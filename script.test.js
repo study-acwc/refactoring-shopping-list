@@ -221,3 +221,18 @@ describe('검색어를 입력했을 때', () => {
     expect(filteredItems).toHaveLength(1);
   });
 });
+
+describe('Clear All 버튼이 눌렸을 때', () => {
+  beforeEach(() => {
+    initialize();
+    // 2개의 아이템을 추가한다.
+    localStorage.setItem('items', JSON.stringify(['item1', 'item2']));
+  });
+
+  test('모든 아이템을 저장소에서 제거한다.', () => {
+    script.clearItems();
+
+    const items = JSON.parse(localStorage.getItem('items'));
+    expect(items).toBeNull();
+  });
+});

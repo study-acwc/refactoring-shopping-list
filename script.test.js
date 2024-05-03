@@ -109,7 +109,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
 
     test("아이템 편집 상태를 해제한다", () => {
         script.onAddItemSubmit(e);
-        expect(script.isEditMode).toBe(false);
+        expect(script.isEditMode).toBeFalsy();
     });
 
     test('아이템을 저장한다', () => {

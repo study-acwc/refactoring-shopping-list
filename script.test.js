@@ -143,7 +143,7 @@ describe('아이템 제거 버튼이 눌렸을 때', () => {
     // 3. confirm 함수를 모의 함수로 대체
     global.confirm = jest.fn();
   });
-  
+
   test('삭제 여부를 묻는 Alert를 띄운다', () => {
     script.removeItem(item);
 
@@ -176,5 +176,48 @@ describe('삭제 여부 Alert에서 확인 버튼이 눌렸을 때', () => {
     const items = JSON.parse(localStorage.getItem('items'));
     
     expect(items).not.toContain('item1');
+  });
+});
+
+describe('검색어를 입력했을 때', () => {
+  let searchKeyword;
+  let searchKeywordEvent;
+  beforeEach(() => {
+    initialize();
+    // 1. 아이템을 2개 추가한다.
+    let e = {
+      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
+      target: { value: 'Sample Value' } // target 속성을 가짐
+    };
+    document.getElementById('item-input').value = 'notebook';
+    script.onAddItemSubmit(e);
+    document.getElementById('item-input').value = 'ipad';
+    script.onAddItemSubmit(e);
+    // 2. 그 중 1개의 아이템만 검색되는 검색어를 설정한다.
+    searchKeyword = 'note';
+    searchKeywordEvent = {
+      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
+      target: { value: searchKeyword } // target 속성을 가짐
+    };
+  });
+
+  test('검색 결과에 해당하는 아이템을 표시한다', () => {
+    script.filterItems(searchKeywordEvent);
+
+    const items = script.itemList.querySelectorAll('li'); 
+    const filteredItems = Array.from(items).filter(
+      (i) => i.textContent.includes(searchKeyword) && i.style.display == 'flex'
+    );
+    expect(filteredItems).toHaveLength(1);
+  });
+
+  test('검색 결과에 해당하지 않는 아이템은 표시하지 않는다.', () => {
+    script.filterItems(searchKeywordEvent);
+
+    const items = script.itemList.querySelectorAll('li');
+    const filteredItems = Array.from(items).filter(
+      (i) => i.textContent != searchKeyword && i.style.display == 'none'
+    );
+    expect(filteredItems).toHaveLength(1);
   });
 });

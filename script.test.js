@@ -236,3 +236,34 @@ describe('Clear All 버튼이 눌렸을 때', () => {
     expect(items).toBeNull();
   });
 });
+
+describe('Dom Content가 로드되었을 때', () => {
+  let contents = ['item1', 'item2'];
+  beforeEach(() => {
+    initialize();
+    // 2개의 아이템을 추가한다.
+    localStorage.setItem('items', JSON.stringify(contents));
+  });
+
+  test('저장된 아이템을 화면에 표시한다', () => {
+    script.displayItems();
+
+    const items = script.itemList.querySelectorAll('li');
+    const filteredItems = Array.from(items).filter(
+      (i) => contents.includes(i.textContent)
+    );
+    expect(filteredItems).toHaveLength(2);
+  });
+
+  test('입력필드가 비어있어야 한다', () => {
+    script.displayItems();
+
+    expect(script.itemInput.value).toBe('');
+  });
+
+  test('아이템 편집상태가 아니어야 한다', () => {
+    script.displayItems();
+
+    expect(script.isEditMode).toBeFalsy();
+  });
+});

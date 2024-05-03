@@ -124,3 +124,57 @@ describe('Update Item 버튼이 눌렸을 때', () => {
         expect(document.getElementById('item-input').value).toBe('');
     });
 });
+
+describe('아이템 제거 버튼이 눌렸을 때', () => {
+  let item;
+  beforeEach(() => {
+    initialize();
+    let e = {
+      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
+      target: { value: 'Sample Value' } // target 속성을 가짐
+    };
+    // 1. "item1" item 등록
+    document.getElementById('item-input').value = 'item1';
+    script.onAddItemSubmit(e);
+    // 2. "item1" item 객체 조회
+    const items = script.itemList.querySelectorAll('li');
+    const filtered = Array.from(items).filter((i) => i.textContent == 'item1');
+    item = filtered[0];
+    // 3. confirm 함수를 모의 함수로 대체
+    global.confirm = jest.fn();
+  });
+  
+  test('삭제 여부를 묻는 Alert를 띄운다', () => {
+    script.removeItem(item);
+
+    expect(confirm).toHaveBeenCalled();
+  });
+});
+
+describe('삭제 여부 Alert에서 확인 버튼이 눌렸을 때', () => {
+  let item;
+  beforeEach(() => {
+    initialize();
+    let e = {
+      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
+      target: { value: 'Sample Value' } // target 속성을 가짐
+    };
+    // 1. "item1" item 등록
+    document.getElementById('item-input').value = 'item1';
+    script.onAddItemSubmit(e);
+    // 2. "item1" item 객체 조회
+    const items = script.itemList.querySelectorAll('li');
+    const filtered = Array.from(items).filter((i) => i.textContent == 'item1');
+    item = filtered[0];
+    // 3. alert 함수를 모의 함수로 대체
+    global.confirm = jest.fn().mockReturnValue(true);
+  });
+
+  test('아이템을 저장소에서 제거한다', () => {
+    script.removeItem(item);
+
+    const items = JSON.parse(localStorage.getItem('items'));
+    
+    expect(items).not.toContain('item1');
+  });
+});

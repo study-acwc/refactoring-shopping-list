@@ -125,15 +125,15 @@ describe('Update Item 버튼이 눌렸을 때', () => {
     });
 });
 
-describe('아이템 제거 버튼이 눌렸을 때', () => {
+describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다면', () => {
   let item;
   beforeEach(() => {
     initialize();
+    // 1. "item1" item 등록
     let e = {
       preventDefault: jest.fn(), // preventDefault 메서드를 가짐
       target: { value: 'Sample Value' } // target 속성을 가짐
     };
-    // 1. "item1" item 등록
     document.getElementById('item-input').value = 'item1';
     script.onAddItemSubmit(e);
     // 2. "item1" item 객체 조회
@@ -144,15 +144,114 @@ describe('아이템 제거 버튼이 눌렸을 때', () => {
     global.confirm = jest.fn();
   });
 
-  test('삭제 여부를 묻는 Alert를 띄운다', () => {
-    script.removeItem(item);
+  test('삭제 여부 확인 창을 띄운다', () => {
+    let event = {
+      target: item.lastElementChild.lastElementChild // 삭제 버튼 element
+    };
+    script.onClickItem(event);
 
+    // 메서드 호출 여부로 테스트 성공여부를 검증(= 행위 검증)
     expect(confirm).toHaveBeenCalled();
   });
 });
 
-describe('삭제 여부 Alert에서 확인 버튼이 눌렸을 때', () => {
+describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이었다면', () => {
   let item;
+  let event;
+  beforeEach(() => {
+    initialize();
+    // 1. "item1" item 등록
+    let e = {
+      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
+      target: { value: 'Sample Value' } // target 속성을 가짐
+    };
+    document.getElementById('item-input').value = 'item1';
+    script.onAddItemSubmit(e);
+    // 2. "item1" item 객체 조회
+    const items = script.itemList.querySelectorAll('li');
+    const filtered = Array.from(items).filter((i) => i.textContent == 'item1');
+    item = filtered[0];
+    // 3. event 객체 생성
+    event = {
+      target: item // item element (LI)
+    };
+  });
+
+  test('아이템 편집 상태를 활성화한다', () => {
+    script.onClickItem(event);
+
+    expect(script.isEditMode).toBeTruthy();
+  });
+
+  test('해당 아이템을 편집 모드로 표시한다', () => {
+    script.onClickItem(event);
+
+    const items = script.itemList.querySelectorAll('li'); 
+    const filteredItems = Array.from(items).filter(
+      (i) => i.textContent.includes(item.textContent) && i.classList.contains('edit-mode')
+    );
+    expect(filteredItems).toHaveLength(1);
+  });
+
+  test('해당되지 않는 아이템은 편집 모드로 표시하지 않는다', () => {
+    script.onClickItem(event);
+
+    const items = script.itemList.querySelectorAll('li'); 
+    const filteredItems = Array.from(items).filter(
+      (i) => false == i.textContent.includes(item.textContent) && i.classList.contains('edit-mode')
+    );
+    expect(filteredItems).toHaveLength(0);
+  });
+
+  test('검색어 입력창을 편집할 아이템의 텍스트로 채운다', () => {
+    script.onClickItem(event);
+
+    expect(script.itemInput.value).toBe(item.textContent);
+  });
+});
+
+describe('아이템 영역이 아닌 위치에서 눌렸을 때', () => {
+  let removeItemSpy;
+  let setItemToEditSpy;
+
+  beforeEach(() => {
+    initialize();
+
+    // script 모듈의 removeItem과 setItemToEdit 함수를 스파이가 모킹한다.
+    removeItemSpy = jest.spyOn(script, 'removeItem');
+    setItemToEditSpy = jest.spyOn(script, 'setItemToEdit');
+  });
+
+  afterEach(() => {
+    // 테스트 후 각 스파이를 복원한다.
+    jest.restoreAllMocks();
+  });
+
+  test('아이템 삭제나 편집 동작을 수행하지 않는다', () => {
+    let event = {
+      target: {
+        parentElement: {
+          classList: {
+            contains: jest.fn().mockReturnValue(false)
+          }
+        },
+        closest: jest.fn().mockReturnValue(null)
+      }
+    };
+    script.onClickItem(event);
+
+    expect(removeItemSpy).not.toHaveBeenCalled();
+    expect(setItemToEditSpy).not.toHaveBeenCalled();
+  });
+});
+
+
+describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => {
+  let item;
+  afterEach(() => {
+    jest.clearAllMocks();  // 각 테스트 후 모의 함수를 초기화
+  });
+
   beforeEach(() => {
     initialize();
     let e = {

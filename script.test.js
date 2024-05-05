@@ -318,7 +318,7 @@ describe('Dom Content가 로드되었을 때', () => {
   test('입력필드가 비어있어야 한다', () => {
     script.displayItems();
 
-    expect(script.itemInput.value).toBe('');
+    expect(itemInputValue()).toBe('');
   });
 
   test('아이템 편집상태가 아니어야 한다', () => {
@@ -352,7 +352,7 @@ function setItemInputValue(value) {
 }
 
 function itemInputValue() {
-  return document.getElementById('item-input').value;
+  return script.itemInput.value;
 }
 
 function itemElements() {

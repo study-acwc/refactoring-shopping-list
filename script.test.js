@@ -24,9 +24,11 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는 값이면', () => {
     let e;
+    let inputValue;
     beforeEach(() => {
         e = dummyUIEvent();
-        setItemInputValue('item1');
+        inputValue = 'item1';
+        setItemInputValue(inputValue);
         setLocalStorageItems(['item2', 'item3']);
     });
 
@@ -34,7 +36,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
         script.onAddItemSubmit(e);
 
         const items = localStorageItems();
-        expect(items).toContain('item1');
+        expect(items).toContain(inputValue);
     });
 
     test("입력값을 지운다.", () => {
@@ -45,18 +47,19 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이템이 이미 존재하면', () => {
     let e;
+    let inputValue;
     beforeEach(() => {
         e = dummyUIEvent();
-  
-        setItemInputValue('item1');
-        setLocalStorageItems(['item1']);
+        inputValue = 'item1';
+        setItemInputValue(inputValue);
+        setLocalStorageItems([inputValue]);
     });
 
     test('아이템을 중복 저장하지 않는다', () => {
         script.onAddItemSubmit(e);
 
         const items = localStorageItems();
-        const filteredItems = items.filter(item => item === 'item1');
+        const filteredItems = items.filter(item => item === inputValue);
         expect(filteredItems).toHaveLength(1);
     });
 
@@ -68,25 +71,29 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
 
 describe('Update Item 버튼이 눌렸을 때', () => {
     let e;
+    let itemTitle;
+    let updatedItemTitle;
     beforeEach(() => {
       e = dummyUIEvent();
+      itemTitle = 'oldItem';
+      updatedItemTitle = 'updatedItem';
       // 1
-      setItemInputValue('oldItem');
+      setItemInputValue(itemTitle);
       script.onAddItemSubmit(e);
       // 2. "oldItem" item 업데이트 모드로 전환
       // "oldItem" item 객체 조회
       const items = script.itemList.querySelectorAll('li');
-      const filtered = Array.from(items).filter((i) => i.textContent == 'oldItem');
+      const filtered = Array.from(items).filter((i) => i.textContent == itemTitle);
       // 그 아이템을 업데이트 모드로 변경
       script.setItemToEdit(filtered[0]);
       // 3
-      setItemInputValue('updatedItem');
+      setItemInputValue(updatedItemTitle);
     });
 
     test('저장된 아이템을 제거한다', () => {
         script.onAddItemSubmit(e);
         const items = localStorageItems();
-        expect(items).not.toContain('oldItem');
+        expect(items).not.toContain(itemTitle);
     });
 
     test("아이템 편집 상태를 해제한다", () => {
@@ -98,7 +105,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
         script.onAddItemSubmit(e);
 
         const items = localStorageItems();
-        expect(items).toContain('updatedItem');
+        expect(items).toContain(updatedItemTitle);
     });
 
     test("입력값을 지운다", () => {
@@ -109,14 +116,16 @@ describe('Update Item 버튼이 눌렸을 때', () => {
 
 describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다면', () => {
   let item;
+
   beforeEach(() => {;
-    // 1. "item1" item 등록
+    // 1
     let e = dummyUIEvent();
-    setItemInputValue('item1');
+    let itemTitle = 'item1';
+    setItemInputValue(itemTitle);
     script.onAddItemSubmit(e);
     // 2. "item1" item 객체 조회
     const items = script.itemList.querySelectorAll('li');
-    const filtered = Array.from(items).filter((i) => i.textContent == 'item1');
+    const filtered = Array.from(items).filter((i) => i.textContent == itemTitle);
     item = filtered[0];
     // 3. confirm 함수를 모의 함수로 대체
     global.confirm = jest.fn();
@@ -139,11 +148,12 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   beforeEach(() => {
     // 1
     let e = dummyUIEvent();
-    setItemInputValue('item1');
+    let itemTitle = 'item1';
+    setItemInputValue(itemTitle);
     script.onAddItemSubmit(e);
     // 2. "item1" item 객체 조회
     const items = script.itemList.querySelectorAll('li');
-    const filtered = Array.from(items).filter((i) => i.textContent == 'item1');
+    const filtered = Array.from(items).filter((i) => i.textContent == itemTitle);
     item = filtered[0];
     // 3. event 객체 생성
     event = {
@@ -220,18 +230,21 @@ describe('아이템 영역이 아닌 위치에서 눌렸을 때', () => {
 
 describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => {
   let item;
+  let itemTitle;
+
   afterEach(() => {
     jest.clearAllMocks();  // 각 테스트 후 모의 함수를 초기화
   });
 
   beforeEach(() => {
     let e = dummyUIEvent();
+    itemTitle = 'item1';
     // 1.
-    setItemInputValue('item1');
+    setItemInputValue(itemTitle);
     script.onAddItemSubmit(e);
     // 2. "item1" item 객체 조회
     const items = script.itemList.querySelectorAll('li');
-    const filtered = Array.from(items).filter((i) => i.textContent == 'item1');
+    const filtered = Array.from(items).filter((i) => i.textContent == itemTitle);
     item = filtered[0];
     // 3. alert 함수를 모의 함수로 대체
     global.confirm = jest.fn().mockReturnValue(true);
@@ -242,7 +255,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => 
 
     const items = localStorageItems();
     
-    expect(items).not.toContain('item1');
+    expect(items).not.toContain(itemTitle);
   });
 });
 

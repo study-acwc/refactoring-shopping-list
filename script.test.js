@@ -18,6 +18,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
 
     test('아이템을 저장하지 않는다', () => {
         script.onAddItemSubmit(e);
+
         expect(localStorageItems()).toBe(null);
     });
 });
@@ -64,6 +65,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
 
     test("입력값을 지우지 않는다", () => {
         script.onAddItemSubmit(e);
+
         expect(itemInputValue()).toBe(inputValue);
     });
 });
@@ -79,9 +81,8 @@ describe('Update Item 버튼이 눌렸을 때', () => {
       // 1
       setItemInputValue(itemTitle);
       script.onAddItemSubmit(e);
-      // 2. "oldItem" item 업데이트 모드로 전환
+      // 2
       const filtered = filteredItemElementsBy(itemTitle);
-      // 그 아이템을 업데이트 모드로 변경
       script.setItemToEdit(filtered[0]);
       // 3
       setItemInputValue(updatedItemTitle);
@@ -89,11 +90,13 @@ describe('Update Item 버튼이 눌렸을 때', () => {
 
     test('저장된 아이템을 제거한다', () => {
         script.onAddItemSubmit(e);
+
         expect(localStorageItems()).not.toContain(itemTitle);
     });
 
     test("아이템 편집 상태를 해제한다", () => {
         script.onAddItemSubmit(e);
+
         expect(script.isEditMode).toBeFalsy();
     });
 
@@ -105,6 +108,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
 
     test("입력값을 지운다", () => {
         script.onAddItemSubmit(e);
+
         expect(itemInputValue()).toBe('');
     });
 });
@@ -121,7 +125,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
     item = filtered[0];
-    // 3. confirm 함수를 모의 함수로 대체
+    // 3
     global.confirm = jest.fn();
   });
 
@@ -236,7 +240,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => 
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
     item = filtered[0];
-    // 3. alert 함수를 모의 함수로 대체
+    // 3
     global.confirm = jest.fn().mockReturnValue(true);
   });
 
@@ -257,11 +261,11 @@ describe('검색어를 입력했을 때', () => {
     script.onAddItemSubmit(e);
     setItemInputValue('ipad');
     script.onAddItemSubmit(e);
-    // 2. 그 중 1개의 아이템만 검색되는 검색어를 설정한다.
+    // 2
     searchKeyword = 'note';
     searchKeywordEvent = {
-      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-      target: { value: searchKeyword } // target 속성을 가짐
+      preventDefault: jest.fn(),
+      target: { value: searchKeyword }
     };
   });
 

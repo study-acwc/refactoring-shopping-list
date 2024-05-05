@@ -131,7 +131,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
 
   test('삭제 여부 확인 창을 띄운다', () => {
     let event = {
-      target: item.lastElementChild.lastElementChild // 삭제 버튼 element
+      target: deleteButtonInItemElement(item)
     };
     script.onClickItem(event);
 
@@ -373,4 +373,8 @@ function hasFilteredItemStyle(element) {
 
 function hasUnfilteredItemStyle(element) {
   return element.style.display == 'none'
+}
+
+function deleteButtonInItemElement(element) {
+  return element.lastElementChild.lastElementChild;
 }

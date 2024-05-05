@@ -1,7 +1,7 @@
 import * as innerHTMLForTest from './scriptTestHTMLSetup.js';
 import * as script from './script.js';
 
-window.alert = jest.fn()
+window.alert = jest.fn();
 
 function initialize() {
   // 테스트 시작하기 전에 다른 테스트에서 설정한 값을 초기화하는 작업

@@ -96,7 +96,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
     test("아이템 편집 상태를 해제한다", () => {
         script.onAddItemSubmit(event);
 
-        expect(script.isEditMode).toBeFalsy();
+        expect(isEditModeEnabled()).toBeFalsy();
     });
 
     test('새로운 아이템을 저장한다', () => {
@@ -156,7 +156,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   test('아이템 편집 상태를 활성화한다', () => {
     script.onClickItem(itemClickEvent);
 
-    expect(script.isEditMode).toBeTruthy();
+    expect(isEditModeEnabled()).toBeTruthy();
   });
 
   test('해당 아이템을 편집 모드로 표시한다', () => {
@@ -320,7 +320,7 @@ describe('Dom Content가 로드되었을 때', () => {
   test('아이템 편집상태가 아니어야 한다', () => {
     script.displayItems();
 
-    expect(script.isEditMode).toBeFalsy();
+    expect(isEditModeEnabled()).toBeFalsy();
   });
 });
 
@@ -378,4 +378,8 @@ function editingItemElement(element) {
 function updateUserInputAndSubmitAdd(itemTitle) {
   setItemInputValue(itemTitle);
   script.onAddItemSubmit(dummyUIEvent());
+}
+
+function isEditModeEnabled() {
+  return script.isEditMode;
 }

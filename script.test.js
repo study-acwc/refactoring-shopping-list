@@ -11,10 +11,7 @@ beforeEach(() => {
 describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
     let e;
     beforeEach(() => {
-        e = {
-            preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-            target: { value: 'Sample Value' } // target 속성을 가짐
-        };
+        e = dummyUIEvent();
         // HTML 요소를 생성하여 테스트에 사용합니다.
         document.getElementById('item-input').value = '';
     });
@@ -28,10 +25,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
 describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는 값이면', () => {
     let e;
     beforeEach(() => {
-        e = {
-            preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-            target: { value: 'Sample Value' } // target 속성을 가짐
-        };
+        e = dummyUIEvent();
         // HTML 요소를 생성하여 테스트에 사용합니다.
         document.getElementById('item-input').value = 'item1';
         localStorage.setItem('items', JSON.stringify(['item2', 'item3']));
@@ -53,10 +47,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
 describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이템이 이미 존재하면', () => {
     let e;
     beforeEach(() => {
-        e = {
-            preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-            target: { value: 'Sample Value' } // target 속성을 가짐
-        };
+        e = dummyUIEvent();
   
         // HTML 요소를 생성하여 테스트에 사용합니다.
         document.getElementById('item-input').value = 'item1';
@@ -80,10 +71,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
 describe('Update Item 버튼이 눌렸을 때', () => {
     let e;
     beforeEach(() => {
-      e = {
-          preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-          target: { value: 'Sample Value' } // target 속성을 가짐
-      };
+      e = dummyUIEvent();
       // 1. "oldItem" item 등록
       document.getElementById('item-input').value = 'oldItem';
       script.onAddItemSubmit(e);
@@ -125,10 +113,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
   let item;
   beforeEach(() => {;
     // 1. "item1" item 등록
-    let e = {
-      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-      target: { value: 'Sample Value' } // target 속성을 가짐
-    };
+    let e = dummyUIEvent();
     document.getElementById('item-input').value = 'item1';
     script.onAddItemSubmit(e);
     // 2. "item1" item 객체 조회
@@ -155,10 +140,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   let event;
   beforeEach(() => {
     // 1. "item1" item 등록
-    let e = {
-      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-      target: { value: 'Sample Value' } // target 속성을 가짐
-    };
+    let e = dummyUIEvent();
     document.getElementById('item-input').value = 'item1';
     script.onAddItemSubmit(e);
     // 2. "item1" item 객체 조회
@@ -245,10 +227,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => 
   });
 
   beforeEach(() => {
-    let e = {
-      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-      target: { value: 'Sample Value' } // target 속성을 가짐
-    };
+    let e = dummyUIEvent();
     // 1. "item1" item 등록
     document.getElementById('item-input').value = 'item1';
     script.onAddItemSubmit(e);
@@ -274,10 +253,7 @@ describe('검색어를 입력했을 때', () => {
   let searchKeywordEvent;
   beforeEach(() => {
     // 1. 아이템을 2개 추가한다.
-    let e = {
-      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-      target: { value: 'Sample Value' } // target 속성을 가짐
-    };
+    let e = dummyUIEvent();
     document.getElementById('item-input').value = 'notebook';
     script.onAddItemSubmit(e);
     document.getElementById('item-input').value = 'ipad';
@@ -354,3 +330,10 @@ describe('Dom Content가 로드되었을 때', () => {
     expect(script.isEditMode).toBeFalsy();
   });
 });
+
+function dummyUIEvent() {
+  return {
+    preventDefault: jest.fn(), // preventDefault 메서드를 가짐
+    target: { value: 'Sample Value' } // target 속성을 가짐
+  };
+}

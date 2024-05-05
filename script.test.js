@@ -79,8 +79,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
       itemTitle = 'oldItem';
       updatedItemTitle = 'updatedItem';
       // 1
-      setItemInputValue(itemTitle);
-      script.onAddItemSubmit(event);
+      updateUserInputAndSubmitAdd(itemTitle);
       // 2
       const filtered = filteredItemElementsBy(itemTitle);
       script.setItemToEdit(filtered[0]);
@@ -119,13 +118,10 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
   beforeEach(() => {;
     let itemTitle = 'item1';
     // 1
-    let event = dummyUIEvent();
-    setItemInputValue(itemTitle);
-    script.onAddItemSubmit(event);
+    updateUserInputAndSubmitAdd(itemTitle);
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
     clickedElement = deleteButtonInItemElement(filtered[0]);
-
     // 3
     global.confirm = jest.fn();
   });
@@ -147,8 +143,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   beforeEach(() => {
     let itemTitle = 'item1';
     // 1
-    setItemInputValue(itemTitle);
-    script.onAddItemSubmit(dummyUIEvent());
+    updateUserInputAndSubmitAdd(itemTitle);
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
     clickedElement = filtered[0];
@@ -236,8 +231,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => 
   beforeEach(() => {
     itemTitle = 'item1';
     // 1
-    setItemInputValue(itemTitle);
-    script.onAddItemSubmit(dummyUIEvent());
+    updateUserInputAndSubmitAdd(itemTitle);
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
     item = filtered[0];
@@ -257,11 +251,8 @@ describe('검색어를 입력했을 때', () => {
   let searchKeywordEvent;
   beforeEach(() => {
     // 1
-    let event = dummyUIEvent();
-    setItemInputValue('notebook');
-    script.onAddItemSubmit(event);
-    setItemInputValue('ipad');
-    script.onAddItemSubmit(event);
+    updateUserInputAndSubmitAdd('notebook');
+    updateUserInputAndSubmitAdd('ipad');
     // 2
     searchKeyword = 'note';
     searchKeywordEvent = {
@@ -382,4 +373,9 @@ function deleteButtonInItemElement(element) {
 
 function editingItemElement(element) {
   return element.classList.contains('edit-mode')
+}
+
+function updateUserInputAndSubmitAdd(itemTitle) {
+  setItemInputValue(itemTitle);
+  script.onAddItemSubmit(dummyUIEvent());
 }

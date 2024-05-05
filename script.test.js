@@ -10,77 +10,77 @@ beforeEach(() => {
 });
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
-    let e;
+    let event;
     beforeEach(() => {
-        e = dummyUIEvent();
+        event = dummyUIEvent();
         setItemInputValue('');
     });
 
     test('아이템을 저장하지 않는다', () => {
-        script.onAddItemSubmit(e);
+        script.onAddItemSubmit(event);
 
         expect(localStorageItems()).toBe(null);
     });
 });
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는 값이면', () => {
-    let e;
+    let event;
     let inputValue;
     beforeEach(() => {
-        e = dummyUIEvent();
+        event = dummyUIEvent();
         inputValue = 'item1';
         setItemInputValue(inputValue);
         setLocalStorageItems(['item2', 'item3']);
     });
 
     test('아이템을 저장한다', () => {
-        script.onAddItemSubmit(e);
+        script.onAddItemSubmit(event);
 
         expect(localStorageItems()).toContain(inputValue);
     });
 
     test("입력값을 지운다.", () => {
-        script.onAddItemSubmit(e);
+        script.onAddItemSubmit(event);
 
         expect(itemInputValue()).toBe('');
     });
 });
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이템이 이미 존재하면', () => {
-    let e;
+    let event;
     let inputValue;
     beforeEach(() => {
-        e = dummyUIEvent();
+        event = dummyUIEvent();
         inputValue = 'item1';
         setItemInputValue(inputValue);
         setLocalStorageItems([inputValue]);
     });
 
     test('아이템을 중복 저장하지 않는다', () => {
-        script.onAddItemSubmit(e);
+        script.onAddItemSubmit(event);
 
         const filteredItems = filteredLocalStorageItemsBy(inputValue);
         expect(filteredItems).toHaveLength(1);
     });
 
     test("입력값을 지우지 않는다", () => {
-        script.onAddItemSubmit(e);
+        script.onAddItemSubmit(event);
 
         expect(itemInputValue()).toBe(inputValue);
     });
 });
 
 describe('Update Item 버튼이 눌렸을 때', () => {
-    let e;
+    let event;
     let itemTitle;
     let updatedItemTitle;
     beforeEach(() => {
-      e = dummyUIEvent();
+      event = dummyUIEvent();
       itemTitle = 'oldItem';
       updatedItemTitle = 'updatedItem';
       // 1
       setItemInputValue(itemTitle);
-      script.onAddItemSubmit(e);
+      script.onAddItemSubmit(event);
       // 2
       const filtered = filteredItemElementsBy(itemTitle);
       script.setItemToEdit(filtered[0]);
@@ -89,25 +89,25 @@ describe('Update Item 버튼이 눌렸을 때', () => {
     });
 
     test('저장된 아이템을 제거한다', () => {
-        script.onAddItemSubmit(e);
+        script.onAddItemSubmit(event);
 
         expect(localStorageItems()).not.toContain(itemTitle);
     });
 
     test("아이템 편집 상태를 해제한다", () => {
-        script.onAddItemSubmit(e);
+        script.onAddItemSubmit(event);
 
         expect(script.isEditMode).toBeFalsy();
     });
 
-    test('아이템을 저장한다', () => {
-        script.onAddItemSubmit(e);
+    test('새로운 아이템을 저장한다', () => {
+        script.onAddItemSubmit(event);
 
         expect(localStorageItems()).toContain(updatedItemTitle);
     });
 
     test("입력값을 지운다", () => {
-        script.onAddItemSubmit(e);
+        script.onAddItemSubmit(event);
 
         expect(itemInputValue()).toBe('');
     });
@@ -117,11 +117,11 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
   let item;
 
   beforeEach(() => {;
-    // 1
-    let e = dummyUIEvent();
     let itemTitle = 'item1';
+    // 1
+    let event = dummyUIEvent();
     setItemInputValue(itemTitle);
-    script.onAddItemSubmit(e);
+    script.onAddItemSubmit(event);
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
     item = filtered[0];
@@ -142,30 +142,30 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
 
 describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이었다면', () => {
   let item;
-  let event;
+  let itemClickEvent;
   beforeEach(() => {
     // 1
-    let e = dummyUIEvent();
+    let addButtonEvent = dummyUIEvent();
     let itemTitle = 'item1';
     setItemInputValue(itemTitle);
-    script.onAddItemSubmit(e);
+    script.onAddItemSubmit(addButtonEvent);
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
     item = filtered[0];
     // 3. event 객체 생성
-    event = {
+    itemClickEvent = {
       target: item // item element (LI)
     };
   });
 
   test('아이템 편집 상태를 활성화한다', () => {
-    script.onClickItem(event);
+    script.onClickItem(itemClickEvent);
 
     expect(script.isEditMode).toBeTruthy();
   });
 
   test('해당 아이템을 편집 모드로 표시한다', () => {
-    script.onClickItem(event);
+    script.onClickItem(itemClickEvent);
 
     const filteredItems = itemElements().filter(
       (i) => i.textContent.includes(item.textContent) && editingItemElement(i)
@@ -174,7 +174,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   });
 
   test('해당되지 않는 아이템은 편집 모드로 표시하지 않는다', () => {
-    script.onClickItem(event);
+    script.onClickItem(itemClickEvent);
   
     const filteredItems = itemElements().filter(
       (i) => false == i.textContent.includes(item.textContent) && editingItemElement(i)
@@ -183,7 +183,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   });
 
   test('검색어 입력창을 편집할 아이템의 텍스트로 채운다', () => {
-    script.onClickItem(event);
+    script.onClickItem(itemClickEvent);
 
     expect(script.itemInput.value).toBe(item.textContent);
   });
@@ -232,11 +232,11 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => 
   });
 
   beforeEach(() => {
-    let e = dummyUIEvent();
+    let event = dummyUIEvent();
     itemTitle = 'item1';
     // 1
     setItemInputValue(itemTitle);
-    script.onAddItemSubmit(e);
+    script.onAddItemSubmit(event);
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
     item = filtered[0];
@@ -256,11 +256,11 @@ describe('검색어를 입력했을 때', () => {
   let searchKeywordEvent;
   beforeEach(() => {
     // 1
-    let e = dummyUIEvent();
+    let event = dummyUIEvent();
     setItemInputValue('notebook');
-    script.onAddItemSubmit(e);
+    script.onAddItemSubmit(event);
     setItemInputValue('ipad');
-    script.onAddItemSubmit(e);
+    script.onAddItemSubmit(event);
     // 2
     searchKeyword = 'note';
     searchKeywordEvent = {

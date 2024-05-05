@@ -3,15 +3,14 @@ import * as script from './script.js';
 
 window.alert = jest.fn();
 
-function initialize() {
+beforeEach(() => {
   // 테스트 시작하기 전에 다른 테스트에서 설정한 값을 초기화하는 작업
   script.clearItems();
-}
+});
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
     let e;
     beforeEach(() => {
-        initialize();
         e = {
             preventDefault: jest.fn(), // preventDefault 메서드를 가짐
             target: { value: 'Sample Value' } // target 속성을 가짐
@@ -29,7 +28,6 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
 describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는 값이면', () => {
     let e;
     beforeEach(() => {
-      initialize();
         e = {
             preventDefault: jest.fn(), // preventDefault 메서드를 가짐
             target: { value: 'Sample Value' } // target 속성을 가짐
@@ -55,7 +53,6 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
 describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이템이 이미 존재하면', () => {
     let e;
     beforeEach(() => {
-      initialize();
         e = {
             preventDefault: jest.fn(), // preventDefault 메서드를 가짐
             target: { value: 'Sample Value' } // target 속성을 가짐
@@ -83,7 +80,6 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
 describe('Update Item 버튼이 눌렸을 때', () => {
     let e;
     beforeEach(() => {
-      initialize();
       e = {
           preventDefault: jest.fn(), // preventDefault 메서드를 가짐
           target: { value: 'Sample Value' } // target 속성을 가짐
@@ -127,8 +123,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
 
 describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다면', () => {
   let item;
-  beforeEach(() => {
-    initialize();
+  beforeEach(() => {;
     // 1. "item1" item 등록
     let e = {
       preventDefault: jest.fn(), // preventDefault 메서드를 가짐
@@ -159,7 +154,6 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   let item;
   let event;
   beforeEach(() => {
-    initialize();
     // 1. "item1" item 등록
     let e = {
       preventDefault: jest.fn(), // preventDefault 메서드를 가짐
@@ -215,8 +209,6 @@ describe('아이템 영역이 아닌 위치에서 눌렸을 때', () => {
   let setItemToEditSpy;
 
   beforeEach(() => {
-    initialize();
-
     // script 모듈의 removeItem과 setItemToEdit 함수를 스파이가 모킹한다.
     removeItemSpy = jest.spyOn(script, 'removeItem');
     setItemToEditSpy = jest.spyOn(script, 'setItemToEdit');
@@ -253,7 +245,6 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => 
   });
 
   beforeEach(() => {
-    initialize();
     let e = {
       preventDefault: jest.fn(), // preventDefault 메서드를 가짐
       target: { value: 'Sample Value' } // target 속성을 가짐
@@ -282,7 +273,6 @@ describe('검색어를 입력했을 때', () => {
   let searchKeyword;
   let searchKeywordEvent;
   beforeEach(() => {
-    initialize();
     // 1. 아이템을 2개 추가한다.
     let e = {
       preventDefault: jest.fn(), // preventDefault 메서드를 가짐
@@ -323,7 +313,6 @@ describe('검색어를 입력했을 때', () => {
 
 describe('Clear All 버튼이 눌렸을 때', () => {
   beforeEach(() => {
-    initialize();
     // 2개의 아이템을 추가한다.
     localStorage.setItem('items', JSON.stringify(['item1', 'item2']));
   });
@@ -339,7 +328,6 @@ describe('Clear All 버튼이 눌렸을 때', () => {
 describe('Dom Content가 로드되었을 때', () => {
   let contents = ['item1', 'item2'];
   beforeEach(() => {
-    initialize();
     // 2개의 아이템을 추가한다.
     localStorage.setItem('items', JSON.stringify(contents));
   });

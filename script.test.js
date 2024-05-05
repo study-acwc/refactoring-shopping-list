@@ -14,8 +14,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
     let e;
     beforeEach(() => {
         e = dummyUIEvent();
-        // HTML 요소를 생성하여 테스트에 사용합니다.
-        document.getElementById('item-input').value = '';
+        setItemInputValue('');
     });
 
     test('아이템을 저장하지 않는다', () => {
@@ -28,8 +27,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
     let e;
     beforeEach(() => {
         e = dummyUIEvent();
-        // HTML 요소를 생성하여 테스트에 사용합니다.
-        document.getElementById('item-input').value = 'item1';
+        setItemInputValue('item1');
         setLocalStorageItems(['item2', 'item3']);
     });
 
@@ -51,8 +49,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
     beforeEach(() => {
         e = dummyUIEvent();
   
-        // HTML 요소를 생성하여 테스트에 사용합니다.
-        document.getElementById('item-input').value = 'item1';
+        setItemInputValue('item1');
         setLocalStorageItems(['item1']);
     });
 
@@ -74,8 +71,8 @@ describe('Update Item 버튼이 눌렸을 때', () => {
     let e;
     beforeEach(() => {
       e = dummyUIEvent();
-      // 1. "oldItem" item 등록
-      document.getElementById('item-input').value = 'oldItem';
+      // 1
+      setItemInputValue('oldItem');
       script.onAddItemSubmit(e);
       // 2. "oldItem" item 업데이트 모드로 전환
       // "oldItem" item 객체 조회
@@ -83,8 +80,8 @@ describe('Update Item 버튼이 눌렸을 때', () => {
       const filtered = Array.from(items).filter((i) => i.textContent == 'oldItem');
       // 그 아이템을 업데이트 모드로 변경
       script.setItemToEdit(filtered[0]);
-      // 3. "updatedItem" 으로 변경된 이름 입력
-      document.getElementById('item-input').value = 'updatedItem';
+      // 3
+      setItemInputValue('updatedItem');
     });
 
     test('저장된 아이템을 제거한다', () => {
@@ -116,7 +113,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
   beforeEach(() => {;
     // 1. "item1" item 등록
     let e = dummyUIEvent();
-    document.getElementById('item-input').value = 'item1';
+    setItemInputValue('item1');
     script.onAddItemSubmit(e);
     // 2. "item1" item 객체 조회
     const items = script.itemList.querySelectorAll('li');
@@ -141,9 +138,9 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   let item;
   let event;
   beforeEach(() => {
-    // 1. "item1" item 등록
+    // 1
     let e = dummyUIEvent();
-    document.getElementById('item-input').value = 'item1';
+    setItemInputValue('item1');
     script.onAddItemSubmit(e);
     // 2. "item1" item 객체 조회
     const items = script.itemList.querySelectorAll('li');
@@ -230,8 +227,8 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => 
 
   beforeEach(() => {
     let e = dummyUIEvent();
-    // 1. "item1" item 등록
-    document.getElementById('item-input').value = 'item1';
+    // 1.
+    setItemInputValue('item1');
     script.onAddItemSubmit(e);
     // 2. "item1" item 객체 조회
     const items = script.itemList.querySelectorAll('li');
@@ -254,11 +251,11 @@ describe('검색어를 입력했을 때', () => {
   let searchKeyword;
   let searchKeywordEvent;
   beforeEach(() => {
-    // 1. 아이템을 2개 추가한다.
+    // 1
     let e = dummyUIEvent();
-    document.getElementById('item-input').value = 'notebook';
+    setItemInputValue('notebook');
     script.onAddItemSubmit(e);
-    document.getElementById('item-input').value = 'ipad';
+    setItemInputValue('ipad');
     script.onAddItemSubmit(e);
     // 2. 그 중 1개의 아이템만 검색되는 검색어를 설정한다.
     searchKeyword = 'note';
@@ -346,4 +343,8 @@ function localStorageItems() {
 
 function setLocalStorageItems(items) {
   localStorage.setItem(localStorageKey, JSON.stringify(items));
+}
+
+function setItemInputValue(value) {
+  document.getElementById('item-input').value = value;
 }

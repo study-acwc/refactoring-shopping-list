@@ -80,9 +80,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
       setItemInputValue(itemTitle);
       script.onAddItemSubmit(e);
       // 2. "oldItem" item 업데이트 모드로 전환
-      // "oldItem" item 객체 조회
-      const items = itemElements();
-      const filtered = Array.from(items).filter((i) => i.textContent == itemTitle);
+      const filtered = filteredItemElementsBy(itemTitle);
       // 그 아이템을 업데이트 모드로 변경
       script.setItemToEdit(filtered[0]);
       // 3
@@ -122,9 +120,8 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
     let itemTitle = 'item1';
     setItemInputValue(itemTitle);
     script.onAddItemSubmit(e);
-    // 2. "item1" item 객체 조회
-    const items = itemElements();
-    const filtered = Array.from(items).filter((i) => i.textContent == itemTitle);
+    // 2
+    const filtered = filteredItemElementsBy(itemTitle);
     item = filtered[0];
     // 3. confirm 함수를 모의 함수로 대체
     global.confirm = jest.fn();
@@ -150,9 +147,8 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
     let itemTitle = 'item1';
     setItemInputValue(itemTitle);
     script.onAddItemSubmit(e);
-    // 2. "item1" item 객체 조회
-    const items = itemElements();
-    const filtered = Array.from(items).filter((i) => i.textContent == itemTitle);
+    // 2
+    const filtered = filteredItemElementsBy(itemTitle);
     item = filtered[0];
     // 3. event 객체 생성
     event = {
@@ -238,12 +234,11 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => 
   beforeEach(() => {
     let e = dummyUIEvent();
     itemTitle = 'item1';
-    // 1.
+    // 1
     setItemInputValue(itemTitle);
     script.onAddItemSubmit(e);
-    // 2. "item1" item 객체 조회
-    const items = itemElements();
-    const filtered = Array.from(items).filter((i) => i.textContent == itemTitle);
+    // 2
+    const filtered = filteredItemElementsBy(itemTitle);
     item = filtered[0];
     // 3. alert 함수를 모의 함수로 대체
     global.confirm = jest.fn().mockReturnValue(true);
@@ -370,4 +365,8 @@ function itemInputValue() {
 
 function itemElements() {
   return script.itemList.querySelectorAll('li');
+}
+
+function filteredItemElementsBy(itemTitle) {
+  return Array.from(itemElements()).filter((i) => i.textContent == itemTitle);
 }

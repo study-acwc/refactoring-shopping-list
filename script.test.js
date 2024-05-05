@@ -6,7 +6,7 @@ const localStorageKey = 'items';
 window.alert = jest.fn();
 
 beforeEach(() => {
-  script.clearItems();
+  clearItems();
 });
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
@@ -382,4 +382,8 @@ function updateUserInputAndSubmitAdd(itemTitle) {
 
 function isEditModeEnabled() {
   return script.isEditMode;
+}
+
+function clearItems() {
+  script.clearItems();
 }

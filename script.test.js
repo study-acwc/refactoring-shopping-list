@@ -40,6 +40,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
 
     test("입력값을 지운다.", () => {
         script.onAddItemSubmit(e);
+
         expect(itemInputValue()).toBe('');
     });
 });
@@ -63,7 +64,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
 
     test("입력값을 지우지 않는다", () => {
         script.onAddItemSubmit(e);
-        expect(itemInputValue()).not.toBe('');
+        expect(itemInputValue()).toBe(inputValue);
     });
 });
 

@@ -270,7 +270,7 @@ describe('검색어를 입력했을 때', () => {
     expect(filteredItems).toHaveLength(1);
   });
 
-  test('검색 결과에 해당하지 않는 아이템은 표시하지 않는다.', () => {
+  test('검색 결과에 해당하지 않는 아이템은 표시하지 않는다', () => {
     script.filterItems(searchKeywordEvent);
     
     const filteredItems = itemElements().filter(
@@ -285,7 +285,7 @@ describe('Clear All 버튼이 눌렸을 때', () => {
     setLocalStorageItems(['item1', 'item2']);
   });
 
-  test('모든 아이템을 저장소에서 제거한다.', () => {
+  test('모든 아이템을 저장소에서 제거한다', () => {
     script.clearItems();
 
     expect(localStorageItems()).toBeNull();
@@ -360,11 +360,11 @@ function filteredItemElementsBy(itemTitle) {
 }
 
 function hasFilteredItemStyle(element) {
-  return element.style.display == 'flex'
+  return element.style.display == 'flex';
 }
 
 function hasUnfilteredItemStyle(element) {
-  return element.style.display == 'none'
+  return element.style.display == 'none';
 }
 
 function deleteButtonInItemElement(element) {

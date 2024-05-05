@@ -162,8 +162,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   test('해당 아이템을 편집 모드로 표시한다', () => {
     script.onClickItem(event);
 
-    const items = itemElements(); 
-    const filteredItems = Array.from(items).filter(
+    const filteredItems = itemElements().filter(
       (i) => i.textContent.includes(item.textContent) && i.classList.contains('edit-mode')
     );
     expect(filteredItems).toHaveLength(1);
@@ -171,9 +170,8 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
 
   test('해당되지 않는 아이템은 편집 모드로 표시하지 않는다', () => {
     script.onClickItem(event);
-
-    const items = itemElements(); 
-    const filteredItems = Array.from(items).filter(
+  
+    const filteredItems = itemElements().filter(
       (i) => false == i.textContent.includes(item.textContent) && i.classList.contains('edit-mode')
     );
     expect(filteredItems).toHaveLength(0);
@@ -269,8 +267,7 @@ describe('검색어를 입력했을 때', () => {
   test('검색 결과에 해당하는 아이템을 표시한다', () => {
     script.filterItems(searchKeywordEvent);
 
-    const items = itemElements(); 
-    const filteredItems = Array.from(items).filter(
+    const filteredItems = itemElements().filter(
       (i) => i.textContent.includes(searchKeyword) && i.style.display == 'flex'
     );
     expect(filteredItems).toHaveLength(1);
@@ -278,9 +275,8 @@ describe('검색어를 입력했을 때', () => {
 
   test('검색 결과에 해당하지 않는 아이템은 표시하지 않는다.', () => {
     script.filterItems(searchKeywordEvent);
-
-    const items = itemElements();
-    const filteredItems = Array.from(items).filter(
+    
+    const filteredItems = itemElements().filter(
       (i) => i.textContent != searchKeyword && i.style.display == 'none'
     );
     expect(filteredItems).toHaveLength(1);
@@ -307,9 +303,8 @@ describe('Dom Content가 로드되었을 때', () => {
 
   test('저장된 아이템을 화면에 표시한다', () => {
     script.displayItems();
-
-    const items = itemElements();
-    const filteredItems = Array.from(items).filter(
+    
+    const filteredItems = itemElements().filter(
       (i) => contents.includes(i.textContent)
     );
     expect(filteredItems).toHaveLength(2);
@@ -356,9 +351,9 @@ function itemInputValue() {
 }
 
 function itemElements() {
-  return script.itemList.querySelectorAll('li');
+  return Array.from(script.itemList.querySelectorAll('li'));
 }
 
 function filteredItemElementsBy(itemTitle) {
-  return Array.from(itemElements()).filter((i) => i.textContent == itemTitle);
+  return itemElements().filter((i) => i.textContent == itemTitle);
 }

@@ -294,7 +294,6 @@ describe('검색어를 입력했을 때', () => {
 
 describe('Clear All 버튼이 눌렸을 때', () => {
   beforeEach(() => {
-    // 2개의 아이템을 추가한다.
     setLocalStorageItems(['item1', 'item2']);
   });
 
@@ -309,7 +308,6 @@ describe('Clear All 버튼이 눌렸을 때', () => {
 describe('Dom Content가 로드되었을 때', () => {
   let contents = ['item1', 'item2'];
   beforeEach(() => {
-    // 2개의 아이템을 추가한다.
     setLocalStorageItems(contents);
   });
 
@@ -338,8 +336,8 @@ describe('Dom Content가 로드되었을 때', () => {
 
 function dummyUIEvent() {
   return {
-    preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-    target: { value: 'Sample Value' } // target 속성을 가짐
+    preventDefault: jest.fn(),
+    target: { value: 'Sample Value' }
   };
 }
 

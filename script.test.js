@@ -6,7 +6,6 @@ const localStorageKey = 'items';
 window.alert = jest.fn();
 
 beforeEach(() => {
-  // 테스트 시작하기 전에 다른 테스트에서 설정한 값을 초기화하는 작업
   script.clearItems();
 });
 

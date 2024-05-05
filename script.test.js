@@ -28,7 +28,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
         e = dummyUIEvent();
         // HTML 요소를 생성하여 테스트에 사용합니다.
         document.getElementById('item-input').value = 'item1';
-        localStorage.setItem('items', JSON.stringify(['item2', 'item3']));
+        setLocalStorageItems(['item2', 'item3']);
     });
 
     test('아이템을 저장한다', () => {
@@ -51,7 +51,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
   
         // HTML 요소를 생성하여 테스트에 사용합니다.
         document.getElementById('item-input').value = 'item1';
-        localStorage.setItem('items', JSON.stringify(['item1']));
+        setLocalStorageItems(['item1']);
     });
 
     test('아이템을 중복 저장하지 않는다', () => {
@@ -290,7 +290,7 @@ describe('검색어를 입력했을 때', () => {
 describe('Clear All 버튼이 눌렸을 때', () => {
   beforeEach(() => {
     // 2개의 아이템을 추가한다.
-    localStorage.setItem('items', JSON.stringify(['item1', 'item2']));
+    setLocalStorageItems(['item1', 'item2']);
   });
 
   test('모든 아이템을 저장소에서 제거한다.', () => {
@@ -305,7 +305,7 @@ describe('Dom Content가 로드되었을 때', () => {
   let contents = ['item1', 'item2'];
   beforeEach(() => {
     // 2개의 아이템을 추가한다.
-    localStorage.setItem('items', JSON.stringify(contents));
+    setLocalStorageItems(contents);
   });
 
   test('저장된 아이템을 화면에 표시한다', () => {
@@ -340,4 +340,8 @@ function dummyUIEvent() {
 
 function localStorageItems() {
   return JSON.parse(localStorage.getItem('items'));
+}
+
+function setLocalStorageItems(items) {
+  localStorage.setItem('items', JSON.stringify(items));
 }

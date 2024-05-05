@@ -114,7 +114,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
 });
 
 describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다면', () => {
-  let item;
+  let clickedElement;
 
   beforeEach(() => {;
     let itemTitle = 'item1';
@@ -124,14 +124,15 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
     script.onAddItemSubmit(event);
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
-    item = filtered[0];
+    clickedElement = deleteButtonInItemElement(filtered[0]);
+
     // 3
     global.confirm = jest.fn();
   });
 
   test('삭제 여부 확인 창을 띄운다', () => {
     let event = {
-      target: deleteButtonInItemElement(item)
+      target: clickedElement
     };
     script.onClickItem(event);
 
@@ -141,20 +142,19 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
 });
 
 describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이었다면', () => {
-  let item;
+  let clickedElement;
   let itemClickEvent;
   beforeEach(() => {
-    // 1
-    let addButtonEvent = dummyUIEvent();
     let itemTitle = 'item1';
+    // 1
     setItemInputValue(itemTitle);
-    script.onAddItemSubmit(addButtonEvent);
+    script.onAddItemSubmit(dummyUIEvent());
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
-    item = filtered[0];
-    // 3. event 객체 생성
+    clickedElement = filtered[0];
+    // 3
     itemClickEvent = {
-      target: item // item element (LI)
+      target: clickedElement
     };
   });
 
@@ -168,7 +168,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
     script.onClickItem(itemClickEvent);
 
     const filteredItems = itemElements().filter(
-      (i) => i.textContent.includes(item.textContent) && editingItemElement(i)
+      (i) => i.textContent.includes(clickedElement.textContent) && editingItemElement(i)
     );
     expect(filteredItems).toHaveLength(1);
   });
@@ -177,7 +177,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
     script.onClickItem(itemClickEvent);
   
     const filteredItems = itemElements().filter(
-      (i) => false == i.textContent.includes(item.textContent) && editingItemElement(i)
+      (i) => false == i.textContent.includes(clickedElement.textContent) && editingItemElement(i)
     );
     expect(filteredItems).toHaveLength(0);
   });
@@ -185,27 +185,21 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   test('검색어 입력창을 편집할 아이템의 텍스트로 채운다', () => {
     script.onClickItem(itemClickEvent);
 
-    expect(script.itemInput.value).toBe(item.textContent);
+    expect(script.itemInput.value).toBe(clickedElement.textContent);
   });
 });
 
-describe('아이템 영역이 아닌 위치에서 눌렸을 때', () => {
+describe('아이템 영역이 아닌 위치가 눌렸을 때', () => {
   let removeItemSpy;
   let setItemToEditSpy;
+  let itemClickEvent;
 
   beforeEach(() => {
     // script 모듈의 removeItem과 setItemToEdit 함수를 스파이가 모킹한다.
     removeItemSpy = jest.spyOn(script, 'removeItem');
     setItemToEditSpy = jest.spyOn(script, 'setItemToEdit');
-  });
 
-  afterEach(() => {
-    // 테스트 후 각 스파이를 복원한다.
-    jest.restoreAllMocks();
-  });
-
-  test('아이템 삭제나 편집 동작을 수행하지 않는다', () => {
-    let event = {
+    itemClickEvent = {
       target: {
         parentElement: {
           classList: {
@@ -215,7 +209,15 @@ describe('아이템 영역이 아닌 위치에서 눌렸을 때', () => {
         closest: jest.fn().mockReturnValue(null)
       }
     };
-    script.onClickItem(event);
+  });
+
+  afterEach(() => {
+    // 테스트 후 각 스파이를 복원한다.
+    jest.restoreAllMocks();
+  });
+
+  test('아이템 삭제나 편집 동작을 수행하지 않는다', () => {
+    script.onClickItem(itemClickEvent);
 
     expect(removeItemSpy).not.toHaveBeenCalled();
     expect(setItemToEditSpy).not.toHaveBeenCalled();
@@ -232,11 +234,10 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => 
   });
 
   beforeEach(() => {
-    let event = dummyUIEvent();
     itemTitle = 'item1';
     // 1
     setItemInputValue(itemTitle);
-    script.onAddItemSubmit(event);
+    script.onAddItemSubmit(dummyUIEvent());
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
     item = filtered[0];

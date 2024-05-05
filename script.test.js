@@ -168,7 +168,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
     script.onClickItem(event);
 
     const filteredItems = itemElements().filter(
-      (i) => i.textContent.includes(item.textContent) && i.classList.contains('edit-mode')
+      (i) => i.textContent.includes(item.textContent) && editingItemElement(i)
     );
     expect(filteredItems).toHaveLength(1);
   });
@@ -177,7 +177,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
     script.onClickItem(event);
   
     const filteredItems = itemElements().filter(
-      (i) => false == i.textContent.includes(item.textContent) && i.classList.contains('edit-mode')
+      (i) => false == i.textContent.includes(item.textContent) && editingItemElement(i)
     );
     expect(filteredItems).toHaveLength(0);
   });
@@ -377,4 +377,8 @@ function hasUnfilteredItemStyle(element) {
 
 function deleteButtonInItemElement(element) {
   return element.lastElementChild.lastElementChild;
+}
+
+function editingItemElement(element) {
+  return element.classList.contains('edit-mode')
 }

@@ -17,7 +17,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
     test('아이템을 저장하지 않는다', () => {
         script.onAddItemSubmit(event);
 
-        expect(localStorageItems()).toBe(null);
+        expect(localStorageItems()).toBeNull();
     });
 });
 

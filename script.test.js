@@ -309,10 +309,14 @@ describe('Dom Content가 로드되었을 때', () => {
   test('저장된 아이템을 화면에 표시한다', () => {
     script.displayItems();
     
-    const filteredItems = itemElements().filter(
-      (i) => contents.includes(i.textContent)
+    const items = itemElements().map(
+      (i) => i.textContent
     );
-    expect(filteredItems).toHaveLength(2);
+
+    // items 배열과 contents 배열이 자료형과 내용이 완전히 동일한지를 검사한다. 
+    // 만약 두 배열의 요소의 순서, 자료형, 내용이 완전히 같으면 테스트가 통과한다.
+    // 하지만 만약 두 배열이 다른 요소 순서나 다른 요소를 포함하거나 자료형이 다르면 테스트는 실패하게 된다.
+    expect(items).toStrictEqual(contents);
   });
 
   test('입력필드가 비어있어야 한다', () => {

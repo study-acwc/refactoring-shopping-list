@@ -273,7 +273,7 @@ describe('검색어를 입력했을 때', () => {
     script.filterItems(searchKeywordEvent);
 
     const filteredItems = itemElements().filter(
-      (i) => i.textContent.includes(searchKeyword) && i.style.display == 'flex'
+      (i) => i.textContent.includes(searchKeyword) && hasFilteredItemStyle(i)
     );
     expect(filteredItems).toHaveLength(1);
   });
@@ -282,7 +282,7 @@ describe('검색어를 입력했을 때', () => {
     script.filterItems(searchKeywordEvent);
     
     const filteredItems = itemElements().filter(
-      (i) => i.textContent != searchKeyword && i.style.display == 'none'
+      (i) => i.textContent != searchKeyword && hasUnfilteredItemStyle(i)
     );
     expect(filteredItems).toHaveLength(1);
   });
@@ -365,4 +365,12 @@ function itemElements() {
 
 function filteredItemElementsBy(itemTitle) {
   return itemElements().filter((i) => i.textContent == itemTitle);
+}
+
+function hasFilteredItemStyle(element) {
+  return element.style.display == 'flex'
+}
+
+function hasUnfilteredItemStyle(element) {
+  return element.style.display == 'none'
 }

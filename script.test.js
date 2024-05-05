@@ -1,6 +1,8 @@
 import * as innerHTMLForTest from './scriptTestHTMLSetup.js';
 import * as script from './script.js';
 
+const localStorageKey = 'items';
+
 window.alert = jest.fn();
 
 beforeEach(() => {
@@ -18,7 +20,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
 
     test('아이템을 저장하지 않는다', () => {
         script.onAddItemSubmit(e);
-        expect(localStorage.getItem('items')).toBe(null);
+        expect(localStorage.getItem(localStorageKey)).toBe(null);
     });
 });
 
@@ -339,9 +341,9 @@ function dummyUIEvent() {
 }
 
 function localStorageItems() {
-  return JSON.parse(localStorage.getItem('items'));
+  return JSON.parse(localStorage.getItem(localStorageKey));
 }
 
 function setLocalStorageItems(items) {
-  localStorage.setItem('items', JSON.stringify(items));
+  localStorage.setItem(localStorageKey, JSON.stringify(items));
 }

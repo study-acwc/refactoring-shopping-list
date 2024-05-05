@@ -35,8 +35,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
     test('아이템을 저장한다', () => {
         script.onAddItemSubmit(e);
 
-        const items = localStorageItems();
-        expect(items).toContain(inputValue);
+        expect(localStorageItems()).toContain(inputValue);
     });
 
     test("입력값을 지운다.", () => {
@@ -89,8 +88,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
 
     test('저장된 아이템을 제거한다', () => {
         script.onAddItemSubmit(e);
-        const items = localStorageItems();
-        expect(items).not.toContain(itemTitle);
+        expect(localStorageItems()).not.toContain(itemTitle);
     });
 
     test("아이템 편집 상태를 해제한다", () => {
@@ -101,8 +99,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
     test('아이템을 저장한다', () => {
         script.onAddItemSubmit(e);
 
-        const items = localStorageItems();
-        expect(items).toContain(updatedItemTitle);
+        expect(localStorageItems()).toContain(updatedItemTitle);
     });
 
     test("입력값을 지운다", () => {
@@ -247,9 +244,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => 
   test('아이템을 저장소에서 제거한다', () => {
     script.removeItem(item);
 
-    const items = localStorageItems();
-    
-    expect(items).not.toContain(itemTitle);
+    expect(localStorageItems()).not.toContain(itemTitle);
   });
 });
 
@@ -300,8 +295,7 @@ describe('Clear All 버튼이 눌렸을 때', () => {
   test('모든 아이템을 저장소에서 제거한다.', () => {
     script.clearItems();
 
-    const items = localStorageItems();
-    expect(items).toBeNull();
+    expect(localStorageItems()).toBeNull();
   });
 });
 

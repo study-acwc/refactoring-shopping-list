@@ -63,7 +63,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
 
     test("입력값을 지우지 않는다", () => {
         script.onAddItemSubmit(e);
-        expect(document.getElementById('item-input').value).not.toBe('');
+        expect(itemInputValue()).not.toBe('');
     });
 });
 
@@ -104,7 +104,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
 
     test("입력값을 지운다", () => {
         script.onAddItemSubmit(e);
-        expect(document.getElementById('item-input').value).toBe('');
+        expect(itemInputValue()).toBe('');
     });
 });
 
@@ -347,4 +347,8 @@ function setLocalStorageItems(items) {
 
 function setItemInputValue(value) {
   document.getElementById('item-input').value = value;
+}
+
+function itemInputValue() {
+  return document.getElementById('item-input').value
 }

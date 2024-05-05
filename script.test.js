@@ -34,7 +34,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
     test('아이템을 저장한다', () => {
         script.onAddItemSubmit(e);
 
-        const items = JSON.parse(localStorage.getItem('items'));
+        const items = localStorageItems();
         expect(items).toContain('item1');
     });
 
@@ -57,7 +57,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
     test('아이템을 중복 저장하지 않는다', () => {
         script.onAddItemSubmit(e);
 
-        const items = JSON.parse(localStorage.getItem('items'));
+        const items = localStorageItems();
         const filteredItems = items.filter(item => item === 'item1');
         expect(filteredItems).toHaveLength(1);
     });
@@ -87,7 +87,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
 
     test('저장된 아이템을 제거한다', () => {
         script.onAddItemSubmit(e);
-        const items = JSON.parse(localStorage.getItem('items'));
+        const items = localStorageItems();
         expect(items).not.toContain('oldItem');
     });
 
@@ -99,7 +99,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
     test('아이템을 저장한다', () => {
         script.onAddItemSubmit(e);
 
-        const items = JSON.parse(localStorage.getItem('items'));
+        const items = localStorageItems();
         expect(items).toContain('updatedItem');
     });
 
@@ -242,7 +242,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => 
   test('아이템을 저장소에서 제거한다', () => {
     script.removeItem(item);
 
-    const items = JSON.parse(localStorage.getItem('items'));
+    const items = localStorageItems();
     
     expect(items).not.toContain('item1');
   });
@@ -296,7 +296,7 @@ describe('Clear All 버튼이 눌렸을 때', () => {
   test('모든 아이템을 저장소에서 제거한다.', () => {
     script.clearItems();
 
-    const items = JSON.parse(localStorage.getItem('items'));
+    const items = localStorageItems();
     expect(items).toBeNull();
   });
 });
@@ -336,4 +336,8 @@ function dummyUIEvent() {
     preventDefault: jest.fn(), // preventDefault 메서드를 가짐
     target: { value: 'Sample Value' } // target 속성을 가짐
   };
+}
+
+function localStorageItems() {
+  return JSON.parse(localStorage.getItem('items'));
 }

@@ -41,7 +41,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
 
     test("입력값을 지운다.", () => {
         script.onAddItemSubmit(e);
-        expect(document.getElementById('item-input').value).toBe('');
+        expect(itemInputValue()).toBe('');
     });
 });
 

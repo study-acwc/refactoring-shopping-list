@@ -1,8 +1,6 @@
 import * as innerHTMLForTest from './scriptTestHTMLSetup.js';
 import * as script from './script.js';
 
-const localStorageKey = 'items';
-
 window.alert = jest.fn();
 
 beforeEach(() => {
@@ -323,6 +321,8 @@ describe('Dom Content가 로드되었을 때', () => {
     expect(isEditModeEnabled()).toBeFalsy();
   });
 });
+
+const localStorageKey = 'items';
 
 function dummyUIEvent() {
   return {

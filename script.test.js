@@ -82,7 +82,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
       script.onAddItemSubmit(e);
       // 2. "oldItem" item 업데이트 모드로 전환
       // "oldItem" item 객체 조회
-      const items = script.itemList.querySelectorAll('li');
+      const items = itemElements();
       const filtered = Array.from(items).filter((i) => i.textContent == itemTitle);
       // 그 아이템을 업데이트 모드로 변경
       script.setItemToEdit(filtered[0]);
@@ -124,7 +124,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
     setItemInputValue(itemTitle);
     script.onAddItemSubmit(e);
     // 2. "item1" item 객체 조회
-    const items = script.itemList.querySelectorAll('li');
+    const items = itemElements();
     const filtered = Array.from(items).filter((i) => i.textContent == itemTitle);
     item = filtered[0];
     // 3. confirm 함수를 모의 함수로 대체
@@ -152,7 +152,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
     setItemInputValue(itemTitle);
     script.onAddItemSubmit(e);
     // 2. "item1" item 객체 조회
-    const items = script.itemList.querySelectorAll('li');
+    const items = itemElements();
     const filtered = Array.from(items).filter((i) => i.textContent == itemTitle);
     item = filtered[0];
     // 3. event 객체 생성
@@ -170,7 +170,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   test('해당 아이템을 편집 모드로 표시한다', () => {
     script.onClickItem(event);
 
-    const items = script.itemList.querySelectorAll('li'); 
+    const items = itemElements(); 
     const filteredItems = Array.from(items).filter(
       (i) => i.textContent.includes(item.textContent) && i.classList.contains('edit-mode')
     );
@@ -180,7 +180,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   test('해당되지 않는 아이템은 편집 모드로 표시하지 않는다', () => {
     script.onClickItem(event);
 
-    const items = script.itemList.querySelectorAll('li'); 
+    const items = itemElements(); 
     const filteredItems = Array.from(items).filter(
       (i) => false == i.textContent.includes(item.textContent) && i.classList.contains('edit-mode')
     );
@@ -243,7 +243,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => 
     setItemInputValue(itemTitle);
     script.onAddItemSubmit(e);
     // 2. "item1" item 객체 조회
-    const items = script.itemList.querySelectorAll('li');
+    const items = itemElements();
     const filtered = Array.from(items).filter((i) => i.textContent == itemTitle);
     item = filtered[0];
     // 3. alert 함수를 모의 함수로 대체
@@ -280,7 +280,7 @@ describe('검색어를 입력했을 때', () => {
   test('검색 결과에 해당하는 아이템을 표시한다', () => {
     script.filterItems(searchKeywordEvent);
 
-    const items = script.itemList.querySelectorAll('li'); 
+    const items = itemElements(); 
     const filteredItems = Array.from(items).filter(
       (i) => i.textContent.includes(searchKeyword) && i.style.display == 'flex'
     );
@@ -290,7 +290,7 @@ describe('검색어를 입력했을 때', () => {
   test('검색 결과에 해당하지 않는 아이템은 표시하지 않는다.', () => {
     script.filterItems(searchKeywordEvent);
 
-    const items = script.itemList.querySelectorAll('li');
+    const items = itemElements();
     const filteredItems = Array.from(items).filter(
       (i) => i.textContent != searchKeyword && i.style.display == 'none'
     );
@@ -322,7 +322,7 @@ describe('Dom Content가 로드되었을 때', () => {
   test('저장된 아이템을 화면에 표시한다', () => {
     script.displayItems();
 
-    const items = script.itemList.querySelectorAll('li');
+    const items = itemElements();
     const filteredItems = Array.from(items).filter(
       (i) => contents.includes(i.textContent)
     );
@@ -362,5 +362,9 @@ function setItemInputValue(value) {
 }
 
 function itemInputValue() {
-  return document.getElementById('item-input').value
+  return document.getElementById('item-input').value;
+}
+
+function itemElements() {
+  return script.itemList.querySelectorAll('li');
 }

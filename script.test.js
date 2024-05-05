@@ -82,7 +82,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
       updateUserInputAndSubmitAdd(itemTitle);
       // 2
       const filtered = filteredItemElementsBy(itemTitle);
-      script.setItemToEdit(filtered[0]);
+      setItemElementToEdit(filtered[0]);
       // 3
       setItemInputValue(updatedItemTitle);
     });
@@ -386,4 +386,8 @@ function isEditModeEnabled() {
 
 function clearItems() {
   script.clearItems();
+}
+
+function setItemElementToEdit(element){
+  script.setItemToEdit(element);
 }

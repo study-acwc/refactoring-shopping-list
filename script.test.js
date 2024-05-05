@@ -58,8 +58,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
     test('아이템을 중복 저장하지 않는다', () => {
         script.onAddItemSubmit(e);
 
-        const items = localStorageItems();
-        const filteredItems = items.filter(item => item === inputValue);
+        const filteredItems = filteredLocalStorageItemsBy(inputValue);
         expect(filteredItems).toHaveLength(1);
     });
 
@@ -351,6 +350,10 @@ function dummyUIEvent() {
 
 function localStorageItems() {
   return JSON.parse(localStorage.getItem(localStorageKey));
+}
+
+function filteredLocalStorageItemsBy(itemTitle) {
+  return localStorageItems().filter(item => item === itemTitle);
 }
 
 function setLocalStorageItems(items) {

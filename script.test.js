@@ -188,3 +188,32 @@ describe("UI 아이템 삭제", () => {
     expect(itemList.children.length).toBe(0);
   });
 });
+
+describe("Local Storage 아이템을 추가 삭제", () => {
+  const inputValue = "test-item";
+
+  beforeEach(() => {
+    initialize();
+  });
+
+  // addItemToStorage 및 removeItemFromStorage 함수 테스트
+  test("Local Storage 아이템 추가", () => {
+    // 아이템 추가
+    script.addItemToStorage(inputValue);
+
+    // localStorage에서 아이템이 추가되었는지 확인
+    const storageList = getLocalStorageList();
+    expect(storageList).toContain(inputValue);
+  });
+
+  test("Local Storage 아이템 추가", () => {
+    script.addItemToStorage(inputValue);
+
+    // 아이템 제거
+    script.removeItemFromStorage(inputValue);
+
+    // localStorage에서 아이템이 제거되었는지 확인
+    const storageList = getLocalStorageList();
+    expect(storageList).not.toContain(inputValue);
+  });
+});

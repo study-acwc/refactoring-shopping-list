@@ -37,6 +37,13 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
         expect(localStorageItems()).toContain(inputValue);
     });
 
+    test('화면에 새로운 아이템을 표시한다', () => {
+      script.onAddItemSubmit(event);
+
+      let elements = filteredItemElementsBy(inputValue);
+      expect(elements).toHaveLength(1);
+  });
+
     test("입력값을 지운다.", () => {
         script.onAddItemSubmit(event);
 
@@ -91,6 +98,13 @@ describe('Update Item 버튼이 눌렸을 때', () => {
         expect(localStorageItems()).not.toContain(itemTitle);
     });
 
+    test('화면에서 해당 아이템을 제거한다', () => {
+      script.onAddItemSubmit(event);
+
+      let elements = filteredItemElementsBy(itemTitle);
+      expect(elements).toHaveLength(0);
+    });
+
     test("아이템 편집 상태를 해제한다", () => {
         script.onAddItemSubmit(event);
 
@@ -101,6 +115,13 @@ describe('Update Item 버튼이 눌렸을 때', () => {
         script.onAddItemSubmit(event);
 
         expect(localStorageItems()).toContain(updatedItemTitle);
+    });
+
+    test('화면에 새로운 아이템을 표시한다', () => {
+        script.onAddItemSubmit(event);
+
+        let elements = filteredItemElementsBy(updatedItemTitle);
+        expect(elements).toHaveLength(1);
     });
 
     test("입력값을 지운다", () => {
@@ -218,7 +239,7 @@ describe('아이템 영역이 아닌 위치가 눌렸을 때', () => {
 });
 
 
-describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => {
+describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이템이 하나이면', () => {
   let item;
   let itemTitle;
 
@@ -241,6 +262,57 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => 
     script.removeItem(item);
 
     expect(localStorageItems()).not.toContain(itemTitle);
+  });
+
+  test('필터링 영역을 표시하지 않는다', () => {
+    script.removeItem(item);
+
+    expect(isFilterHidden()).toBeTruthy();
+  });
+
+  test('전체 삭제 버튼을 표시하지 않는다', () => {
+    script.removeItem(item);
+
+    expect(isClearButtonHidden()).toBeTruthy();
+  });
+});
+
+describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이템이 두 개이면', () => {
+  let item1;
+  let itemTitle1;
+
+  afterEach(() => {
+    jest.clearAllMocks();  // 각 테스트 후 모의 함수를 초기화
+  });
+
+  beforeEach(() => {
+    itemTitle1 = 'item1';
+    // 1
+    updateUserInputAndSubmitAdd(itemTitle1);
+    updateUserInputAndSubmitAdd('item2');
+    // 2
+    const filtered = filteredItemElementsBy(itemTitle1);
+    item1 = filtered[0];
+    // 3
+    global.confirm = jest.fn().mockReturnValue(true);
+  });
+
+  test('아이템을 저장소에서 제거한다', () => {
+    script.removeItem(item1);
+
+    expect(localStorageItems()).not.toContain(itemTitle1);
+  });
+
+  test('필터링 영역을 표시한다', () => {
+    script.removeItem(item1);
+
+    expect(isFilterDisplayed()).toBeTruthy();
+  });
+
+  test('전체 삭제 버튼을 표시하지 않는다', () => {
+    script.removeItem(item1);
+
+    expect(isClearButtonDisplayed()).toBeTruthy();
   });
 });
 
@@ -287,6 +359,12 @@ describe('Clear All 버튼이 눌렸을 때', () => {
     script.clearItems();
 
     expect(localStorageItems()).toBeNull();
+  });
+
+  test('모든 아이템을 화면에서 제거한다', () => {
+    script.clearItems();
+
+    expect(itemElements()).toHaveLength(0);
   });
 });
 
@@ -390,4 +468,20 @@ function clearItems() {
 
 function setItemElementToEdit(element){
   script.setItemToEdit(element);
+}
+
+function isFilterHidden() {
+  return script.itemFilter.style.display == 'none';
+}
+
+function isClearButtonHidden() {
+  return script.clearBtn.style.display == 'none';
+}
+
+function isFilterDisplayed() {
+  return script.itemFilter.style.display == 'block';
+}
+
+function isClearButtonDisplayed() {
+  return script.clearBtn.style.display == 'block';
 }

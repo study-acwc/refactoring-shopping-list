@@ -2,6 +2,10 @@ import * as innerHTMLForTest from "./scriptTestHTMLSetup.js";
 import * as script from "./script.js";
 
 const ITEM_LIST_ELEMENT_ID = "item-list";
+const BUTTON_REMOVE_CLASS_NAME = "remove-item btn-link text-red";
+const ICON_DELETE_CLASS_NAMES = ["fa-solid", "fa-xmark"];
+const INPUT_ELEMENT_Id = "item-input";
+const BUTTON_CLEAR_ID = "clear";
 const LOCAL_STORAGE_LIST_KEY = "items";
 
 window.alert = jest.fn();
@@ -12,6 +16,7 @@ function initialize() {
 }
 
 const getElementList = () => document.getElementById(ITEM_LIST_ELEMENT_ID);
+
 const getLocalStorageList = () => {
   try {
     return JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY));
@@ -147,73 +152,194 @@ describe("Update Item 버튼이 눌렸을 때", () => {
 
 //NOTE: william test case begin
 
-describe("UI 아이템 추가", () => {
+describe("목록 아이템 추가", () => {
   beforeEach(() => {
     initialize();
   });
+  const inputValue = "test-item";
   // addItemToDOM 함수 테스트
-  test("임으의 입력값 item block이 추가", () => {
-    const inputValue = "test-item";
+  test("아이템 DOM 생성", () => {
     // 새로운 아이템을 추가
     script.addItemToDOM(inputValue);
 
     // 아이템 목록에 해당 아이템이 추가되었는지 확인
     const itemList = getElementList();
+    const item = itemList.children[0];
+
     expect(itemList.children.length).toBe(1);
     expect(itemList.children[0].textContent).toBe(inputValue);
+
+    const itemButton = item.children[0];
+    expect(itemButton.className).toBe(BUTTON_REMOVE_CLASS_NAME);
+
+    const icon = itemButton.children[0];
+    expect(icon.classList.contains(...ICON_DELETE_CLASS_NAMES)).toBe(true);
+  });
+
+  test("로컬 스토리지 아이템 추가", () => {
+    script.addItemToStorage(inputValue);
+    const storageList = getLocalStorageList();
+    expect(storageList).toContain(inputValue);
   });
 });
 
-describe("UI 아이템 삭제", () => {
+describe("목록 아이템 삭제", () => {
+  const inputValue = "test-item";
+
   beforeEach(() => {
     // confirm 함수를 jest.fn()으로 초기화
     global.confirm = jest.fn();
     initialize();
+
+    script.addItemToDOM(inputValue);
+    script.addItemToStorage(inputValue);
   });
-  // addItemToDOM 함수 테스트
-  test("삭제 확인을 누르면 목록에서 item block이 삭제", () => {
+
+  test("삭제 취소를 누르면 목록에서 item 유지", () => {
     // confirm 함수가 항상 true를 반환하도록 설정
-    global.confirm.mockReturnValueOnce(true);
-
-    const inputValue = "test-item";
-
-    // 아이템 추가
-    document.body.innerHTML = `<ul id="item-list"><li>${inputValue}</li></ul>`;
+    global.confirm.mockReturnValueOnce(false);
 
     // 아이템 목록이 비어있는지 확인
     const itemList = getElementList();
 
-    // 아이템을 DOM에서 제거
+    // 아이템을 DOM에서 유지
     script.removeItem(itemList.children[0]);
-    expect(itemList.children.length).toBe(0);
-  });
-});
-
-describe("Local Storage 아이템을 추가 삭제", () => {
-  const inputValue = "test-item";
-
-  beforeEach(() => {
-    initialize();
+    expect(itemList.children.length).toBe(1);
+    expect(itemList.children[0].textContent).toBe(inputValue);
   });
 
-  // addItemToStorage 및 removeItemFromStorage 함수 테스트
-  test("Local Storage 아이템 추가", () => {
-    // 아이템 추가
-    script.addItemToStorage(inputValue);
+  test("삭제 취소를 누르면 로컬 스토리지에 유지", () => {
+    global.confirm.mockReturnValueOnce(false);
 
-    // localStorage에서 아이템이 추가되었는지 확인
+    const itemList = getElementList();
+    script.removeItem(itemList.children[0]);
+
     const storageList = getLocalStorageList();
     expect(storageList).toContain(inputValue);
   });
 
-  test("Local Storage 아이템 추가", () => {
-    script.addItemToStorage(inputValue);
+  test("삭제 확인을 누르면 목록에서 item 삭제", () => {
+    // confirm 함수가 항상 true를 반환하도록 설정
+    global.confirm.mockReturnValueOnce(true);
 
-    // 아이템 제거
-    script.removeItemFromStorage(inputValue);
+    const itemList = getElementList();
 
-    // localStorage에서 아이템이 제거되었는지 확인
+    script.removeItem(itemList.children[0]);
+    expect(itemList.children.length).toBe(0);
+  });
+
+  test("삭제 확인을 누르면 로컬 스토리지에서 삭제", () => {
+    global.confirm.mockReturnValueOnce(true);
+
+    const itemList = getElementList();
+
+    script.removeItem(itemList.children[0]);
+
     const storageList = getLocalStorageList();
     expect(storageList).not.toContain(inputValue);
+  });
+});
+
+describe("clear all 버튼", () => {
+  const inputValues = ["test1", "test2", "test3", "test4"];
+
+  beforeEach(() => {
+    inputValues.map(script.addItemToDOM);
+    inputValues.map(script.addItemToStorage);
+  });
+
+  test("버튼 노출", () => {
+    script.checkUI();
+    const buttonClearAll = document.getElementById(BUTTON_CLEAR_ID);
+    expect(buttonClearAll.style.display).toBe("block");
+  });
+
+  test("버튼 클릭시 모든 아이템 삭제시 버튼 숨김", () => {
+    const itemList = getElementList();
+    const buttonClearAll = document.getElementById(BUTTON_CLEAR_ID);
+    buttonClearAll.click();
+
+    expect(itemList.children.length).toBe(0);
+    expect(buttonClearAll.style.display).toBe("none");
+  });
+});
+
+describe("아이템 편집", () => {
+  const inputValues = ["test1", "test2", "test3", "test4"];
+
+  beforeEach(() => {
+    initialize();
+
+    inputValues.map(script.addItemToDOM);
+    inputValues.map(script.addItemToStorage);
+  });
+
+  test("X버튼 외 버튼 영역 클릭시 편집 모드로 전환", () => {
+    const itemList = getElementList();
+
+    const item = itemList.children[1];
+
+    const buttonSubmit = document.querySelector('button[type="submit"]');
+
+    item.click();
+
+    expect(item.className).toContain("edit-mode");
+    expect(script.isEditMode).toBe(true);
+    expect(document.getElementById(INPUT_ELEMENT_Id).value).toBe(
+      item.textContent
+    );
+
+    expect(buttonSubmit.textContent.trim()).toBe("Update Item");
+  });
+
+  test("아이템 값 변경", () => {
+    const itemList = getElementList();
+    const item = itemList.children[0];
+    const buttonSubmit = document.querySelector('button[type="submit"]');
+
+    const updateValue = "update test item";
+
+    item.click();
+
+    document.getElementById(INPUT_ELEMENT_Id).value = updateValue;
+
+    buttonSubmit.click();
+
+    expect(script.isEditMode).toBe(false);
+    expect(itemList.children).toHaveLength(inputValues.length);
+    expect(itemList.lastChild.textContent).toBe(updateValue);
+    expect(buttonSubmit.textContent.trim()).toBe("Add Item");
+    expect(getLocalStorageList()).toContain(updateValue);
+  });
+  test("빈 값을 업데이트 할 경우, 편집 모드 유지", () => {
+    const itemList = getElementList();
+    const item = itemList.children[0];
+    const buttonSubmit = document.querySelector('button[type="submit"]');
+    const inputElement = document.getElementById(INPUT_ELEMENT_Id);
+
+    item.click();
+
+    inputElement.value = "";
+
+    buttonSubmit.click();
+
+    expect(script.isEditMode).toBe(true);
+    expect(itemList.children).toHaveLength(inputValues.length);
+    expect(buttonSubmit.textContent.trim()).toBe("Update Item");
+  });
+
+  test("편집모드 버튼을 다시 누르면 해제", () => {
+    const itemList = getElementList();
+    const item = itemList.children[0];
+    const buttonSubmit = document.querySelector('button[type="submit"]');
+    const inputElement = document.getElementById(INPUT_ELEMENT_Id);
+
+    item.click();
+    buttonSubmit.click();
+
+    expect(script.isEditMode).toBe(false);
+    expect(buttonSubmit.textContent.trim()).toBe("Add Item");
+    expect(inputElement.value.length).toBe(0);
+    expect(item.className).not.toContain("edit-mode");
   });
 });

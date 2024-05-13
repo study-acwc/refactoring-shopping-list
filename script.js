@@ -1,9 +1,9 @@
-export const itemForm = document.getElementById('item-form');
-export const itemInput = document.getElementById('item-input');
-export const itemList = document.getElementById('item-list');
-export const clearBtn = document.getElementById('clear');
-export const itemFilter = document.getElementById('filter');
-export const formBtn = itemForm.querySelector('button');
+export const itemForm = document.getElementById("item-form");
+export const itemInput = document.getElementById("item-input");
+export const itemList = document.getElementById("item-list");
+export const clearBtn = document.getElementById("clear");
+export const itemFilter = document.getElementById("filter");
+export const formBtn = itemForm.querySelector("button");
 export let isEditMode = false;
 
 export function displayItems() {
@@ -19,17 +19,17 @@ export function onAddItemSubmit(e) {
   const newItem = itemInput.value.trim();
 
   // Validate Input
-  if (newItem === '') {
-    alert('Please add an item');
+  if (newItem === "") {
+    alert("Please add an item");
     return;
   }
 
   // Check for edit mode
   if (isEditMode) {
-    const itemToEdit = itemList.querySelector('.edit-mode');
+    const itemToEdit = itemList.querySelector(".edit-mode");
 
     removeItemFromStorage(itemToEdit.textContent);
-    itemToEdit.classList.remove('edit-mode');
+    itemToEdit.classList.remove("edit-mode");
     itemToEdit.remove();
     isEditMode = false;
   } else {
@@ -47,15 +47,15 @@ export function onAddItemSubmit(e) {
 
   checkUI();
 
-  itemInput.value = '';
+  itemInput.value = "";
 }
 
 export function addItemToDOM(item) {
   // Create list item
-  const li = document.createElement('li');
+  const li = document.createElement("li");
   li.appendChild(document.createTextNode(item));
 
-  const button = createButton('remove-item btn-link text-red');
+  const button = createButton("remove-item btn-link text-red");
   li.appendChild(button);
 
   // Add li to the DOM
@@ -63,15 +63,15 @@ export function addItemToDOM(item) {
 }
 
 export function createButton(classes) {
-  const button = document.createElement('button');
+  const button = document.createElement("button");
   button.className = classes;
-  const icon = createIcon('fa-solid fa-xmark');
+  const icon = createIcon("fa-solid fa-xmark");
   button.appendChild(icon);
   return button;
 }
 
 export function createIcon(classes) {
-  const icon = document.createElement('i');
+  const icon = document.createElement("i");
   icon.className = classes;
   return icon;
 }
@@ -83,25 +83,25 @@ export function addItemToStorage(item) {
   itemsFromStorage.push(item);
 
   // Convert to JSON string and set to local storage
-  localStorage.setItem('items', JSON.stringify(itemsFromStorage));
+  localStorage.setItem("items", JSON.stringify(itemsFromStorage));
 }
 
 export function getItemsFromStorage() {
   let itemsFromStorage;
 
-  if (localStorage.getItem('items') === null) {
+  if (localStorage.getItem("items") === null) {
     itemsFromStorage = [];
   } else {
-    itemsFromStorage = JSON.parse(localStorage.getItem('items'));
+    itemsFromStorage = JSON.parse(localStorage.getItem("items"));
   }
 
   return itemsFromStorage;
 }
 
 export function onClickItem(e) {
-  if (e.target.parentElement.classList.contains('remove-item')) {
+  if (e.target.parentElement.classList.contains("remove-item")) {
     removeItem(e.target.parentElement.parentElement);
-  } else if (e.target.closest('li')) {
+  } else if (e.target.closest("li")) {
     setItemToEdit(e.target);
   }
 }
@@ -115,12 +115,12 @@ export function setItemToEdit(item) {
   isEditMode = true;
 
   itemList
-    .querySelectorAll('li')
-    .forEach((i) => i.classList.remove('edit-mode'));
+    .querySelectorAll("li")
+    .forEach((i) => i.classList.remove("edit-mode"));
 
-  item.classList.add('edit-mode');
+  item.classList.add("edit-mode");
   formBtn.innerHTML = '<i class="fa-solid fa-pen"></i>   Update Item';
-  formBtn.style.backgroundColor = '#228B22';
+  formBtn.style.backgroundColor = "#228B22";
   itemInput.value = item.textContent;
 }
 
@@ -132,6 +132,7 @@ export function removeItem(item) {
     item.remove();
 
     // Remove item from storage
+    console.log(removeItemFromStorage);
     removeItemFromStorage(item.textContent);
 
     checkUI();
@@ -145,7 +146,7 @@ export function removeItemFromStorage(item) {
   itemsFromStorage = itemsFromStorage.filter((i) => i !== item);
 
   // Re-set to localstorage
-  localStorage.setItem('items', JSON.stringify(itemsFromStorage));
+  localStorage.setItem("items", JSON.stringify(itemsFromStorage));
 }
 
 export function clearItems() {
@@ -154,41 +155,41 @@ export function clearItems() {
   }
 
   // Clear from localStorage
-  localStorage.removeItem('items');
+  localStorage.removeItem("items");
 
   checkUI();
 }
 
 function filterItems(e) {
-  const items = itemList.querySelectorAll('li');
+  const items = itemList.querySelectorAll("li");
   const text = e.target.value.toLowerCase();
 
   items.forEach((item) => {
     const itemName = item.firstChild.textContent.toLowerCase();
 
     if (itemName.indexOf(text) != -1) {
-      item.style.display = 'flex';
+      item.style.display = "flex";
     } else {
-      item.style.display = 'none';
+      item.style.display = "none";
     }
   });
 }
 
 export function checkUI() {
-  itemInput.value = '';
+  itemInput.value = "";
 
-  const items = itemList.querySelectorAll('li');
+  const items = itemList.querySelectorAll("li");
 
   if (items.length === 0) {
-    clearBtn.style.display = 'none';
-    itemFilter.style.display = 'none';
+    clearBtn.style.display = "none";
+    itemFilter.style.display = "none";
   } else {
-    clearBtn.style.display = 'block';
-    itemFilter.style.display = 'block';
+    clearBtn.style.display = "block";
+    itemFilter.style.display = "block";
   }
 
   formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
-  formBtn.style.backgroundColor = '#333';
+  formBtn.style.backgroundColor = "#333";
 
   isEditMode = false;
 }
@@ -196,11 +197,11 @@ export function checkUI() {
 // Initialize app
 export function init() {
   // Event Listeners
-  itemForm.addEventListener('submit', onAddItemSubmit);
-  itemList.addEventListener('click', onClickItem);
-  clearBtn.addEventListener('click', clearItems);
-  itemFilter.addEventListener('input', filterItems);
-  document.addEventListener('DOMContentLoaded', displayItems);
+  itemForm.addEventListener("submit", onAddItemSubmit);
+  itemList.addEventListener("click", onClickItem);
+  clearBtn.addEventListener("click", clearItems);
+  itemFilter.addEventListener("input", filterItems);
+  document.addEventListener("DOMContentLoaded", displayItems);
 
   checkUI();
 }

@@ -1,3 +1,5 @@
+import * as eventListener from "./EventListener";
+
 export const itemForm = document.getElementById("item-form");
 export const itemInput = document.getElementById("item-input");
 export const itemList = document.getElementById("item-list");
@@ -98,14 +100,6 @@ export function getItemsFromStorage() {
   return itemsFromStorage;
 }
 
-export function onClickItem(e) {
-  if (e.target.parentElement.classList.contains("remove-item")) {
-    removeItem(e.target.parentElement.parentElement);
-  } else if (e.target.closest("li")) {
-    setItemToEdit(e.target);
-  }
-}
-
 export function checkIfItemExists(item) {
   const itemsFromStorage = getItemsFromStorage();
   return itemsFromStorage.includes(item);
@@ -198,7 +192,7 @@ export function checkUI() {
 export function init() {
   // Event Listeners
   itemForm.addEventListener("submit", onAddItemSubmit);
-  itemList.addEventListener("click", onClickItem);
+  itemList.addEventListener("click", eventListener.onClickItem);
   clearBtn.addEventListener("click", clearItems);
   itemFilter.addEventListener("input", filterItems);
   document.addEventListener("DOMContentLoaded", displayItems);

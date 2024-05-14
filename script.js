@@ -188,6 +188,15 @@ export function checkUI() {
   isEditMode = false;
 }
 
+export function onClickItem2(e) {
+  if (e.target.parentElement.classList.contains("remove-item")) {
+    removeItem(e.target.parentElement.parentElement);
+    checkUI();
+  } else if (e.target.closest("li")) {
+    setItemToEdit(e.target);
+  }
+}
+
 // Initialize app
 export function init() {
   // Event Listeners

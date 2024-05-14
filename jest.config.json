@@ -4,6 +4,5 @@
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
   },
   "transformIgnorePatterns": ["<rootDir>/node_modules/"],
-  "testEnvironment": "jsdom",
-  "setupFilesAfterEnv": ["./userServicemocking.js"]
+  "testEnvironment": "jsdom"
 }

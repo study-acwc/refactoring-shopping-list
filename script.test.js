@@ -343,3 +343,24 @@ describe("아이템 편집", () => {
     expect(item.className).not.toContain("edit-mode");
   });
 });
+
+describe("이닛 후 아이템 목록", () => {
+  const inputValues = ["test1", "test2", "test3", "test4"];
+
+  beforeEach(() => {
+    initialize();
+    inputValues.map(script.addItemToStorage);
+  });
+
+  test("local에 저장된 아이템을 있는 겨웅 목록의 아이템을 보여준다", () => {
+    script.displayItems();
+
+    const itemList = getElementList();
+
+    expect(itemList.children.length).toBe(inputValues.length);
+
+    [...itemList.children].forEach((element, index) => {
+      expect(element.textContent).toBe(inputValues[index]);
+    });
+  });
+});

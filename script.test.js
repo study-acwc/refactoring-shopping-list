@@ -364,3 +364,49 @@ describe("이닛 후 아이템 목록", () => {
     });
   });
 });
+
+describe("Filter Items", () => {
+  const inputValues = ["apple", "Orange", "Milk", "Test", "test123"];
+
+  const getFilteredDomItems = () => {
+    return [...getElementList().children].filter(
+      ({ style }) => style.display === "flex"
+    );
+  };
+
+  beforeEach(() => {
+    initialize();
+    inputValues.map(script.addItemToDOM);
+  });
+
+  test("입력된 값이 포함된 아이템들 노출", () => {
+    const searchingChar = "test";
+
+    const e = {
+      target: { value: searchingChar }, // target 속성을 가짐
+    };
+
+    script.filterItems(e);
+
+    const filteredFlexDOMItems = getFilteredDomItems();
+    const filteredInput = inputValues.filter(
+      (keyword) => keyword.toLocaleLowerCase().indexOf(searchingChar) !== -1
+    );
+
+    expect(filteredInput.length).toBe(filteredFlexDOMItems.length);
+  });
+
+  test("입력된 값과 일치하지 않는다면 목록 아이템 미노출", () => {
+    const searchingChar = "bb";
+
+    const e = {
+      target: { value: searchingChar }, // target 속성을 가짐
+    };
+
+    script.filterItems(e);
+
+    const filteredFlexDOMItems = getFilteredDomItems();
+
+    expect(filteredFlexDOMItems.length).toBe(0);
+  });
+});

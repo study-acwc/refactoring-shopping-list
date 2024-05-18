@@ -240,7 +240,7 @@ describe('item 클릭시', () => {
 						textContent: 'Apples',
 					},
 					classList: {
-						contains: jest.fn().mockReturnValue(false),
+						contains: jest.fn().mockReturnValue(null),
 					},
 				},
 			},
@@ -260,10 +260,11 @@ describe('removeItem 호출시 item이 있다면', () => {
 			textContent: 'Apples',
 			remove: jest.fn(),
 		}
+		window.confirm = jest.fn(() => true)
 	})
 	test('confirm을 띄운다', () => {
 		script.removeItem(item)
-		window.confirm = jest.fn(() => true)
+		expect(confirm).toHaveBeenCalled()
 	})
 
 	test('dom에서 제거한다', () => {

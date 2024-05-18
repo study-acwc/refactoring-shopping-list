@@ -1,10 +1,9 @@
 {
-  "moduleFileExtensions": ["js", "jsx", "json", "ts", "tsx"],
-  "transform": {
-    "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
-  },
-  "transformIgnorePatterns": ["<rootDir>/node_modules/"],
-  "testEnvironment": "jsdom",
-  "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"]
+	"moduleFileExtensions": ["js", "jsx", "json", "ts", "tsx"],
+	"transform": {
+		"^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+	},
+	"transformIgnorePatterns": ["<rootDir>/node_modules/"],
+	"testEnvironment": "jsdom",
+	"restoreMocks": true
 }
-

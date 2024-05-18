@@ -6,7 +6,6 @@ const itemList = document.getElementById('item-list')
 
 beforeEach(() => {
 	script.clearItems()
-	itemInput.value = ''
 })
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
@@ -139,6 +138,8 @@ describe('clear all 버튼을 클릭한다', () => {
 
 describe('item 을 필터링한다', () => {
 	let e
+	let items
+
 	beforeEach(() => {
 		e = {
 			preventDefault: jest.fn(),
@@ -146,25 +147,27 @@ describe('item 을 필터링한다', () => {
 				value: '',
 			},
 		}
+		items = itemList.querySelectorAll('li')
+		itemInput.value = 'Apples'
+		script.onAddItemSubmit(e)
 	})
 
-	test('입력된 값이 있다면 보여준다', () => {
+	test('입력된 값이 item에 있다면 ui에서 보여준다 ', () => {
 		e.target.value = 'a'
 		script.filterItems(e)
-		const filtered = Array.from(itemList.childNodes).filter((item) =>
-			item.textContent.toLocaleLowerCase().includes(e.target.value)
-		)
-
-		// expect(filtered.length).not.toBe(0)
+		items.forEach((item) => {
+			if (item.textContent.toLowerCase().includes(e.target.value)) {
+				expect(item.style.display).toBe('flex')
+			}
+		})
 	})
 
 	test('입력된 값이 없다면 안보여준다', () => {
 		e.target.value = 'z'
 		script.filterItems(e)
-		const items = Array.from(itemList.childNodes).filter(
-			(item) => item.textContent.indexOf(e.target.value.toLowerCase()) === -1
-		)
-		expect(items.length).toBe(0)
+		items.forEach((item) => {
+			expect(item.style.display).toBe('none')
+		})
 	})
 })
 
@@ -178,10 +181,11 @@ test('dom이 로드되면 displayItems를 호출한다', () => {
 	expect(itemList.children.length).toBeGreaterThan(0)
 })
 
-describe('item 을 클릭시', () => {
+describe('item 클릭시', () => {
 	let e
 	let removeSpy
 	let editSpy
+
 	beforeEach(() => {
 		e = {
 			preventDefault: jest.fn(),
@@ -193,7 +197,7 @@ describe('item 을 클릭시', () => {
 		editSpy = jest.spyOn(script, 'setItemToEdit')
 	})
 
-	test('item list, remove-item 이 아닌 다른 영역 클릭시 아무동작도 하지 않는다', () => {
+	test('다른영역인 경우 아무것도 호출하지 않는다', () => {
 		const list = itemList.childNodes[0]
 		const event = {
 			target: list,
@@ -205,23 +209,47 @@ describe('item 을 클릭시', () => {
 		expect(editSpy).not.toHaveBeenCalled()
 	})
 
-	test('remove-item 클릭시 removeItem을 호출하고, li 클릭시 편집상태를 바꾼다', () => {
-		const list = itemList.childNodes[0]
+	test('remove-item 클릭인 경우 removeItem을 호출한다', () => {
 		const event = {
-			target: list,
+			target: {
+				closest: jest.fn().mockReturnValue(null),
+				parentElement: {
+					parentElement: {
+						textContent: 'Apples',
+					},
+
+					classList: {
+						contains: jest.fn().mockReturnValue(true),
+					},
+				},
+			},
 			preventDefault: jest.fn(),
 		}
 
-		if (event.target.parentElement.classList.contains('remove-item')) {
-			script.onClickItem(event)
-			expect(removeSpy).toHaveBeenCalled()
-			expect(editSpy).not.toHaveBeenCalled()
+		script.onClickItem(event)
+		expect(removeSpy).toHaveBeenCalled()
+		expect(editSpy).not.toHaveBeenCalled()
+	})
+
+	test('아이템 영역만 클릭시 setItemToEdit을 호출한다', () => {
+		const event = {
+			target: {
+				closest: jest.fn().mockReturnValue(true),
+				parentElement: {
+					parentElement: {
+						textContent: 'Apples',
+					},
+					classList: {
+						contains: jest.fn().mockReturnValue(false),
+					},
+				},
+			},
+			preventDefault: jest.fn(),
 		}
 
-		if (event.target.closest('li')) {
-			// expect(editSpy).toHaveBeenCalled()
-			expect(removeSpy).not.toHaveBeenCalled()
-		}
+		script.onClickItem(event)
+		expect(removeSpy).not.toHaveBeenCalled()
+		expect(editSpy).toHaveBeenCalled()
 	})
 })
 

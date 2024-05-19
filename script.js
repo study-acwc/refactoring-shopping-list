@@ -174,10 +174,14 @@ export function checkUI() {
     showListControls()
   }
 
-  formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
-  formBtn.style.backgroundColor = '#333';
+  setAddItemButtonStyle();
 
   isEditMode = false;
+}
+
+function setAddItemButtonStyle() {
+  formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
+  formBtn.style.backgroundColor = '#333';
 }
 
 function hideListControls() {

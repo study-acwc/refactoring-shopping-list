@@ -17,8 +17,7 @@ export function displayItems() {
 export function onAddItemSubmit(e) {
   e.preventDefault();
 
-  // trim the input value to remove whitespace - disallowing duplicate items due to white space in the process
-  const newItem = itemInput.value.trim();
+  const newItem = uniqueInput();
 
   if (false == validateInput(newItem)) {
     alert('Please add an item');
@@ -195,6 +194,10 @@ export function checkUI() {
 
 function validateInput(input) {
   return input != ''
+}
+
+function uniqueInput() {
+  return itemInput.value.trim()
 }
 
 // Initialize app

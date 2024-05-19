@@ -24,7 +24,6 @@ export function onAddItemSubmit(e) {
     return;
   }
 
-  // Check for edit mode
   if (isEditingItem()) {
     removeEditingItem()
   } else if (checkIfItemExists(newItem)) {
@@ -32,10 +31,8 @@ export function onAddItemSubmit(e) {
       return;
   }
 
-  // Create item DOM element
   addItemToDOM(newItem);
 
-  // Add item to local storage
   addItemToStorage(newItem);
 
   checkUI();

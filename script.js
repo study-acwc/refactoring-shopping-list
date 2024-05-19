@@ -166,7 +166,7 @@ export function filterItems(e) {
 export function checkUI() {
   clearInput();
 
-  const items = itemList.querySelectorAll('li');
+  const items = allItemsFromDOM();
 
   if (items.length === 0) {
     clearBtn.style.display = 'none';
@@ -180,6 +180,10 @@ export function checkUI() {
   formBtn.style.backgroundColor = '#333';
 
   isEditMode = false;
+}
+
+function allItemsFromDOM() {
+  return itemList.querySelectorAll('li');
 }
 
 function validateInput(input) {

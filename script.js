@@ -164,7 +164,7 @@ export function filterItems(e) {
 }
 
 export function checkUI() {
-  itemInput.value = '';
+  clearInput();
 
   const items = itemList.querySelectorAll('li');
 

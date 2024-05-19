@@ -32,10 +32,6 @@ export function onAddItemSubmit(e) {
       return;
   }
 
-  function alertAddAnItem() {
-    alert('Please add an item');
-  }
-
   // Create item DOM element
   addItemToDOM(newItem);
 
@@ -199,6 +195,10 @@ function uniqueInput() {
 
 function alertIfItemExists (newItem) {
   alert(`The item "${newItem}" already exists!`);
+}
+
+function alertAddAnItem() {
+  alert('Please add an item');
 }
 
 function isEditingItem() {

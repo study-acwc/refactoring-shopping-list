@@ -11,7 +11,7 @@ export let isEditMode = false;
 export function displayItems() {
   const itemsFromStorage = getItemsFromStorage();
   itemsFromStorage.forEach((item) => addItemToDOM(item));
-  checkUI();
+  updateUIBasedOnListState();
 }
 
 export function onAddItemSubmit(e) {
@@ -35,7 +35,7 @@ export function onAddItemSubmit(e) {
 
   addItemToStorage(newItem);
 
-  checkUI();
+  updateUIBasedOnListState();
 
   clearInput();
 }
@@ -124,7 +124,7 @@ export function removeItem(item) {
     // Remove item from storage
     removeItemFromStorage(item.textContent);
 
-    checkUI();
+    updateUIBasedOnListState();
   }
 }
 
@@ -146,7 +146,7 @@ export function clearItems() {
   // Clear from localStorage
   localStorage.removeItem('items');
 
-  checkUI();
+  updateUIBasedOnListState();
 }
 
 export function filterItems(e) {
@@ -163,7 +163,7 @@ export function filterItems(e) {
   });
 }
 
-export function checkUI() {
+export function updateUIBasedOnListState() {
   clearInput();
 
   if (isItemListEmptyInDOM()) {
@@ -249,7 +249,7 @@ export function init() {
   itemFilter.addEventListener('input', filterItems);
   document.addEventListener('DOMContentLoaded', displayItems);
 
-  checkUI();
+  updateUIBasedOnListState();
 }
 
 init();

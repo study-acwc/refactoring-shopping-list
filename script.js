@@ -20,8 +20,7 @@ export function onAddItemSubmit(e) {
   // trim the input value to remove whitespace - disallowing duplicate items due to white space in the process
   const newItem = itemInput.value.trim();
 
-  // Validate Input
-  if (newItem === '') {
+  if (false == validateInput(newItem)) {
     alert('Please add an item');
     return;
   }
@@ -192,6 +191,10 @@ export function checkUI() {
   formBtn.style.backgroundColor = '#333';
 
   isEditMode = false;
+}
+
+function validateInput(input) {
+  return input != ''
 }
 
 // Initialize app

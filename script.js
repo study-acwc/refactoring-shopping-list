@@ -27,8 +27,7 @@ export function onAddItemSubmit(e) {
   // Check for edit mode
   if (isEditingItem()) {
     removeEditingItem()
-  } else {
-    if (checkIfItemExists(newItem)) {
+  } else if (checkIfItemExists(newItem)) {
       alertIfItemExists();
       return;
   }

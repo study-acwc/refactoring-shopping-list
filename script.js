@@ -169,17 +169,25 @@ export function checkUI() {
   const items = allItemsFromDOM();
 
   if (items.length === 0) {
-    clearBtn.style.display = 'none';
-    itemFilter.style.display = 'none';
+    hideListControls()
   } else {
-    clearBtn.style.display = 'block';
-    itemFilter.style.display = 'block';
+    showListControls()
   }
 
   formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
   formBtn.style.backgroundColor = '#333';
 
   isEditMode = false;
+}
+
+function hideListControls() {
+  clearBtn.style.display = 'none';
+  itemFilter.style.display = 'none'; 
+}
+
+function showListControls() {
+  clearBtn.style.display = 'block';
+  itemFilter.style.display = 'block';
 }
 
 function allItemsFromDOM() {

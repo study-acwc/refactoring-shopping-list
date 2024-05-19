@@ -25,18 +25,12 @@ export function onAddItemSubmit(e) {
   }
 
   // Check for edit mode
-  if (isEditMode) {
-    const itemToEdit = itemList.querySelector('.edit-mode');
-
-    removeItemFromStorage(itemToEdit.textContent);
-    itemToEdit.classList.remove('edit-mode');
-    itemToEdit.remove();
-    isEditMode = false;
+  if (isEditingItem()) {
+    removeEditingItem()
   } else {
     if (checkIfItemExists(newItem)) {
-      alert(`The item "${newItem}" already exists!`);
+      alertIfItemExists();
       return;
-    }
   }
 
   // Create item DOM element
@@ -198,6 +192,28 @@ function validateInput(input) {
 
 function uniqueInput() {
   return itemInput.value.trim()
+}
+
+function alertIfItemExists (newItem) {
+  alert(`The item "${newItem}" already exists!`);
+}
+
+function isEditingItem() {
+  return isEditMode
+}
+
+function removeEditingItem() {
+  const itemToEdit = itemList.querySelector('.edit-mode');
+
+  removeItemFromStorage(itemToEdit.textContent);
+  itemToEdit.classList.remove('edit-mode');
+  itemToEdit.remove();
+
+  turnOffEditMode();
+}
+
+function turnOffEditMode() {
+  isEditMode = false;
 }
 
 // Initialize app

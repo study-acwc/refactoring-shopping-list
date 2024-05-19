@@ -166,9 +166,7 @@ export function filterItems(e) {
 export function checkUI() {
   clearInput();
 
-  const items = allItemsFromDOM();
-
-  if (items.length === 0) {
+  if (isItemListEmptyInDOM()) {
     hideListControls()
   } else {
     showListControls()
@@ -177,6 +175,12 @@ export function checkUI() {
   setAddItemButtonStyle();
 
   turnOffEditMode();
+}
+
+function isItemListEmptyInDOM () {
+  const items = allItemsFromDOM();
+
+  return items.length === 0
 }
 
 function setAddItemButtonStyle() {

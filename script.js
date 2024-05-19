@@ -20,7 +20,7 @@ export function onAddItemSubmit(e) {
   const newItem = uniqueInput();
 
   if (false == validateInput(newItem)) {
-    alert('Please add an item');
+    alertAddAnItem();
     return;
   }
 
@@ -30,6 +30,10 @@ export function onAddItemSubmit(e) {
   } else if (checkIfItemExists(newItem)) {
       alertIfItemExists();
       return;
+  }
+
+  function alertAddAnItem() {
+    alert('Please add an item');
   }
 
   // Create item DOM element

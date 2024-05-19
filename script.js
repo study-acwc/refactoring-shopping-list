@@ -176,7 +176,7 @@ export function checkUI() {
 
   setAddItemButtonStyle();
 
-  isEditMode = false;
+  turnOffEditMode();
 }
 
 function setAddItemButtonStyle() {

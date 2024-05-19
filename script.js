@@ -37,7 +37,7 @@ export function onAddItemSubmit(e) {
 
   checkUI();
 
-  itemInput.value = '';
+  clearInput();
 }
 
 export function addItemToDOM(item) {
@@ -184,6 +184,10 @@ export function checkUI() {
 
 function validateInput(input) {
   return input != ''
+}
+
+function clearInput () {
+  itemInput.value = '';
 }
 
 function uniqueInput() {

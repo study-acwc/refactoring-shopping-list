@@ -123,9 +123,7 @@ function enableEditModeClassFor(item) {
 }
 
 export function removeItem(item) {
-  if (
-    confirm(`Are you sure you want to remove the item "${item.textContent}"?`)
-  ) {
+  if (confirmItemRemoval(item.textContent)) {
     // Remove item from DOM
     item.remove();
 
@@ -134,6 +132,10 @@ export function removeItem(item) {
 
     updateUIBasedOnListState();
   }
+}
+
+function confirmItemRemoval(textContent) {
+  return confirm(`Are you sure you want to remove the item "${textContent}"?`)
 }
 
 export function removeItemFromStorage(item) {

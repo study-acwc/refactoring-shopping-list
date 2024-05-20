@@ -310,16 +310,14 @@ describe("displayItems 함수 테스트", () => {
   });
 });
 describe("checkIfItemExists", () => {
-  it("should return true if the item exists in storage", () => {
-    // Mocking getItemsFromStorage function
+  test("스토리지에 item이 있는경우 true 리턴", () => {
     script.getItemsFromStorage = jest.fn(() => ["item1", "item2", "item3"]);
 
     const itemExists = script.checkIfItemExists("item2");
     expect(itemExists).toBe(true);
   });
 
-  it("should return false if the item does not exist in storage", () => {
-    // Mocking getItemsFromStorage function
+  test("스토리지에 item이없는경우 true 리턴", () => {
     script.getItemsFromStorage = jest.fn(() => ["item1", "item2", "item3"]);
 
     const itemExists = script.checkIfItemExists("item4");

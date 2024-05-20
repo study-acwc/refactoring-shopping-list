@@ -79,17 +79,13 @@ export function addItemToStorage(item) {
 export function getItemsFromStorage() {
   let itemsFromStorage;
 
-  if (isItemListEmptyInStorage()) {
+  if ( localStorage.getItem('items') === null) {
     itemsFromStorage = [];
   } else {
     itemsFromStorage = JSON.parse(localStorage.getItem('items'));
   }
 
   return itemsFromStorage;
-}
-
-function isItemListEmptyInStorage() {
-  return localStorage.getItem('items') === null
 }
 
 export function onClickItem(e) {

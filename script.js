@@ -104,8 +104,7 @@ export function checkIfItemExists(item) {
 export function setItemToEdit(item) {
   turnOnEditMode()
 
-  itemList
-    .querySelectorAll('li')
+  allItemsFromDOM()
     .forEach((i) => i.classList.remove('edit-mode'));
 
   item.classList.add('edit-mode');
@@ -151,7 +150,7 @@ export function clearItems() {
 }
 
 export function filterItems(e) {
-  const items = itemList.querySelectorAll('li');
+  const items = allItemsFromDOM();
   const text = e.target.value.toLowerCase();
 
   items.forEach((item) => {

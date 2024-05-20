@@ -102,7 +102,7 @@ export function checkIfItemExists(item) {
 }
 
 export function setItemToEdit(item) {
-  isEditMode = true;
+  turnOnEditMode()
 
   itemList
     .querySelectorAll('li')
@@ -238,6 +238,10 @@ function removeEditingItem() {
 
 function turnOffEditMode() {
   isEditMode = false;
+}
+
+function turnOnEditMode() {
+  isEditMode = true;
 }
 
 // Initialize app

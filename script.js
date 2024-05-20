@@ -9,8 +9,8 @@ export const formBtn = itemForm.querySelector('button');
 export let isEditMode = false;
 
 export function displayItems() {
-  const itemsFromStorage = allItemsFromStorage();
-  itemsFromStorage.forEach((item) => addItemToDOM(item));
+  allItemsFromStorage()
+    .forEach((item) => addItemToDOM(item));
   updateUIBasedOnListState();
 }
 

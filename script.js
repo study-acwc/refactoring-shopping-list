@@ -102,16 +102,20 @@ export function checkIfItemExists(item) {
 }
 
 export function setItemToEdit(item) {
-  turnOnEditMode()
+  turnOnEditMode();
 
-  allItemsFromDOM()
-    .forEach((i) => i.classList.remove('edit-mode'));
-
-  item.classList.add('edit-mode');
+  enableEditModeClassFor(item);
   formBtn.innerHTML = '<i class="fa-solid fa-pen"></i>   Update Item';
   formBtn.style.backgroundColor = '#228B22';
 
   updateInput(item.textContent);
+}
+
+function enableEditModeClassFor(item) {
+  allItemsFromDOM()
+    .forEach((i) => i.classList.remove('edit-mode'));
+
+  item.classList.add('edit-mode');
 }
 
 export function removeItem(item) {

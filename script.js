@@ -27,8 +27,8 @@ export function onAddItemSubmit(e) {
   if (isEditingItem()) {
     removeEditingItem()
   } else if (checkIfItemExists(newItem)) {
-      alertIfItemExists();
-      return;
+    alertIfItemExists();
+    return;
   }
 
   addItemToDOM(newItem);

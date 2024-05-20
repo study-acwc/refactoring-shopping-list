@@ -122,6 +122,10 @@ function enableEditModeClassFor(item) {
   item.classList.add('edit-mode');
 }
 
+function disableEditModeClassFor(item) {
+  item.classList.remove('edit-mode');
+}
+
 export function removeItem(item) {
   if (confirmItemRemoval(item.textContent)) {
     removeItemFromDOM(item);
@@ -250,7 +254,7 @@ function removeEditingItem() {
   const item = editingItem();
 
   removeItemFromStorage(item.textContent);
-  item.classList.remove('edit-mode');
+  disableEditModeClassFor(item);
   removeItemFromDOM(item);
 
   turnOffEditMode();

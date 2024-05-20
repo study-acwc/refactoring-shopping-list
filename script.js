@@ -126,7 +126,6 @@ export function removeItem(item) {
   if (confirmItemRemoval(item.textContent)) {
     removeItemFromDOM(item);
 
-    // Remove item from storage
     removeItemFromStorage(item.textContent);
 
     updateUIBasedOnListState();
@@ -261,14 +260,17 @@ function turnOnEditMode() {
   isEditMode = true;
 }
 
-// Initialize app
-export function init() {
-  // Event Listeners
+function registerEventListeners() {
   itemForm.addEventListener('submit', onAddItemSubmit);
   itemList.addEventListener('click', onClickItem);
   clearBtn.addEventListener('click', clearItems);
   itemFilter.addEventListener('input', filterItems);
   document.addEventListener('DOMContentLoaded', displayItems);
+}
+
+// Initialize app
+export function init() {
+  registerEventListeners();
 
   updateUIBasedOnListState();
 }

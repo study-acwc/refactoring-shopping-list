@@ -249,9 +249,9 @@ function editingItem() {
 function removeEditingItem() {
   const item = editingItem();
 
-  itemToEdit.remove();
   removeItemFromStorage(item.textContent);
   item.classList.remove('edit-mode');
+  removeItemFromDOM(item);
 
   turnOffEditMode();
 }

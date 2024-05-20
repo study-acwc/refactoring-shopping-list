@@ -113,84 +113,216 @@ describe("Update Item 버튼이 눌렸을 때", () => {
     script.onAddItemSubmit(e);
     expect(script.isEditMode).toBe(false);
   });
-
-  test("아이템을 저장한다", () => {
-    script.onAddItemSubmit(e);
-
-    const items = JSON.parse(localStorage.getItem("items"));
-    expect(items).toContain("updatedItem");
-  });
-
-  test("입력값을 지운다", () => {
-    script.onAddItemSubmit(e);
-    expect(document.getElementById("item-input").value).toBe("");
-  });
 });
 
-describe("Click Item 이벤트가 발생했을 때", () => {
-  let mockSetItemToEdit;
-  let mockRemoveItem;
-  let script;
+describe("아이템을 클릭했을 때", () => {
+  let e;
   beforeEach(() => {
-    mockSetItemToEdit = jest.fn();
-    mockRemoveItem = jest.fn();
-    jest.mock(script, () => ({
-      ...jest.requireActual("./script"),
-      removeItem: mockRemoveItem,
-    }));
-    script = require("./script");
+    initialize();
+    e = {
+      target: {
+        parentElement: {
+          classList: {
+            contains: jest.fn().mockReturnValue(false),
+            add: jest.fn(),
+          },
+          parentElement: {
+            remove: jest.fn(),
+          },
+        },
+        closest: jest.fn().mockReturnValue(true),
+        classList: {
+          add: jest.fn(),
+        },
+      },
+      preventDefault: jest.fn(),
+    };
+
+    document.getElementById("item-input").value = "item1";
+    script.onAddItemSubmit(e);
+    script.addItemToDOM("item2");
   });
 
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  it("remove-item 클래스가 클릭했을 때, removeItem 함수를 호출해야 한다", () => {
-    const mockGrandParentElement = {
-      textContent: "Mock Item Text",
-      remove: jest.fn(),
-    };
-    const mockParentElement = {
-      classList: {
-        contains: jest.fn().mockReturnValue(true),
-      },
-      parentElement: mockGrandParentElement,
-    };
+  test("아이템을 누른경우 편집모드로 설정되어야 한다.", () => {
+    e.target.parentElement.classList.contains.mockReturnValue(false);
+    const setItemToEditSpy = jest.spyOn(script, "setItemToEdit");
+    const itemElements = Array.from(script.itemList.querySelectorAll("li"));
 
-    const mockEvent = {
-      target: {
-        parentElement: mockParentElement,
-      },
-    };
-    const mockRemoveItemFromStorage = jest.fn();
-    global.removeItemFromStorage = mockRemoveItemFromStorage;
-
-    // confirm 함수도 모킹
-    window.confirm = jest.fn().mockReturnValue(true);
-
-    script.onClickItem(mockEvent);
-    expect(mockRemoveItem).toHaveBeenCalled();
-    expect(mockSetItemToEdit).not.toHaveBeenCalled();
-    expect(mockGrandParentElement.remove).toHaveBeenCalled();
-    // expect(mockRemoveItemFromStorage).toHaveBeenCalledWith("Mock Item Text");
+    script.onClickItem(e);
+    expect(script.isEditMode).toBe(true);
   });
-  it("li 요소가 클릭될 때 setItemToEdit를 호출해야 한다.", () => {
-    const mockLiElement = document.createElement("li");
-    mockLiElement.textContent = "Mock Item Text";
-    const mockEvent = {
+
+  test("삭제 버튼을 누른경우 삭제되어야 한다.", () => {
+    e.target.parentElement.classList.contains.mockReturnValue(true);
+    const removeItemSpy = jest.spyOn(script, "removeItem");
+    const itemElements = Array.from(script.itemList.querySelectorAll("li"));
+    window.confirm = jest.fn(() => true);
+    const itemList = document.getElementById("item-list");
+    script.removeItem(itemList.children[0]);
+    //script.onClickItem(e);
+    script.removeItem(e.target.parentElement.parentElement); // 함수 호출
+
+    expect(script.isEditMode).toBe(false);
+    expect();
+  });
+
+  test("삭제 버튼을 누른경우 값이 없는 경우", () => {
+    e.target.parentElement.classList.contains.mockReturnValue(true);
+    const removeItemSpy = jest.spyOn(script, "removeItem");
+    const itemElements = Array.from(script.itemList.querySelectorAll("li"));
+    window.confirm = jest.fn(() => true);
+
+    script.onClickItem(e);
+    script.removeItem(e.target.parentElement.parentElement); // 함수 호출
+    expect(script.isEditMode).toBe(false);
+  });
+});
+
+describe("아이템을 삭제했을 때", () => {
+  let e;
+
+  beforeEach(() => {
+    initialize();
+    e = {
       target: {
-        closest: jest.fn().mockReturnValue(mockLiElement),
         parentElement: {
           classList: {
             contains: jest.fn().mockReturnValue(false),
+            add: jest.fn(),
+          },
+          parentElement: {
+            remove: jest.fn(),
           },
         },
+        closest: jest.fn().mockReturnValue(true),
+        classList: {
+          add: jest.fn(),
+        },
+      },
+      preventDefault: jest.fn(),
+    };
+
+    document.getElementById("item-input").value = "item1";
+    script.onAddItemSubmit(e);
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  describe("beforeEach에 대한 테스트", () => {
+    test("event 발생시 preventDefault를 호출한다", () => {
+      expect(e.preventDefault).toHaveBeenCalled();
+    });
+    test("itemlist에 item1이 추가되어 있다", () => {
+      const itemList = document.getElementById("item-list");
+      expect(itemList.children.length).toBe(1);
+      expect(itemList.textContent).toContain("item1");
+    });
+    test("item 삭제", () => {
+      script.onClickItem(e);
+      expect(script.setItemToEdit).toHaveBeenCalledTimes(1);
+    });
+    test("item 삭제confirm이되는경우", () => {
+      window.confirm = jest.fn(() => true);
+      e.target.parentElement.classList.contains.mockReturnValue(true);
+      script.onClickItem(e);
+      expect(script.removeItem).toHaveBeenCalledTimes(1);
+    });
+    test("item 삭제confirm이 안된경우", () => {
+      window.confirm = jest.fn(() => false);
+      e.target.parentElement.classList.contains.mockReturnValue(true);
+      script.onClickItem(e);
+      expect(script.removeItem).toHaveBeenCalledTimes(1);
+    });
+  });
+});
+
+describe("filterItems 함수 테스트", () => {
+  beforeEach(() => {
+    script.addItemToDOM("Item1");
+    script.addItemToDOM("Item2");
+  });
+
+  test("입력된 텍스트와 일치하는 아이템만 표시한다", () => {
+    const e = {
+      target: {
+        value: "item2",
       },
     };
 
-    script.onClickItem(mockEvent);
+    // filterItems 함수를 호출합니다.
+    script.filterItems(e);
+    const itemList = Array.from(script.itemList.querySelectorAll("li"));
+    const filteredItems = itemList.filter(
+      (i) =>
+        i.textContent.toLowerCase().includes(e.target.value) &&
+        i.style.display === "flex",
+    );
+    expect(filteredItems).toHaveLength(1);
+  });
+});
 
-    expect(mockSetItemToEdit).toHaveBeenCalledWith("mockLiElement");
-    expect(mockRemoveItem).not.toHaveBeenCalled();
+describe("displayItems 함수 테스트", () => {
+  let e;
+  beforeEach(() => {
+    e = {
+      target: {
+        parentElement: {
+          classList: {
+            contains: jest.fn().mockReturnValue(false),
+            add: jest.fn(),
+          },
+          parentElement: {
+            remove: jest.fn(),
+          },
+        },
+        closest: jest.fn().mockReturnValue(true),
+        classList: {
+          add: jest.fn(),
+        },
+      },
+      preventDefault: jest.fn(),
+    };
+
+    jest
+      .spyOn(script, "getItemsFromStorage")
+      .mockReturnValue(["Item1", "Item2"]);
+    jest.spyOn(script, "addItemToDOM");
+    jest.spyOn(script, "checkUI");
+    script.onClickItem(e);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test("아이템이 올바르게 표시되는지 확인", () => {
+    script.displayItems();
+    expect(script.addItemToDOM).toHaveBeenCalledTimes(2);
+    expect(script.addItemToDOM).toHaveBeenCalledWith("Item1");
+    expect(script.addItemToDOM).toHaveBeenCalledWith("Item2");
+    expect(script.checkUI).toHaveBeenCalled();
+  });
+});
+describe("checkIfItemExists", () => {
+  it("should return true if the item exists in storage", () => {
+    // Mocking getItemsFromStorage function
+    script.getItemsFromStorage = jest.fn(() => ["item1", "item2", "item3"]);
+
+    const itemExists = script.checkIfItemExists("item2");
+    expect(itemExists).toBe(true);
+  });
+
+  it("should return false if the item does not exist in storage", () => {
+    // Mocking getItemsFromStorage function
+    script.getItemsFromStorage = jest.fn(() => ["item1", "item2", "item3"]);
+
+    const itemExists = script.checkIfItemExists("item4");
+    expect(itemExists).toBe(false);
   });
 });

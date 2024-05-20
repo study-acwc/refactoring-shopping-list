@@ -77,16 +77,13 @@ export function addItemToStorage(item) {
 }
 
 export function getItemsFromStorage() {
-  let itemsFromStorage;
-
   const itemsJsonString = localStorage.getItem('items');
+  
   if ( itemsJsonString === null) {
-    itemsFromStorage = [];
+    return [];
   } else {
-    itemsFromStorage = JSON.parse(itemsJsonString);
+    return JSON.parse(itemsJsonString);
   }
-
-  return itemsFromStorage;
 }
 
 export function onClickItem(e) {

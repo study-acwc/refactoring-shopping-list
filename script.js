@@ -124,14 +124,17 @@ function enableEditModeClassFor(item) {
 
 export function removeItem(item) {
   if (confirmItemRemoval(item.textContent)) {
-    // Remove item from DOM
-    item.remove();
+    removeItemFromDOM(item);
 
     // Remove item from storage
     removeItemFromStorage(item.textContent);
 
     updateUIBasedOnListState();
   }
+}
+
+function removeItemFromDOM(item) {
+  item.remove();
 }
 
 function confirmItemRemoval(textContent) {

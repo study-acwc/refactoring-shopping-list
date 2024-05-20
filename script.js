@@ -105,10 +105,14 @@ export function setItemToEdit(item) {
   turnOnEditMode();
 
   enableEditModeClassFor(item);
-  formBtn.innerHTML = '<i class="fa-solid fa-pen"></i>   Update Item';
-  formBtn.style.backgroundColor = '#228B22';
+  styleFormButtonToEditMode();
 
   updateInput(item.textContent);
+}
+
+function styleFormButtonToEditMode() {
+  formBtn.innerHTML = '<i class="fa-solid fa-pen"></i>   Update Item';
+  formBtn.style.backgroundColor = '#228B22';
 }
 
 function enableEditModeClassFor(item) {

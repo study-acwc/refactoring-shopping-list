@@ -79,10 +79,11 @@ export function addItemToStorage(item) {
 export function getItemsFromStorage() {
   let itemsFromStorage;
 
-  if ( localStorage.getItem('items') === null) {
+  const itemsJsonString = localStorage.getItem('items');
+  if ( itemsJsonString === null) {
     itemsFromStorage = [];
   } else {
-    itemsFromStorage = JSON.parse(localStorage.getItem('items'));
+    itemsFromStorage = JSON.parse(itemsJsonString);
   }
 
   return itemsFromStorage;

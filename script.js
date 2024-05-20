@@ -9,7 +9,7 @@ export const formBtn = itemForm.querySelector('button');
 export let isEditMode = false;
 
 export function displayItems() {
-  const itemsFromStorage = getItemsFromStorage();
+  const itemsFromStorage = allItemsFromStorage();
   itemsFromStorage.forEach((item) => addItemToDOM(item));
   updateUIBasedOnListState();
 }
@@ -67,7 +67,7 @@ export function createIcon(classes) {
 }
 
 export function addItemToStorage(item) {
-  const itemsFromStorage = getItemsFromStorage();
+  const itemsFromStorage = allItemsFromStorage();
 
   // Add new item to array
   itemsFromStorage.push(item);
@@ -76,10 +76,10 @@ export function addItemToStorage(item) {
   localStorage.setItem('items', JSON.stringify(itemsFromStorage));
 }
 
-export function getItemsFromStorage() {
+export function allItemsFromStorage() {
   const itemsJsonString = localStorage.getItem('items');
-  
-  if ( itemsJsonString === null) {
+
+  if (itemsJsonString === null) {
     return [];
   } else {
     return JSON.parse(itemsJsonString);
@@ -95,7 +95,7 @@ export function onClickItem(e) {
 }
 
 export function checkIfItemExists(item) {
-  const itemsFromStorage = getItemsFromStorage();
+  const itemsFromStorage = allItemsFromStorage();
   return itemsFromStorage.includes(item);
 }
 
@@ -143,7 +143,7 @@ function confirmItemRemoval(textContent) {
 }
 
 export function removeItemFromStorage(item) {
-  let itemsFromStorage = getItemsFromStorage();
+  let itemsFromStorage = allItemsFromStorage();
 
   // Filter out item to be removed
   itemsFromStorage = itemsFromStorage.filter((i) => i !== item);

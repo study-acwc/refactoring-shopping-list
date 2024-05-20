@@ -247,11 +247,11 @@ function editingItem() {
 }
 
 function removeEditingItem() {
-  const itemToEdit = editingItem();
+  const item = editingItem();
 
-  removeItemFromStorage(itemToEdit.textContent);
-  itemToEdit.classList.remove('edit-mode');
   itemToEdit.remove();
+  removeItemFromStorage(item.textContent);
+  item.classList.remove('edit-mode');
 
   turnOffEditMode();
 }

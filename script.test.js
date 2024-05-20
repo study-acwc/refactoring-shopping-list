@@ -3,150 +3,151 @@ import * as script from './script.js';
 
 window.alert = jest.fn();
 
-function initialize() {
-  // 테스트 시작하기 전에 다른 테스트에서 설정한 값을 초기화하는 작업
-  script.clearItems();
-}
+beforeEach(() => {
+  clearItems();
+});
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
-    let e;
+    let event;
     beforeEach(() => {
-        initialize();
-        e = {
-            preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-            target: { value: 'Sample Value' } // target 속성을 가짐
-        };
-        // HTML 요소를 생성하여 테스트에 사용합니다.
-        document.getElementById('item-input').value = '';
+        event = dummyUIEvent();
+        setItemInputValue('');
     });
 
     test('아이템을 저장하지 않는다', () => {
-        script.onAddItemSubmit(e);
-        expect(localStorage.getItem('items')).toBe(null);
+        script.onAddItemSubmit(event);
+
+        expect(localStorageItems()).toBeNull();
     });
 });
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는 값이면', () => {
-    let e;
+    let event;
+    let inputValue;
     beforeEach(() => {
-      initialize();
-        e = {
-            preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-            target: { value: 'Sample Value' } // target 속성을 가짐
-        };
-        // HTML 요소를 생성하여 테스트에 사용합니다.
-        document.getElementById('item-input').value = 'item1';
-        localStorage.setItem('items', JSON.stringify(['item2', 'item3']));
+        event = dummyUIEvent();
+        inputValue = 'item1';
+        setItemInputValue(inputValue);
+        setLocalStorageItems(['item2', 'item3']);
     });
 
     test('아이템을 저장한다', () => {
-        script.onAddItemSubmit(e);
+        script.onAddItemSubmit(event);
 
-        const items = JSON.parse(localStorage.getItem('items'));
-        expect(items).toContain('item1');
+        expect(localStorageItems()).toContain(inputValue);
     });
 
+    test('화면에 새로운 아이템을 표시한다', () => {
+      script.onAddItemSubmit(event);
+
+      let elements = filteredItemElementsBy(inputValue);
+      expect(elements).toHaveLength(1);
+  });
+
     test("입력값을 지운다.", () => {
-        script.onAddItemSubmit(e);
-        expect(document.getElementById('item-input').value).toBe('');
+        script.onAddItemSubmit(event);
+
+        expect(itemInputValue()).toBe('');
     });
 });
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이템이 이미 존재하면', () => {
-    let e;
+    let event;
+    let inputValue;
     beforeEach(() => {
-      initialize();
-        e = {
-            preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-            target: { value: 'Sample Value' } // target 속성을 가짐
-        };
-  
-        // HTML 요소를 생성하여 테스트에 사용합니다.
-        document.getElementById('item-input').value = 'item1';
-        localStorage.setItem('items', JSON.stringify(['item1']));
+        event = dummyUIEvent();
+        inputValue = 'item1';
+        setItemInputValue(inputValue);
+        setLocalStorageItems([inputValue]);
     });
 
     test('아이템을 중복 저장하지 않는다', () => {
-        script.onAddItemSubmit(e);
+        script.onAddItemSubmit(event);
 
-        const items = JSON.parse(localStorage.getItem('items'));
-        const filteredItems = items.filter(item => item === 'item1');
+        const filteredItems = filteredLocalStorageItemsBy(inputValue);
         expect(filteredItems).toHaveLength(1);
     });
 
     test("입력값을 지우지 않는다", () => {
-        script.onAddItemSubmit(e);
-        expect(document.getElementById('item-input').value).not.toBe('');
+        script.onAddItemSubmit(event);
+
+        expect(itemInputValue()).toBe(inputValue);
     });
 });
 
 describe('Update Item 버튼이 눌렸을 때', () => {
-    let e;
+    let event;
+    let itemTitle;
+    let updatedItemTitle;
     beforeEach(() => {
-      initialize();
-      e = {
-          preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-          target: { value: 'Sample Value' } // target 속성을 가짐
-      };
-      // 1. "oldItem" item 등록
-      document.getElementById('item-input').value = 'oldItem';
-      script.onAddItemSubmit(e);
-      // 2. "oldItem" item 업데이트 모드로 전환
-      // "oldItem" item 객체 조회
-      const items = script.itemList.querySelectorAll('li');
-      const filtered = Array.from(items).filter((i) => i.textContent == 'oldItem');
-      // 그 아이템을 업데이트 모드로 변경
-      script.setItemToEdit(filtered[0]);
-      // 3. "updatedItem" 으로 변경된 이름 입력
-      document.getElementById('item-input').value = 'updatedItem';
+      event = dummyUIEvent();
+      itemTitle = 'oldItem';
+      updatedItemTitle = 'updatedItem';
+      // 1
+      updateUserInputAndSubmitAdd(itemTitle);
+      // 2
+      const filtered = filteredItemElementsBy(itemTitle);
+      setItemElementToEdit(filtered[0]);
+      // 3
+      setItemInputValue(updatedItemTitle);
     });
 
     test('저장된 아이템을 제거한다', () => {
-        script.onAddItemSubmit(e);
-        const items = JSON.parse(localStorage.getItem('items'));
-        expect(items).not.toContain('oldItem');
+        script.onAddItemSubmit(event);
+
+        expect(localStorageItems()).not.toContain(itemTitle);
+    });
+
+    test('화면에서 해당 아이템을 제거한다', () => {
+      script.onAddItemSubmit(event);
+
+      let elements = filteredItemElementsBy(itemTitle);
+      expect(elements).toHaveLength(0);
     });
 
     test("아이템 편집 상태를 해제한다", () => {
-        script.onAddItemSubmit(e);
-        expect(script.isEditMode).toBeFalsy();
+        script.onAddItemSubmit(event);
+
+        expect(isEditModeEnabled()).toBeFalsy();
     });
 
-    test('아이템을 저장한다', () => {
-        script.onAddItemSubmit(e);
+    test('새로운 아이템을 저장한다', () => {
+        script.onAddItemSubmit(event);
 
-        const items = JSON.parse(localStorage.getItem('items'));
-        expect(items).toContain('updatedItem');
+        expect(localStorageItems()).toContain(updatedItemTitle);
+    });
+
+    test('화면에 새로운 아이템을 표시한다', () => {
+        script.onAddItemSubmit(event);
+
+        let elements = filteredItemElementsBy(updatedItemTitle);
+        expect(elements).toHaveLength(1);
     });
 
     test("입력값을 지운다", () => {
-        script.onAddItemSubmit(e);
-        expect(document.getElementById('item-input').value).toBe('');
+        script.onAddItemSubmit(event);
+
+        expect(itemInputValue()).toBe('');
     });
 });
 
 describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다면', () => {
-  let item;
-  beforeEach(() => {
-    initialize();
-    // 1. "item1" item 등록
-    let e = {
-      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-      target: { value: 'Sample Value' } // target 속성을 가짐
-    };
-    document.getElementById('item-input').value = 'item1';
-    script.onAddItemSubmit(e);
-    // 2. "item1" item 객체 조회
-    const items = script.itemList.querySelectorAll('li');
-    const filtered = Array.from(items).filter((i) => i.textContent == 'item1');
-    item = filtered[0];
-    // 3. confirm 함수를 모의 함수로 대체
+  let clickedElement;
+
+  beforeEach(() => {;
+    let itemTitle = 'item1';
+    // 1
+    updateUserInputAndSubmitAdd(itemTitle);
+    // 2
+    const filtered = filteredItemElementsBy(itemTitle);
+    clickedElement = deleteButtonInItemElement(filtered[0]);
+    // 3
     global.confirm = jest.fn();
   });
 
   test('삭제 여부 확인 창을 띄운다', () => {
     let event = {
-      target: item.lastElementChild.lastElementChild // 삭제 버튼 element
+      target: clickedElement
     };
     script.onClickItem(event);
 
@@ -156,79 +157,63 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
 });
 
 describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이었다면', () => {
-  let item;
-  let event;
+  let clickedElement;
+  let itemClickEvent;
   beforeEach(() => {
-    initialize();
-    // 1. "item1" item 등록
-    let e = {
-      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-      target: { value: 'Sample Value' } // target 속성을 가짐
-    };
-    document.getElementById('item-input').value = 'item1';
-    script.onAddItemSubmit(e);
-    // 2. "item1" item 객체 조회
-    const items = script.itemList.querySelectorAll('li');
-    const filtered = Array.from(items).filter((i) => i.textContent == 'item1');
-    item = filtered[0];
-    // 3. event 객체 생성
-    event = {
-      target: item // item element (LI)
+    let itemTitle = 'item1';
+    // 1
+    updateUserInputAndSubmitAdd(itemTitle);
+    // 2
+    const filtered = filteredItemElementsBy(itemTitle);
+    clickedElement = filtered[0];
+    // 3
+    itemClickEvent = {
+      target: clickedElement
     };
   });
 
   test('아이템 편집 상태를 활성화한다', () => {
-    script.onClickItem(event);
+    script.onClickItem(itemClickEvent);
 
-    expect(script.isEditMode).toBeTruthy();
+    expect(isEditModeEnabled()).toBeTruthy();
   });
 
   test('해당 아이템을 편집 모드로 표시한다', () => {
-    script.onClickItem(event);
+    script.onClickItem(itemClickEvent);
 
-    const items = script.itemList.querySelectorAll('li'); 
-    const filteredItems = Array.from(items).filter(
-      (i) => i.textContent.includes(item.textContent) && i.classList.contains('edit-mode')
+    const filteredItems = itemElements().filter(
+      (i) => i.textContent.includes(clickedElement.textContent) && editingItemElement(i)
     );
     expect(filteredItems).toHaveLength(1);
   });
 
   test('해당되지 않는 아이템은 편집 모드로 표시하지 않는다', () => {
-    script.onClickItem(event);
-
-    const items = script.itemList.querySelectorAll('li'); 
-    const filteredItems = Array.from(items).filter(
-      (i) => false == i.textContent.includes(item.textContent) && i.classList.contains('edit-mode')
+    script.onClickItem(itemClickEvent);
+  
+    const filteredItems = itemElements().filter(
+      (i) => false == i.textContent.includes(clickedElement.textContent) && editingItemElement(i)
     );
     expect(filteredItems).toHaveLength(0);
   });
 
   test('검색어 입력창을 편집할 아이템의 텍스트로 채운다', () => {
-    script.onClickItem(event);
+    script.onClickItem(itemClickEvent);
 
-    expect(script.itemInput.value).toBe(item.textContent);
+    expect(script.itemInput.value).toBe(clickedElement.textContent);
   });
 });
 
-describe('아이템 영역이 아닌 위치에서 눌렸을 때', () => {
+describe('아이템 영역이 아닌 위치가 눌렸을 때', () => {
   let removeItemSpy;
   let setItemToEditSpy;
+  let itemClickEvent;
 
   beforeEach(() => {
-    initialize();
-
     // script 모듈의 removeItem과 setItemToEdit 함수를 스파이가 모킹한다.
     removeItemSpy = jest.spyOn(script, 'removeItem');
     setItemToEditSpy = jest.spyOn(script, 'setItemToEdit');
-  });
 
-  afterEach(() => {
-    // 테스트 후 각 스파이를 복원한다.
-    jest.restoreAllMocks();
-  });
-
-  test('아이템 삭제나 편집 동작을 수행하지 않는다', () => {
-    let event = {
+    itemClickEvent = {
       target: {
         parentElement: {
           classList: {
@@ -238,7 +223,15 @@ describe('아이템 영역이 아닌 위치에서 눌렸을 때', () => {
         closest: jest.fn().mockReturnValue(null)
       }
     };
-    script.onClickItem(event);
+  });
+
+  afterEach(() => {
+    // 테스트 후 각 스파이를 복원한다.
+    jest.restoreAllMocks();
+  });
+
+  test('아이템 삭제나 편집 동작을 수행하지 않는다', () => {
+    script.onClickItem(itemClickEvent);
 
     expect(removeItemSpy).not.toHaveBeenCalled();
     expect(setItemToEditSpy).not.toHaveBeenCalled();
@@ -246,35 +239,80 @@ describe('아이템 영역이 아닌 위치에서 눌렸을 때', () => {
 });
 
 
-describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때', () => {
+describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이템이 하나이면', () => {
   let item;
+  let itemTitle;
+
   afterEach(() => {
     jest.clearAllMocks();  // 각 테스트 후 모의 함수를 초기화
   });
 
   beforeEach(() => {
-    initialize();
-    let e = {
-      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-      target: { value: 'Sample Value' } // target 속성을 가짐
-    };
-    // 1. "item1" item 등록
-    document.getElementById('item-input').value = 'item1';
-    script.onAddItemSubmit(e);
-    // 2. "item1" item 객체 조회
-    const items = script.itemList.querySelectorAll('li');
-    const filtered = Array.from(items).filter((i) => i.textContent == 'item1');
+    itemTitle = 'item1';
+    // 1
+    updateUserInputAndSubmitAdd(itemTitle);
+    // 2
+    const filtered = filteredItemElementsBy(itemTitle);
     item = filtered[0];
-    // 3. alert 함수를 모의 함수로 대체
+    // 3
     global.confirm = jest.fn().mockReturnValue(true);
   });
 
   test('아이템을 저장소에서 제거한다', () => {
     script.removeItem(item);
 
-    const items = JSON.parse(localStorage.getItem('items'));
-    
-    expect(items).not.toContain('item1');
+    expect(localStorageItems()).not.toContain(itemTitle);
+  });
+
+  test('필터링 영역을 표시하지 않는다', () => {
+    script.removeItem(item);
+
+    expect(isFilterHidden()).toBeTruthy();
+  });
+
+  test('전체 삭제 버튼을 표시하지 않는다', () => {
+    script.removeItem(item);
+
+    expect(isClearButtonHidden()).toBeTruthy();
+  });
+});
+
+describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이템이 두 개이면', () => {
+  let item1;
+  let itemTitle1;
+
+  afterEach(() => {
+    jest.clearAllMocks();  // 각 테스트 후 모의 함수를 초기화
+  });
+
+  beforeEach(() => {
+    itemTitle1 = 'item1';
+    // 1
+    updateUserInputAndSubmitAdd(itemTitle1);
+    updateUserInputAndSubmitAdd('item2');
+    // 2
+    const filtered = filteredItemElementsBy(itemTitle1);
+    item1 = filtered[0];
+    // 3
+    global.confirm = jest.fn().mockReturnValue(true);
+  });
+
+  test('아이템을 저장소에서 제거한다', () => {
+    script.removeItem(item1);
+
+    expect(localStorageItems()).not.toContain(itemTitle1);
+  });
+
+  test('필터링 영역을 표시한다', () => {
+    script.removeItem(item1);
+
+    expect(isFilterDisplayed()).toBeTruthy();
+  });
+
+  test('전체 삭제 버튼을 표시하지 않는다', () => {
+    script.removeItem(item1);
+
+    expect(isClearButtonDisplayed()).toBeTruthy();
   });
 });
 
@@ -282,40 +320,31 @@ describe('검색어를 입력했을 때', () => {
   let searchKeyword;
   let searchKeywordEvent;
   beforeEach(() => {
-    initialize();
-    // 1. 아이템을 2개 추가한다.
-    let e = {
-      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-      target: { value: 'Sample Value' } // target 속성을 가짐
-    };
-    document.getElementById('item-input').value = 'notebook';
-    script.onAddItemSubmit(e);
-    document.getElementById('item-input').value = 'ipad';
-    script.onAddItemSubmit(e);
-    // 2. 그 중 1개의 아이템만 검색되는 검색어를 설정한다.
+    // 1
+    updateUserInputAndSubmitAdd('notebook');
+    updateUserInputAndSubmitAdd('ipad');
+    // 2
     searchKeyword = 'note';
     searchKeywordEvent = {
-      preventDefault: jest.fn(), // preventDefault 메서드를 가짐
-      target: { value: searchKeyword } // target 속성을 가짐
+      preventDefault: jest.fn(),
+      target: { value: searchKeyword }
     };
   });
 
   test('검색 결과에 해당하는 아이템을 표시한다', () => {
     script.filterItems(searchKeywordEvent);
 
-    const items = script.itemList.querySelectorAll('li'); 
-    const filteredItems = Array.from(items).filter(
-      (i) => i.textContent.includes(searchKeyword) && i.style.display == 'flex'
+    const filteredItems = itemElements().filter(
+      (i) => i.textContent.includes(searchKeyword) && hasFilteredItemStyle(i)
     );
     expect(filteredItems).toHaveLength(1);
   });
 
-  test('검색 결과에 해당하지 않는 아이템은 표시하지 않는다.', () => {
+  test('검색 결과에 해당하지 않는 아이템은 표시하지 않는다', () => {
     script.filterItems(searchKeywordEvent);
-
-    const items = script.itemList.querySelectorAll('li');
-    const filteredItems = Array.from(items).filter(
-      (i) => i.textContent != searchKeyword && i.style.display == 'none'
+    
+    const filteredItems = itemElements().filter(
+      (i) => i.textContent != searchKeyword && hasUnfilteredItemStyle(i)
     );
     expect(filteredItems).toHaveLength(1);
   });
@@ -323,46 +352,136 @@ describe('검색어를 입력했을 때', () => {
 
 describe('Clear All 버튼이 눌렸을 때', () => {
   beforeEach(() => {
-    initialize();
-    // 2개의 아이템을 추가한다.
-    localStorage.setItem('items', JSON.stringify(['item1', 'item2']));
+    setLocalStorageItems(['item1', 'item2']);
   });
 
-  test('모든 아이템을 저장소에서 제거한다.', () => {
+  test('모든 아이템을 저장소에서 제거한다', () => {
     script.clearItems();
 
-    const items = JSON.parse(localStorage.getItem('items'));
-    expect(items).toBeNull();
+    expect(localStorageItems()).toBeNull();
+  });
+
+  test('모든 아이템을 화면에서 제거한다', () => {
+    script.clearItems();
+
+    expect(itemElements()).toHaveLength(0);
   });
 });
 
 describe('Dom Content가 로드되었을 때', () => {
   let contents = ['item1', 'item2'];
   beforeEach(() => {
-    initialize();
-    // 2개의 아이템을 추가한다.
-    localStorage.setItem('items', JSON.stringify(contents));
+    setLocalStorageItems(contents);
   });
 
   test('저장된 아이템을 화면에 표시한다', () => {
     script.displayItems();
-
-    const items = script.itemList.querySelectorAll('li');
-    const filteredItems = Array.from(items).filter(
-      (i) => contents.includes(i.textContent)
+    
+    const items = itemElements().map(
+      (i) => i.textContent
     );
-    expect(filteredItems).toHaveLength(2);
+
+    // items 배열과 contents 배열이 자료형과 내용이 완전히 동일한지를 검사한다. 
+    // 만약 두 배열의 요소의 순서, 자료형, 내용이 완전히 같으면 테스트가 통과한다.
+    // 하지만 만약 두 배열이 다른 요소 순서나 다른 요소를 포함하거나 자료형이 다르면 테스트는 실패하게 된다.
+    expect(items).toStrictEqual(contents);
   });
 
   test('입력필드가 비어있어야 한다', () => {
     script.displayItems();
 
-    expect(script.itemInput.value).toBe('');
+    expect(itemInputValue()).toBe('');
   });
 
   test('아이템 편집상태가 아니어야 한다', () => {
     script.displayItems();
 
-    expect(script.isEditMode).toBeFalsy();
+    expect(isEditModeEnabled()).toBeFalsy();
   });
 });
+
+const localStorageKey = 'items';
+
+function dummyUIEvent() {
+  return {
+    preventDefault: jest.fn(),
+    target: { value: 'Sample Value' }
+  };
+}
+
+function localStorageItems() {
+  return JSON.parse(localStorage.getItem(localStorageKey));
+}
+
+function filteredLocalStorageItemsBy(itemTitle) {
+  return localStorageItems().filter(item => item === itemTitle);
+}
+
+function setLocalStorageItems(items) {
+  localStorage.setItem(localStorageKey, JSON.stringify(items));
+}
+
+function setItemInputValue(value) {
+  document.getElementById('item-input').value = value;
+}
+
+function itemInputValue() {
+  return script.itemInput.value;
+}
+
+function itemElements() {
+  return Array.from(script.itemList.querySelectorAll('li'));
+}
+
+function filteredItemElementsBy(itemTitle) {
+  return itemElements().filter((i) => i.textContent == itemTitle);
+}
+
+function hasFilteredItemStyle(element) {
+  return element.style.display == 'flex';
+}
+
+function hasUnfilteredItemStyle(element) {
+  return element.style.display == 'none';
+}
+
+function deleteButtonInItemElement(element) {
+  return element.lastElementChild.lastElementChild;
+}
+
+function editingItemElement(element) {
+  return element.classList.contains('edit-mode')
+}
+
+function updateUserInputAndSubmitAdd(itemTitle) {
+  setItemInputValue(itemTitle);
+  script.onAddItemSubmit(dummyUIEvent());
+}
+
+function isEditModeEnabled() {
+  return script.isEditMode;
+}
+
+function clearItems() {
+  script.clearItems();
+}
+
+function setItemElementToEdit(element){
+  script.setItemToEdit(element);
+}
+
+function isFilterHidden() {
+  return script.itemFilter.style.display == 'none';
+}
+
+function isClearButtonHidden() {
+  return script.clearBtn.style.display == 'none';
+}
+
+function isFilterDisplayed() {
+  return script.itemFilter.style.display == 'block';
+}
+
+function isClearButtonDisplayed() {
+  return script.clearBtn.style.display == 'block';
+}

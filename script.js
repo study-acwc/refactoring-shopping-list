@@ -1,3 +1,5 @@
+import * as thisModule from './script.js';
+
 export const itemForm = document.getElementById('item-form');
 export const itemInput = document.getElementById('item-input');
 export const itemList = document.getElementById('item-list');
@@ -100,9 +102,9 @@ export function getItemsFromStorage() {
 
 export function onClickItem(e) {
   if (e.target.parentElement.classList.contains('remove-item')) {
-    removeItem(e.target.parentElement.parentElement);
+    thisModule.removeItem(e.target.parentElement.parentElement);
   } else if (e.target.closest('li')) {
-    setItemToEdit(e.target);
+    thisModule.setItemToEdit(e.target);
   }
 }
 

@@ -242,8 +242,12 @@ function isEditingItem() {
   return isEditMode
 }
 
+function editingItem() {
+  return itemList.querySelector('.edit-mode');
+}
+
 function removeEditingItem() {
-  const itemToEdit = itemList.querySelector('.edit-mode');
+  const itemToEdit = editingItem();
 
   removeItemFromStorage(itemToEdit.textContent);
   itemToEdit.classList.remove('edit-mode');

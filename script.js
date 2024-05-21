@@ -16,9 +16,7 @@ export function displayItems() {
 
 export function onAddItemSubmit(e) {
   e.preventDefault();
-
   const newItem = uniqueInput();
-
   if (false == validateInput(newItem)) {
     alertAddAnItem();
     return;
@@ -29,13 +27,9 @@ export function onAddItemSubmit(e) {
     alertIfItemExists();
     return;
   }
-
   addItemToDOM(newItem);
-
   addItemToStorage(newItem);
-
   updateUIBasedOnListState();
-
   clearInput();
 }
 
@@ -100,10 +94,8 @@ export function checkIfItemExists(item) {
 
 export function setItemToEdit(item) {
   turnOnEditMode();
-
   enableEditModeClassFor(item);
   styleFormButtonToEditMode();
-
   updateInput(item.textContent);
 }
 
@@ -115,7 +107,6 @@ function styleFormButtonToEditMode() {
 function enableEditModeClassFor(item) {
   allItemsFromDOM()
     .forEach((i) => i.classList.remove('edit-mode'));
-
   item.classList.add('edit-mode');
 }
 
@@ -127,7 +118,6 @@ export function removeItem(item) {
   if (false == confirmItemRemoval(item.textContent)) {
     return;
   }
-
   removeItemFromDOM(item);
   removeItemFromStorage(item.textContent);
   updateUIBasedOnListState();
@@ -155,9 +145,7 @@ export function clearItems() {
   while (itemList.firstChild) {
     itemList.removeChild(itemList.firstChild);
   }
-
   clearItemsFromLocalStorage();
-
   updateUIBasedOnListState();
 }
 
@@ -183,15 +171,12 @@ export function updateUIBasedOnListState() {
   } else {
     showListControls()
   }
-
   setAddItemButtonStyle();
-
   turnOffEditMode();
 }
 
 function isItemListEmptyInDOM () {
   const items = allItemsFromDOM();
-
   return items.length === 0
 }
 
@@ -248,11 +233,9 @@ function editingItem() {
 
 function removeEditingItem() {
   const item = editingItem();
-
   removeItemFromStorage(item.textContent);
   disableEditModeClassFor(item);
   removeItemFromDOM(item);
-
   turnOffEditMode();
 }
 
@@ -275,7 +258,6 @@ function registerEventListeners() {
 // Initialize app
 export function init() {
   registerEventListeners();
-
   updateUIBasedOnListState();
 }
 

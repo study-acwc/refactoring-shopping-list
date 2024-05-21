@@ -171,11 +171,7 @@ export function filterItems(e) {
 
   items.forEach((item) => {
     const itemName = item.firstChild.textContent.toLowerCase();
-    if (itemName.indexOf(text) != -1) {
-      item.style.display = 'flex';
-    } else {
-      item.style.display = 'none';
-    }
+    item.style.display = itemName.indexOf(text) != -1 ? 'flex' : 'none';
   });
 }
 

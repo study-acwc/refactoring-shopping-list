@@ -71,12 +71,7 @@ export function addItemToStorage(item) {
 
 export function allItemsFromStorage() {
   const itemsJsonString = localStorage.getItem('items');
-
-  if (itemsJsonString === null) {
-    return [];
-  } else {
-    return JSON.parse(itemsJsonString);
-  }
+  return itemsJsonString === null ? [] : JSON.parse(itemsJsonString);
 }
 
 export function onClickItem(e) {

@@ -75,11 +75,19 @@ export function allItemsFromStorage() {
 }
 
 export function onClickItem(e) {
-  if (e.target.parentElement.classList.contains('remove-item')) {
+  if (isRemoveButtonClicked(e)) {
     thisModule.removeItem(e.target.parentElement.parentElement);
-  } else if (e.target.closest('li')) {
+  } else if (isItemClicked(e)) {
     thisModule.setItemToEdit(e.target);
   }
+}
+
+function isRemoveButtonClicked(e) {
+  return e.target.parentElement.classList.contains('remove-item');
+}
+
+function isItemClicked(e) {
+  return e.target.closest('li');
 }
 
 export function checkIfItemExists(item) {

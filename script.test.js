@@ -238,6 +238,38 @@ describe('아이템 영역이 아닌 위치가 눌렸을 때', () => {
   });
 });
 
+describe('삭제 여부 확인 창에서 취소 버튼이 눌렸을 때', () => {
+  let item;
+  let itemTitle;
+
+  afterEach(() => {
+    jest.clearAllMocks();  // 각 테스트 후 모의 함수를 초기화
+  });
+
+  beforeEach(() => {
+    itemTitle = 'item1';
+    // 1
+    updateUserInputAndSubmitAdd(itemTitle);
+    // 2
+    const filtered = filteredItemElementsBy(itemTitle);
+    item = filtered[0];
+    // 3
+    global.confirm = jest.fn().mockReturnValue(false);
+  });
+
+  test('아이템을 저장소에서 제거하지 않는다', () => {
+    script.removeItem(item);
+
+    expect(localStorageItems()).toContain(itemTitle);
+  });
+
+  test('아이템을 DOM에서 제거하지 않는다', () => {
+    script.removeItem(item);
+
+    expect(itemElements().map( (i) => i.textContent))
+      .toContain(itemTitle);
+  });
+});
 
 describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이템이 하나이면', () => {
   let item;

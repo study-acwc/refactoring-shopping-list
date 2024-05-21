@@ -23,7 +23,6 @@ export function onAddItemSubmit(e) {
     alertAddAnItem();
     return;
   }
-
   if (isEditingItem()) {
     removeEditingItem()
   } else if (checkIfItemExists(newItem)) {
@@ -125,13 +124,13 @@ function disableEditModeClassFor(item) {
 }
 
 export function removeItem(item) {
-  if (confirmItemRemoval(item.textContent)) {
-    removeItemFromDOM(item);
-
-    removeItemFromStorage(item.textContent);
-
-    updateUIBasedOnListState();
+  if (false == confirmItemRemoval(item.textContent)) {
+    return;
   }
+
+  removeItemFromDOM(item);
+  removeItemFromStorage(item.textContent);
+  updateUIBasedOnListState();
 }
 
 function removeItemFromDOM(item) {

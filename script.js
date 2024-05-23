@@ -97,7 +97,7 @@ export function checkIfItemExists(item) {
 
 export function setItemToEdit(item) {
   turnOnEditMode();
-  enableEditModeClassFor(item);
+  toggleEditModeForSingleItem(item);
   styleFormButtonToEditMode();
   updateInput(item.textContent);
 }
@@ -107,7 +107,7 @@ function styleFormButtonToEditMode() {
   formBtn.style.backgroundColor = '#228B22';
 }
 
-function enableEditModeClassFor(item) {
+function toggleEditModeForSingleItem(item) {
   allItemsFromDOM()
     .forEach((i) => i.classList.remove('edit-mode'));
   item.classList.add('edit-mode');

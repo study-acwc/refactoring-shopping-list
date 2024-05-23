@@ -364,7 +364,7 @@ describe('검색어를 입력했을 때', () => {
   });
 
   test('검색 결과에 해당하는 아이템을 표시한다', () => {
-    script.filterItems(searchKeywordEvent);
+    script.onEditingInput(searchKeywordEvent);
 
     const filteredItems = itemElements().filter(
       (i) => i.textContent.includes(searchKeyword) && hasFilteredItemStyle(i)
@@ -373,7 +373,7 @@ describe('검색어를 입력했을 때', () => {
   });
 
   test('검색 결과에 해당하지 않는 아이템은 표시하지 않는다', () => {
-    script.filterItems(searchKeywordEvent);
+    script.onEditingInput(searchKeywordEvent);
     
     const filteredItems = itemElements().filter(
       (i) => i.textContent != searchKeyword && hasUnfilteredItemStyle(i)
@@ -388,13 +388,13 @@ describe('Clear All 버튼이 눌렸을 때', () => {
   });
 
   test('모든 아이템을 저장소에서 제거한다', () => {
-    script.clearItems();
+    script.onClickClearAll();
 
     expect(localStorageItems()).toBeNull();
   });
 
   test('모든 아이템을 화면에서 제거한다', () => {
-    script.clearItems();
+    script.onClickClearAll();
 
     expect(itemElements()).toHaveLength(0);
   });
@@ -407,7 +407,7 @@ describe('Dom Content가 로드되었을 때', () => {
   });
 
   test('저장된 아이템을 화면에 표시한다', () => {
-    script.displayItems();
+    script.onDOMContentLoad();
     
     const items = itemElements().map(
       (i) => i.textContent
@@ -420,13 +420,13 @@ describe('Dom Content가 로드되었을 때', () => {
   });
 
   test('입력필드가 비어있어야 한다', () => {
-    script.displayItems();
+    script.onDOMContentLoad();
 
     expect(itemInputValue()).toBe('');
   });
 
   test('아이템 편집상태가 아니어야 한다', () => {
-    script.displayItems();
+    script.onDOMContentLoad();
 
     expect(isEditModeEnabled()).toBeFalsy();
   });

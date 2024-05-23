@@ -8,7 +8,7 @@ export const itemFilter = document.getElementById('filter');
 export const formBtn = itemForm.querySelector('button');
 export let isEditMode = false;
 
-export function displayItems() {
+function displayItems() {
   allItemsFromStorage()
     .forEach((item) => addItemToDOM(item));
   updateUIBasedOnListState();
@@ -162,7 +162,7 @@ function clearItemsFromLocalStorage() {
   localStorage.removeItem('items');
 }
 
-export function filterItems(e) {
+function filterItems(e) {
   const inputText = e.target.value.toLowerCase();
 
   allItemsFromDOM().forEach((item) => {
@@ -210,7 +210,7 @@ function validateInput(input) {
   return input != ''
 }
 
-function clearInput () {
+function clearInput() {
   itemInput.value = '';
 }
 
@@ -254,12 +254,24 @@ function turnOnEditMode() {
   isEditMode = true;
 }
 
+export function onClickClearAll() {
+  clearItems();
+}
+
+export function onEditingInput(e) {
+  filterItems(e);
+}
+
+export function onDOMContentLoad() {
+  displayItems();
+}
+
 function registerEventListeners() {
   itemForm.addEventListener('submit', onAddItemSubmit);
   itemList.addEventListener('click', onClickItem);
-  clearBtn.addEventListener('click', clearItems);
-  itemFilter.addEventListener('input', filterItems);
-  document.addEventListener('DOMContentLoaded', displayItems);
+  clearBtn.addEventListener('click', onClickClearAll);
+  itemFilter.addEventListener('input', onEditingInput);
+  document.addEventListener('DOMContentLoaded', onDOMContentLoad);
 }
 
 // Initialize app

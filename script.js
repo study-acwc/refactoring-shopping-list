@@ -162,9 +162,7 @@ function clearItemsFromLocalStorage() {
   localStorage.removeItem('items');
 }
 
-function filterItems(e) {
-  const inputText = e.target.value.toLowerCase();
-
+function filterItems(inputText) {
   allItemsFromDOM().forEach((item) => {
     const itemName = item.firstChild.textContent.toLowerCase();
     item.style.display = itemName.indexOf(inputText) != -1 ? 'flex' : 'none';
@@ -259,7 +257,7 @@ export function onClickClearAll() {
 }
 
 export function onEditingInput(e) {
-  filterItems(e);
+  filterItems(e.target.value.toLowerCase());
 }
 
 export function onDOMContentLoad() {

@@ -163,10 +163,9 @@ function clearItemsFromLocalStorage() {
 }
 
 export function filterItems(e) {
-  const items = allItemsFromDOM();
   const text = e.target.value.toLowerCase();
 
-  items.forEach((item) => {
+  allItemsFromDOM().forEach((item) => {
     const itemName = item.firstChild.textContent.toLowerCase();
     item.style.display = itemName.indexOf(text) != -1 ? 'flex' : 'none';
   });

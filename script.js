@@ -98,8 +98,7 @@ function isItemClicked(e) {
 }
 
 export function checkIfItemExists(item) {
-  const itemsFromStorage = allItemsFromStorage();
-  return itemsFromStorage.includes(item);
+  return allItemsFromStorage().includes(item);
 }
 
 export function setItemToEdit(item) {

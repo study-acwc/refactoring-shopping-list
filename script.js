@@ -80,14 +80,17 @@ export function allItemsFromStorage() {
 
 export function onClickItem(e) {
   if (isRemoveButtonClicked(e)) {
-    thisModule.removeItem(e.target.parentElement.parentElement);
+    const listItemElement = e.target.parentElement.parentElement;
+    thisModule.removeItem(listItemElement);
   } else if (isItemClicked(e)) {
-    thisModule.setItemToEdit(e.target);
+    const listItemElement = e.target;
+    thisModule.setItemToEdit(listItemElement);
   }
 }
 
 function isRemoveButtonClicked(e) {
-  return e.target.parentElement.classList.contains('remove-item');
+  const buttonElement = e.target.parentElement
+  return buttonElement.classList.contains('remove-item');
 }
 
 function isItemClicked(e) {

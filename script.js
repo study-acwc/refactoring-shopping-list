@@ -163,11 +163,11 @@ function clearItemsFromLocalStorage() {
 }
 
 export function filterItems(e) {
-  const text = e.target.value.toLowerCase();
+  const inputText = e.target.value.toLowerCase();
 
   allItemsFromDOM().forEach((item) => {
     const itemName = item.firstChild.textContent.toLowerCase();
-    item.style.display = itemName.indexOf(text) != -1 ? 'flex' : 'none';
+    item.style.display = itemName.indexOf(inputText) != -1 ? 'flex' : 'none';
   });
 }
 

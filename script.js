@@ -115,7 +115,7 @@ function styleFormButtonToEditMode() {
 
 function toggleEditModeForSingleItem(item) {
   allItemsFromDOM()
-    .forEach((i) => i.classList.remove('edit-mode'));
+    .forEach((i) => disableEditModeClassFor(i));
   item.classList.add('edit-mode');
 }
 

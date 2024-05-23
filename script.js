@@ -147,11 +147,15 @@ export function removeItemFromStorage(item) {
 }
 
 export function clearItems() {
+  clearItemsFromDOM();
+  clearItemsFromLocalStorage();
+  updateUIBasedOnListState();
+}
+
+function clearItemsFromDOM() {
   while (itemList.firstChild) {
     itemList.removeChild(itemList.firstChild);
   }
-  clearItemsFromLocalStorage();
-  updateUIBasedOnListState();
 }
 
 function clearItemsFromLocalStorage() {

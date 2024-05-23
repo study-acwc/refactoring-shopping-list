@@ -141,13 +141,9 @@ function confirmItemRemoval(textContent) {
 }
 
 export function removeItemFromStorage(item) {
-  let itemsFromStorage = allItemsFromStorage();
-
-  // Filter out item to be removed
-  itemsFromStorage = itemsFromStorage.filter((i) => i !== item);
-
+  const filteredOutItems = allItemsFromStorage().filter((i) => i !== item);
   // Re-set to localstorage
-  localStorage.setItem('items', JSON.stringify(itemsFromStorage));
+  localStorage.setItem('items', JSON.stringify(filteredOutItems));
 }
 
 export function clearItems() {

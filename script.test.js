@@ -491,7 +491,7 @@ function updateUserInputAndSubmitAdd(itemTitle) {
 }
 
 function isEditModeEnabled() {
-  return script.isEditMode;
+  return script.isEditingItem();
 }
 
 function clearItems() {

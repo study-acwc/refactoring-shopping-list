@@ -6,7 +6,7 @@ export const itemList = document.getElementById('item-list');
 export const clearBtn = document.getElementById('clear');
 export const itemFilter = document.getElementById('filter');
 export const formBtn = itemForm.querySelector('button');
-export let isEditMode = false;
+let isEditMode = false;
 
 function displayItems() {
   allItemsFromStorage()
@@ -228,7 +228,7 @@ function alertAddAnItem() {
   alert('Please add an item');
 }
 
-function isEditingItem() {
+export function isEditingItem() {
   return isEditMode
 }
 

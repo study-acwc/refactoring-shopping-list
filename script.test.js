@@ -199,7 +199,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   test('검색어 입력창을 편집할 아이템의 텍스트로 채운다', () => {
     script.onClickItem(itemClickEvent);
 
-    expect(script.itemInput.value).toBe(clickedElement.textContent);
+    expect(itemInputValue()).toBe(clickedElement.textContent);
   });
 });
 
@@ -458,7 +458,7 @@ function setItemInputValue(value) {
 }
 
 function itemInputValue() {
-  return script.itemInput.value;
+  return script.uniqueInput();
 }
 
 function itemElements() {

@@ -1,7 +1,7 @@
 import * as thisModule from './script.js';
 
 const itemForm = document.getElementById('item-form');
-export const itemInput = document.getElementById('item-input');
+const itemInput = document.getElementById('item-input');
 export const itemList = document.getElementById('item-list');
 export const clearBtn = document.getElementById('clear');
 export const itemFilter = document.getElementById('filter');
@@ -216,7 +216,7 @@ function updateInput(newValue) {
   itemInput.value = newValue;
 }
 
-function uniqueInput() {
+export function uniqueInput() {
   return itemInput.value.trim()
 }
 

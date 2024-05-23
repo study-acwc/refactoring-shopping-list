@@ -1,11 +1,11 @@
 import * as thisModule from './script.js';
 
-export const itemForm = document.getElementById('item-form');
+const itemForm = document.getElementById('item-form');
 export const itemInput = document.getElementById('item-input');
 export const itemList = document.getElementById('item-list');
 export const clearBtn = document.getElementById('clear');
 export const itemFilter = document.getElementById('filter');
-export const formBtn = itemForm.querySelector('button');
+const formBtn = itemForm.querySelector('button');
 let isEditMode = false;
 
 function displayItems() {

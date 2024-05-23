@@ -184,8 +184,7 @@ export function updateUIBasedOnListState() {
 }
 
 function isItemListEmptyInDOM () {
-  const items = allItemsFromDOM();
-  return items.length === 0
+  return allItemsFromDOM().length === 0
 }
 
 function setAddItemButtonStyle() {

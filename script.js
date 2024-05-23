@@ -272,10 +272,9 @@ function registerEventListeners() {
   document.addEventListener('DOMContentLoaded', onDOMContentLoad);
 }
 
-// Initialize app
-export function init() {
+function initializeApp() {
   registerEventListeners();
   updateUIBasedOnListState();
 }
 
-init();
+initializeApp();

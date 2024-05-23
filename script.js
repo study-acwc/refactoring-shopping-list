@@ -34,15 +34,19 @@ export function onAddItemSubmit(e) {
 }
 
 export function addItemToDOM(item) {
-  // Create list item
-  const li = document.createElement('li');
-  li.appendChild(document.createTextNode(item));
-
-  const button = createButton('remove-item btn-link text-red');
-  li.appendChild(button);
-
+  const li = createListItem(item)
   // Add li to the DOM
   itemList.appendChild(li);
+}
+
+function createListItem(item) {
+    const li = document.createElement('li');
+    li.appendChild(document.createTextNode(item));
+  
+    const button = createButton('remove-item btn-link text-red');
+    li.appendChild(button);
+
+    return li;
 }
 
 export function createButton(classes) {

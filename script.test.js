@@ -151,7 +151,6 @@ describe("아이템을 클릭했을 때", () => {
     e.target.parentElement.classList.contains.mockReturnValue(false);
     const setItemToEditSpy = jest.spyOn(script, "setItemToEdit");
     const itemElements = Array.from(script.itemList.querySelectorAll("li"));
-
     script.onClickItem(e);
     expect(script.isEditMode).toBe(true);
   });
@@ -167,7 +166,6 @@ describe("아이템을 클릭했을 때", () => {
     script.removeItem(e.target.parentElement.parentElement); // 함수 호출
 
     expect(script.isEditMode).toBe(false);
-    expect();
   });
 
   test("삭제 버튼을 누른경우 값이 없는 경우", () => {

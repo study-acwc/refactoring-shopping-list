@@ -21,7 +21,7 @@ export function onAddItemSubmit(e) {
   const newItem = itemInput.value.trim();
 
   // Validate Input
-  if (newItem === "") {
+  if (isItemEmpty(newItem)) {
     alert("Please add an item");
     return;
   }
@@ -91,7 +91,7 @@ export function addItemToStorage(item) {
 export function getItemsFromStorage() {
   let itemsFromStorage;
 
-  if (localStorage.getItem("items") === null) {
+  if (isLocalStorageNull()) {
     itemsFromStorage = [];
   } else {
     itemsFromStorage = JSON.parse(localStorage.getItem("items"));
@@ -101,9 +101,9 @@ export function getItemsFromStorage() {
 }
 
 export function onClickItem(e) {
-  if (e.target.parentElement.classList.contains("remove-item")) {
+  if (containRemoveItem(e)) {
     script.removeItem(e.target.parentElement.parentElement);
-  } else if (e.target.closest("li")) {
+  } else if (isListItem(e)) {
     script.setItemToEdit(e.target);
   }
 }
@@ -128,9 +128,7 @@ export function setItemToEdit(item) {
 }
 
 export function removeItem(item) {
-  if (
-    confirm(`Are you sure you want to remove the item "${item.textContent}"?`)
-  ) {
+  if (confirmRemoveItem(item)) {
     // Remove item from DOM
     item.remove();
 
@@ -169,7 +167,7 @@ export function filterItems(e) {
   items.forEach((item) => {
     const itemName = item.firstChild.textContent.toLowerCase();
 
-    if (itemName.indexOf(text) != -1) {
+    if (isItemMatch(itemName, text)) {
       item.style.display = "flex";
     } else {
       item.style.display = "none";
@@ -209,3 +207,25 @@ export function init() {
 }
 
 init();
+
+function isLocalStorageNull() {
+  return localStorage.getItem("items") === null;
+}
+
+function containRemoveItem(e) {
+  return e.target.parentElement.classList.contains("remove-item");
+}
+function isListItem(e) {
+  return e.target.closest("li");
+}
+function confirmRemoveItem(item) {
+  return confirm(
+    `Are you sure you want to remove the item "${item.textContent}"?`,
+  );
+}
+function isItemEmpty(item) {
+  return item === "";
+}
+function isItemMatch(item, text) {
+  return item.indexOf(text) != -1;
+}

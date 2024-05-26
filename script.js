@@ -203,10 +203,10 @@ export function init() {
   document.addEventListener("DOMContentLoaded", () => {
     const itemsFromStorage = getItemsFromStorage();
     itemsFromStorage.forEach(addItemToDOM);
+    styleDisplayItems();
+    itemInput.value = "";
+    isEditMode = false;
   });
-  styleDisplayItems();
-  itemInput.value = "";
-  isEditMode = false;
 }
 
 init();

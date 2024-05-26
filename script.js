@@ -19,37 +19,22 @@ export function onAddItemSubmit(e) {
 
   // trim the input value to remove whitespace - disallowing duplicate items due to white space in the process
   const newItem = itemInput.value.trim();
-
   // Validate Input
   if (isItemEmpty(newItem)) {
     alert("Please add an item");
     return;
   }
-
   // Check for edit mode
   if (isEditMode) {
-    const itemToEdit = itemList.querySelector(".edit-mode");
-
-    script.removeItemFromStorage(itemToEdit.textContent);
-    itemToEdit.classList.remove("edit-mode");
-    itemToEdit.remove();
-    isEditMode = false;
-  } else {
-    if (script.checkIfItemExists(newItem)) {
-      alert(`The item "${newItem}" already exists!`);
-      return;
-    }
+    removeEditItem(itemList.querySelector(".edit-mode"));
   }
 
-  // Create item DOM element
-  script.addItemToDOM(newItem);
+  if (script.checkIfItemExists(newItem)) {
+    alert(`The item "${newItem}" already exists!`);
+    return;
+  }
 
-  // Add item to local storage
-  script.addItemToStorage(newItem);
-
-  script.checkUI();
-
-  itemInput.value = "";
+  createItem(newItem);
 }
 
 export function addItemToDOM(item) {
@@ -89,15 +74,10 @@ export function addItemToStorage(item) {
 }
 
 export function getItemsFromStorage() {
-  let itemsFromStorage;
-
-  if (isLocalStorageNull()) {
-    itemsFromStorage = [];
-  } else {
-    itemsFromStorage = JSON.parse(localStorage.getItem("items"));
-  }
-
-  return itemsFromStorage;
+  const items = isLocalStorageNull()
+    ? []
+    : JSON.parse(localStorage.getItem("items"));
+  return items;
 }
 
 export function onClickItem(e) {
@@ -166,32 +146,29 @@ export function filterItems(e) {
 
   items.forEach((item) => {
     const itemName = item.firstChild.textContent.toLowerCase();
-
-    if (isItemMatch(itemName, text)) {
-      item.style.display = "flex";
-    } else {
-      item.style.display = "none";
-    }
+    const shouldDisplay = isItemMatch(itemName, text);
+    item.style.display = shouldDisplay ? "flex" : "none";
   });
 }
-
 export function checkUI() {
+  clearInput();
+  updateVisibility(clearBtn);
+  updateVisibility(itemFilter);
+  resetFormButton();
+  isEditMode = false;
+}
+
+function clearInput() {
   itemInput.value = "";
+}
+function updateVisibility(element) {
+  const hasItems = itemList.querySelectorAll("li").length > 0;
+  element.style.display = hasItems ? "block" : "none";
+}
 
-  const items = itemList.querySelectorAll("li");
-
-  if (items.length === 0) {
-    clearBtn.style.display = "none";
-    itemFilter.style.display = "none";
-  } else {
-    clearBtn.style.display = "block";
-    itemFilter.style.display = "block";
-  }
-
+function resetFormButton() {
   formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
   formBtn.style.backgroundColor = "#333";
-
-  isEditMode = false;
 }
 
 // Initialize app
@@ -228,4 +205,21 @@ function isItemEmpty(item) {
 }
 function isItemMatch(item, text) {
   return item.indexOf(text) != -1;
+}
+function createItem(newItem) {
+  // Create item DOM element
+  script.addItemToDOM(newItem);
+
+  // Add item to local storage
+  script.addItemToStorage(newItem);
+
+  script.checkUI();
+
+  itemInput.value = "";
+}
+function removeEditItem(item) {
+  script.removeItemFromStorage(item.textContent);
+  item.classList.remove("edit-mode");
+  item.remove();
+  isEditMode = false;
 }

@@ -45,6 +45,15 @@ export function onAddItemSubmit(e) {
   isEditMode = false;
 }
 
+function onClickListItem(e) {
+  setItemToEdit(e.target);
+}
+
+function onClickRemoveItem(e) {
+  e.stopPropagation();
+  removeItem(e.target.parentElement.parentElement);
+}
+
 export function addItemToDOM(item) {
   // Create list item
   const li = document.createElement("li");
@@ -52,6 +61,10 @@ export function addItemToDOM(item) {
 
   const button = createElement("button", "remove-item btn-link text-red");
   const icon = createElement("i", "fa-solid fa-xmark");
+
+  li.addEventListener("click", onClickListItem);
+
+  button.addEventListener("click", onClickRemoveItem);
 
   button.appendChild(icon);
   li.appendChild(button);
@@ -96,14 +109,6 @@ export function getItemsFromStorage() {
   }
 
   return itemsFromStorage;
-}
-
-export function onClickItem(e) {
-  if (e.target.parentElement.classList.contains("remove-item")) {
-    removeItem(e.target.parentElement.parentElement);
-  } else if (e.target.closest("li")) {
-    setItemToEdit(e.target);
-  }
 }
 
 export function checkIfItemExists(item) {
@@ -197,7 +202,6 @@ export function styleDisplayItems() {
 export function init() {
   // Event Listeners
   itemForm.addEventListener("submit", onAddItemSubmit);
-  itemList.addEventListener("click", onClickItem);
   clearBtn.addEventListener("click", clearItems);
   itemFilter.addEventListener("input", filterItems);
   document.addEventListener("DOMContentLoaded", () => {

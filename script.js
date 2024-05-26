@@ -58,25 +58,30 @@ export function addItemToDOM(item) {
   const li = document.createElement("li");
   li.appendChild(document.createTextNode(item));
 
-  const button = createButton("remove-item btn-link text-red");
+  const button = createElement("button", "remove-item btn-link text-red");
+  const icon = createElement("i", "fa-solid fa-xmark");
+
+  button.appendChild(icon);
   li.appendChild(button);
 
   // Add li to the DOM
   itemList.appendChild(li);
 }
 
-export function createButton(classes) {
-  const button = document.createElement("button");
-  button.className = classes;
-  const icon = createIcon("fa-solid fa-xmark");
-  button.appendChild(icon);
-  return button;
-}
+export function createElement(tagName, className) {
+  let element = null;
 
-export function createIcon(classes) {
-  const icon = document.createElement("i");
-  icon.className = classes;
-  return icon;
+  if (!tagName) {
+    return element;
+  }
+
+  element = document.createElement(tagName);
+
+  if (className) {
+    element.className = className;
+  }
+
+  return element;
 }
 
 export function addItemToStorage(item) {

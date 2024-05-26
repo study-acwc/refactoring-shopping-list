@@ -6,14 +6,6 @@ export const itemFilter = document.getElementById("filter");
 export const formBtn = itemForm.querySelector("button");
 export let isEditMode = false;
 
-export function displayItems() {
-  const itemsFromStorage = getItemsFromStorage();
-  itemsFromStorage.forEach((item) => addItemToDOM(item));
-  styleDisplayItems();
-  itemInput.value = "";
-  isEditMode = false;
-}
-
 export function onAddItemSubmit(e) {
   e.preventDefault();
 
@@ -208,7 +200,10 @@ export function init() {
   itemList.addEventListener("click", onClickItem);
   clearBtn.addEventListener("click", clearItems);
   itemFilter.addEventListener("input", filterItems);
-  document.addEventListener("DOMContentLoaded", displayItems);
+  document.addEventListener("DOMContentLoaded", () => {
+    const itemsFromStorage = getItemsFromStorage();
+    itemsFromStorage.forEach(addItemToDOM);
+  });
   styleDisplayItems();
   itemInput.value = "";
   isEditMode = false;

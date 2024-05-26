@@ -10,6 +10,8 @@ export function displayItems() {
   const itemsFromStorage = getItemsFromStorage();
   itemsFromStorage.forEach((item) => addItemToDOM(item));
   styleDisplayItems();
+  itemInput.value = "";
+  isEditMode = false;
 }
 
 export function onAddItemSubmit(e) {
@@ -48,6 +50,7 @@ export function onAddItemSubmit(e) {
   styleDisplayItems();
 
   itemInput.value = "";
+  isEditMode = false;
 }
 
 export function addItemToDOM(item) {
@@ -135,6 +138,8 @@ export function removeItem(item) {
     removeItemFromStorage(item.textContent);
 
     styleDisplayItems();
+    itemInput.value = "";
+    isEditMode = false;
   }
 }
 
@@ -157,6 +162,8 @@ export function clearItems() {
   localStorage.removeItem("items");
 
   styleDisplayItems();
+  itemInput.value = "";
+  isEditMode = false;
 }
 
 export function filterItems(e) {
@@ -175,8 +182,6 @@ export function filterItems(e) {
 }
 
 export function styleDisplayItems() {
-  itemInput.value = "";
-
   const items = itemList.querySelectorAll("li");
 
   if (items.length === 0) {
@@ -189,8 +194,6 @@ export function styleDisplayItems() {
 
   formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
   formBtn.style.backgroundColor = "#333";
-
-  isEditMode = false;
 }
 
 // Initialize app
@@ -202,6 +205,8 @@ export function init() {
   itemFilter.addEventListener("input", filterItems);
   document.addEventListener("DOMContentLoaded", displayItems);
   styleDisplayItems();
+  itemInput.value = "";
+  isEditMode = false;
 }
 
 init();

@@ -18,40 +18,52 @@ export function onAddItemSubmit(e) {
     return;
   }
 
-  // Check for edit mode
-  if (isEditMode) {
-    const itemToEdit = itemList.querySelector(".edit-mode");
-
-    removeItemFromStorage(itemToEdit.textContent);
-    itemToEdit.classList.remove("edit-mode");
-    itemToEdit.remove();
-    isEditMode = false;
-  } else {
-    if (checkIfItemExists(newItem)) {
+  if (!isEditMode) {
+    const isExistItem = getItemsFromStorage().includes(newItem);
+    if (isExistItem) {
       alert(`The item "${newItem}" already exists!`);
       return;
     }
+  } else {
+    const itemToEdit = itemList.querySelector(".edit-mode");
+    removeItemFromStorage(itemToEdit.textContent);
+    itemToEdit.remove();
   }
 
-  // Create item DOM element
   addItemToDOM(newItem);
-
-  // Add item to local storage
   addItemToStorage(newItem);
 
   styleDisplayItems();
-
-  itemInput.value = "";
-  isEditMode = false;
+  initInputEditMode();
 }
 
 function onClickListItem(e) {
-  setItemToEdit(e.target);
+  const targetItem = e.target;
+
+  isEditMode = true;
+
+  itemList
+    .querySelectorAll("li")
+    .forEach((i) => i.classList.remove("edit-mode"));
+
+  targetItem.classList.add("edit-mode");
+  formBtn.innerHTML = '<i class="fa-solid fa-pen"></i>   Update Item';
+  formBtn.style.backgroundColor = "#228B22";
+  itemInput.value = targetItem.textContent;
 }
 
 function onClickRemoveItem(e) {
   e.stopPropagation();
-  removeItem(e.target.parentElement.parentElement);
+
+  const targetItem = e.target.parentElement.parentElement;
+  const targetContent = targetItem.textContent;
+  if (confirm(`Are you sure you want to remove the item "${targetContent}"?`)) {
+    targetItem.remove();
+    removeItemFromStorage(targetContent);
+
+    styleDisplayItems();
+    initInputEditMode();
+  }
 }
 
 export function addItemToDOM(item) {
@@ -63,7 +75,6 @@ export function addItemToDOM(item) {
   const icon = createElement("i", "fa-solid fa-xmark");
 
   li.addEventListener("click", onClickListItem);
-
   button.addEventListener("click", onClickRemoveItem);
 
   button.appendChild(icon);
@@ -111,40 +122,6 @@ export function getItemsFromStorage() {
   return itemsFromStorage;
 }
 
-export function checkIfItemExists(item) {
-  const itemsFromStorage = getItemsFromStorage();
-  return itemsFromStorage.includes(item);
-}
-
-export function setItemToEdit(item) {
-  isEditMode = true;
-
-  itemList
-    .querySelectorAll("li")
-    .forEach((i) => i.classList.remove("edit-mode"));
-
-  item.classList.add("edit-mode");
-  formBtn.innerHTML = '<i class="fa-solid fa-pen"></i>   Update Item';
-  formBtn.style.backgroundColor = "#228B22";
-  itemInput.value = item.textContent;
-}
-
-export function removeItem(item) {
-  if (
-    confirm(`Are you sure you want to remove the item "${item.textContent}"?`)
-  ) {
-    // Remove item from DOM
-    item.remove();
-
-    // Remove item from storage
-    removeItemFromStorage(item.textContent);
-
-    styleDisplayItems();
-    itemInput.value = "";
-    isEditMode = false;
-  }
-}
-
 export function removeItemFromStorage(item) {
   let itemsFromStorage = getItemsFromStorage();
 
@@ -164,8 +141,7 @@ export function clearItems() {
   localStorage.removeItem("items");
 
   styleDisplayItems();
-  itemInput.value = "";
-  isEditMode = false;
+  initInputEditMode();
 }
 
 export function filterItems(e) {
@@ -198,18 +174,26 @@ export function styleDisplayItems() {
   formBtn.style.backgroundColor = "#333";
 }
 
+export function initInputEditMode() {
+  itemInput.value = "";
+  isEditMode = false;
+}
+
 // Initialize app
 export function init() {
   // Event Listeners
   itemForm.addEventListener("submit", onAddItemSubmit);
-  clearBtn.addEventListener("click", clearItems);
+  clearBtn.addEventListener("click", () => {
+    clearItems();
+    styleDisplayItems();
+    initInputEditMode();
+  });
   itemFilter.addEventListener("input", filterItems);
   document.addEventListener("DOMContentLoaded", () => {
     const itemsFromStorage = getItemsFromStorage();
     itemsFromStorage.forEach(addItemToDOM);
     styleDisplayItems();
-    itemInput.value = "";
-    isEditMode = false;
+    initInputEditMode();
   });
 }
 

@@ -249,7 +249,7 @@ describe("clear all 버튼", () => {
   });
 
   test("버튼 노출", () => {
-    script.styleHiddenClearButton();
+    script.styleDisplayItems();
     const buttonClearAll = document.getElementById(BUTTON_CLEAR_ID);
     expect(buttonClearAll.style.display).toBe("block");
   });

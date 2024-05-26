@@ -9,7 +9,7 @@ export let isEditMode = false;
 export function displayItems() {
   const itemsFromStorage = getItemsFromStorage();
   itemsFromStorage.forEach((item) => addItemToDOM(item));
-  styleHiddenClearButton();
+  styleDisplayItems();
 }
 
 export function onAddItemSubmit(e) {
@@ -45,7 +45,7 @@ export function onAddItemSubmit(e) {
   // Add item to local storage
   addItemToStorage(newItem);
 
-  styleHiddenClearButton();
+  styleDisplayItems();
 
   itemInput.value = "";
 }
@@ -134,7 +134,7 @@ export function removeItem(item) {
     // Remove item from storage
     removeItemFromStorage(item.textContent);
 
-    styleHiddenClearButton();
+    styleDisplayItems();
   }
 }
 
@@ -156,7 +156,7 @@ export function clearItems() {
   // Clear from localStorage
   localStorage.removeItem("items");
 
-  styleHiddenClearButton();
+  styleDisplayItems();
 }
 
 export function filterItems(e) {
@@ -174,7 +174,7 @@ export function filterItems(e) {
   });
 }
 
-export function styleHiddenClearButton() {
+export function styleDisplayItems() {
   itemInput.value = "";
 
   const items = itemList.querySelectorAll("li");
@@ -201,7 +201,7 @@ export function init() {
   clearBtn.addEventListener("click", clearItems);
   itemFilter.addEventListener("input", filterItems);
   document.addEventListener("DOMContentLoaded", displayItems);
-  styleHiddenClearButton();
+  styleDisplayItems();
 }
 
 init();

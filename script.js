@@ -20,6 +20,7 @@ export function onAddItemSubmit(e) {
   // trim the input value to remove whitespace - disallowing duplicate items due to white space in the process
   const newItem = itemInput.value.trim();
   // Validate Input
+  //[10-3] Gaurd Clause
   if (isItemEmpty(newItem)) {
     alert("Please add an item");
     return;
@@ -29,6 +30,8 @@ export function onAddItemSubmit(e) {
     removeEditItem(itemList.querySelector(".edit-mode"));
   }
 
+  //Validate if item already exists
+  //[10-3] Gaurd Clause
   if (script.checkIfItemExists(newItem)) {
     alert(`The item "${newItem}" already exists!`);
     return;
@@ -81,6 +84,7 @@ export function getItemsFromStorage() {
 }
 
 export function onClickItem(e) {
+  //[10-3] 참과 거짓 경로 모두 정상 동작
   if (containRemoveItem(e)) {
     script.removeItem(e.target.parentElement.parentElement);
   } else if (isListItem(e)) {
@@ -95,8 +99,6 @@ export function checkIfItemExists(item) {
 
 export function setItemToEdit(item) {
   isEditMode = true;
-  console.log("setItemToEdit");
-
   itemList
     .querySelectorAll("li")
     .forEach((i) => i.classList.remove("edit-mode"));
@@ -106,17 +108,17 @@ export function setItemToEdit(item) {
   formBtn.style.backgroundColor = "#228B22";
   itemInput.value = item.textContent;
 }
-
 export function removeItem(item) {
-  if (confirmRemoveItem(item)) {
-    // Remove item from DOM
-    item.remove();
-
-    // Remove item from storage
-    script.removeItemFromStorage(item.textContent);
-
-    script.checkUI();
+  //[10-3] Gaurd Clause
+  if (!script.confirmRemoveItem(item)) {
+    console.log("removeItem not confirmed");
+    return;
   }
+  // Remove item from DOM
+  item.remove();
+  // Remove item from storage
+  script.removeItemFromStorage(item.textContent);
+  script.checkUI();
 }
 
 export function removeItemFromStorage(item) {
@@ -195,8 +197,10 @@ function containRemoveItem(e) {
 function isListItem(e) {
   return e.target.closest("li");
 }
-function confirmRemoveItem(item) {
-  return confirm(
+export function confirmRemoveItem(item) {
+  var test = global.confirm();
+  console.log("confirmRemoveItem", test);
+  return global.confirm(
     `Are you sure you want to remove the item "${item.textContent}"?`,
   );
 }

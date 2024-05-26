@@ -2,6 +2,7 @@ import * as innerHTMLForTest from "./scriptTestHTMLSetup.js";
 import * as script from "./script.js";
 
 window.alert = jest.fn();
+window.confirm = jest.fn().mockReturnValue(false);
 
 function initialize() {
   // 테스트 시작하기 전에 다른 테스트에서 설정한 값을 초기화하는 작업
@@ -159,7 +160,7 @@ describe("아이템을 클릭했을 때", () => {
     e.target.parentElement.classList.contains.mockReturnValue(true);
     const removeItemSpy = jest.spyOn(script, "removeItem");
     const itemElements = Array.from(script.itemList.querySelectorAll("li"));
-    window.confirm = jest.fn(() => true);
+    global.confirm = jest.fn(() => false);
     const itemList = document.getElementById("item-list");
     script.removeItem(itemList.children[0]);
     //script.onClickItem(e);
@@ -167,12 +168,19 @@ describe("아이템을 클릭했을 때", () => {
 
     expect(script.isEditMode).toBe(false);
   });
+  test("삭제 버튼을 누른경우 취소하면 삭제되지 않는다.", () => {
+    const confirmRemoveItemSpy = jest.spyOn(script, "confirmRemoveItem");
+    const itemList = document.getElementById("item-list");
+    e.target.parentElement.classList.contains.mockReturnValue(true);
+
+    script.removeItem(itemList.children[0]);
+    expect(confirmRemoveItemSpy).toHaveBeenCalledTimes(1);
+  });
 
   test("삭제 버튼을 누른경우 값이 없는 경우", () => {
     e.target.parentElement.classList.contains.mockReturnValue(true);
     const removeItemSpy = jest.spyOn(script, "removeItem");
     const itemElements = Array.from(script.itemList.querySelectorAll("li"));
-    window.confirm = jest.fn(() => true);
 
     script.onClickItem(e);
     script.removeItem(e.target.parentElement.parentElement); // 함수 호출

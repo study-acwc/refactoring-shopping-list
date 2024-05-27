@@ -462,7 +462,7 @@ function itemInputValue() {
 }
 
 function itemElements() {
-  return Array.from(script.itemList.querySelectorAll('li'));
+  return Array.from(script.allItemsFromDOM());
 }
 
 function filteredItemElementsBy(itemTitle) {

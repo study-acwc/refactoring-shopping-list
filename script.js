@@ -2,7 +2,7 @@ import * as thisModule from './script.js';
 
 const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
-export const itemList = document.getElementById('item-list');
+const itemList = document.getElementById('item-list');
 export const clearBtn = document.getElementById('clear');
 export const itemFilter = document.getElementById('filter');
 const formBtn = itemForm.querySelector('button');
@@ -200,7 +200,7 @@ function showListControls() {
   itemFilter.style.display = 'block';
 }
 
-function allItemsFromDOM() {
+export function allItemsFromDOM() {
   return itemList.querySelectorAll('li');
 }
 

@@ -3,7 +3,7 @@ import * as thisModule from './script.js';
 const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
 const itemList = document.getElementById('item-list');
-export const clearBtn = document.getElementById('clear');
+const clearBtn = document.getElementById('clear');
 export const itemFilter = document.getElementById('filter');
 const formBtn = itemForm.querySelector('button');
 let isEditMode = false;
@@ -160,6 +160,14 @@ function clearItemsFromDOM() {
 
 function clearItemsFromLocalStorage() {
   localStorage.removeItem('items');
+}
+
+export function isClearButtonHidden() {
+  return clearBtn.style.display == 'none';
+}
+
+export function isClearButtonDisplayed() {
+  return clearBtn.style.display == 'block';
 }
 
 function filterItems(inputText) {

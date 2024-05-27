@@ -507,7 +507,7 @@ function isFilterHidden() {
 }
 
 function isClearButtonHidden() {
-  return script.clearBtn.style.display == 'none';
+  return script.isClearButtonHidden();
 }
 
 function isFilterDisplayed() {
@@ -515,5 +515,6 @@ function isFilterDisplayed() {
 }
 
 function isClearButtonDisplayed() {
-  return script.clearBtn.style.display == 'block';
+  return script.isClearButtonDisplayed();
+  ;
 }

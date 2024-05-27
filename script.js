@@ -3,6 +3,7 @@ import * as thisModule from './script.js';
 const BUTTON_ELEMENT = 'button';
 const LI_ELEMENT = 'li';
 const ITEMS_STORAGE_KEY = 'items';
+const EDITMODE_ELEMENT_CLASS = 'edit-mode';
 
 const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
@@ -120,11 +121,11 @@ function styleFormButtonToEditMode() {
 function toggleEditModeForSingleItem(item) {
   allItemsFromDOM()
     .forEach((i) => disableEditModeClassFor(i));
-  item.classList.add('edit-mode');
+  item.classList.add(EDITMODE_ELEMENT_CLASS);
 }
 
 function disableEditModeClassFor(item) {
-  item.classList.remove('edit-mode');
+  item.classList.remove(EDITMODE_ELEMENT_CLASS);
 }
 
 export function removeItem(item) {

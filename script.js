@@ -46,13 +46,13 @@ function createListItem(item) {
     const li = document.createElement(LI_ELEMENT);
     li.appendChild(document.createTextNode(item));
   
-    const button = createButton('remove-item btn-link text-red');
+    const button = createButtonWithClasses('remove-item btn-link text-red');
     li.appendChild(button);
 
     return li;
 }
 
-export function createButton(classes) {
+export function createButtonWithClasses(classes) {
   const button = document.createElement(BUTTON_ELEMENT);
   button.className = classes;
   const icon = createIcon('fa-solid fa-xmark');

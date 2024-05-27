@@ -1,11 +1,12 @@
 import * as thisModule from './script.js';
 
+const BUTTON_ELEMENT = 'button';
 const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
 const itemList = document.getElementById('item-list');
 const clearBtn = document.getElementById('clear');
 const itemFilter = document.getElementById('filter');
-const formBtn = itemForm.querySelector('button');
+const formBtn = itemForm.querySelector(BUTTON_ELEMENT);
 let isEditMode = false;
 
 function displayItems() {
@@ -50,7 +51,7 @@ function createListItem(item) {
 }
 
 export function createButton(classes) {
-  const button = document.createElement('button');
+  const button = document.createElement(BUTTON_ELEMENT);
   button.className = classes;
   const icon = createIcon('fa-solid fa-xmark');
   button.appendChild(icon);

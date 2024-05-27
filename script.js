@@ -2,6 +2,7 @@ import * as thisModule from './script.js';
 
 const BUTTON_ELEMENT = 'button';
 const LI_ELEMENT = 'li';
+const ITEMS_STORAGE_KEY = 'items';
 
 const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
@@ -73,11 +74,11 @@ export function addItemToStorage(item) {
   itemsFromStorage.push(item);
 
   // Convert to JSON string and set to local storage
-  localStorage.setItem('items', JSON.stringify(itemsFromStorage));
+  localStorage.setItem(ITEMS_STORAGE_KEY, JSON.stringify(itemsFromStorage));
 }
 
 export function allItemsFromStorage() {
-  const itemsJsonString = localStorage.getItem('items');
+  const itemsJsonString = localStorage.getItem(ITEMS_STORAGE_KEY);
   return itemsJsonString === null ? [] : JSON.parse(itemsJsonString);
 }
 
@@ -146,7 +147,7 @@ function confirmItemRemoval(textContent) {
 export function removeItemFromStorage(item) {
   const filteredOutItems = allItemsFromStorage().filter((i) => i !== item);
   // Re-set to localstorage
-  localStorage.setItem('items', JSON.stringify(filteredOutItems));
+  localStorage.setItem(ITEMS_STORAGE_KEY, JSON.stringify(filteredOutItems));
 }
 
 export function clearItems() {
@@ -162,7 +163,7 @@ function clearItemsFromDOM() {
 }
 
 function clearItemsFromLocalStorage() {
-  localStorage.removeItem('items');
+  localStorage.removeItem(ITEMS_STORAGE_KEY);
 }
 
 export function isClearButtonHidden() {

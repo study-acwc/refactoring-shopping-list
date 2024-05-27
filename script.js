@@ -1,6 +1,8 @@
 import * as thisModule from './script.js';
 
 const BUTTON_ELEMENT = 'button';
+const LI_ELEMENT = 'li';
+
 const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
 const itemList = document.getElementById('item-list');
@@ -41,7 +43,7 @@ export function addItemToDOM(item) {
 }
 
 function createListItem(item) {
-    const li = document.createElement('li');
+    const li = document.createElement(LI_ELEMENT);
     li.appendChild(document.createTextNode(item));
   
     const button = createButton('remove-item btn-link text-red');
@@ -95,7 +97,7 @@ function isRemoveButtonClicked(e) {
 }
 
 function isItemClicked(e) {
-  return e.target.closest('li');
+  return e.target.closest(LI_ELEMENT);
 }
 
 export function checkIfItemExists(item) {
@@ -218,7 +220,7 @@ function showListControls() {
 }
 
 export function allItemsFromDOM() {
-  return itemList.querySelectorAll('li');
+  return itemList.querySelectorAll(LI_ELEMENT);
 }
 
 function validateInput(input) {

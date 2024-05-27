@@ -4,7 +4,7 @@ const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
 const itemList = document.getElementById('item-list');
 const clearBtn = document.getElementById('clear');
-export const itemFilter = document.getElementById('filter');
+const itemFilter = document.getElementById('filter');
 const formBtn = itemForm.querySelector('button');
 let isEditMode = false;
 
@@ -175,6 +175,14 @@ function filterItems(inputText) {
     const itemName = item.firstChild.textContent.toLowerCase();
     item.style.display = itemName.indexOf(inputText) != -1 ? 'flex' : 'none';
   });
+}
+
+export function isFilterHidden() {
+  return itemFilter.style.display == 'none';
+}
+
+export function isFilterDisplayed() {
+  return itemFilter.style.display == 'block';
 }
 
 export function updateUIBasedOnListState() {

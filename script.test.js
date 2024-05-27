@@ -503,7 +503,7 @@ function setItemElementToEdit(element){
 }
 
 function isFilterHidden() {
-  return script.itemFilter.style.display == 'none';
+  return script.isFilterHidden();
 }
 
 function isClearButtonHidden() {
@@ -511,7 +511,7 @@ function isClearButtonHidden() {
 }
 
 function isFilterDisplayed() {
-  return script.itemFilter.style.display == 'block';
+  return script.isFilterDisplayed();
 }
 
 function isClearButtonDisplayed() {

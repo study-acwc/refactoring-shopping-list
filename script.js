@@ -3,7 +3,8 @@ import * as thisModule from './script.js';
 const BUTTON_ELEMENT = 'button';
 const LI_ELEMENT = 'li';
 const ITEMS_STORAGE_KEY = 'items';
-const EDITMODE_ELEMENT_CLASS = 'edit-mode';
+export const EDITMODE_ELEMENT_CLASS = 'edit-mode';
+export const ITEM_INPUT_ID = 'item-input';
 
 const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');

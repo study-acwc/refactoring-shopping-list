@@ -454,7 +454,7 @@ function setLocalStorageItems(items) {
 }
 
 function setItemInputValue(value) {
-  document.getElementById('item-input').value = value;
+  document.getElementById(script.ITEM_INPUT_ID).value = value;
 }
 
 function itemInputValue() {
@@ -482,7 +482,7 @@ function deleteButtonInItemElement(element) {
 }
 
 function editingItemElement(element) {
-  return element.classList.contains('edit-mode')
+  return element.classList.contains(script.EDITMODE_ELEMENT_CLASS)
 }
 
 function updateUserInputAndSubmitAdd(itemTitle) {

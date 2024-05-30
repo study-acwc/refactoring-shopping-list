@@ -58,12 +58,12 @@ function listItem(item) {
 export function buttonWithClasses(classes) {
   const button = document.createElement(BUTTON_ELEMENT);
   button.className = classes;
-  const icon = createIconWithClasses('fa-solid fa-xmark');
+  const icon = iconWithClasses('fa-solid fa-xmark');
   button.appendChild(icon);
   return button;
 }
 
-export function createIconWithClasses(classes) {
+export function iconWithClasses(classes) {
   const icon = document.createElement('i');
   icon.className = classes;
   return icon;

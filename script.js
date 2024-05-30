@@ -40,12 +40,12 @@ export function onAddItemSubmit(e) {
 }
 
 export function addItemToDOM(item) {
-  const li = createListItem(item)
+  const li = listItem(item)
   // Add li to the DOM
   itemList.appendChild(li);
 }
 
-function createListItem(item) {
+function listItem(item) {
     const li = document.createElement(LI_ELEMENT);
     li.appendChild(document.createTextNode(item));
   

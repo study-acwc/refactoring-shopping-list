@@ -17,7 +17,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
     test('아이템을 저장하지 않는다', () => {
         script.onAddItemSubmit(event);
 
-        expect(localStorageItems()).toBeNull();
+        expect(script.allItemsFromStorage()).toHaveLength(0);
     });
 });
 
@@ -28,13 +28,13 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
         event = dummyUIEvent();
         inputValue = 'item1';
         setItemInputValue(inputValue);
-        setLocalStorageItems(['item2', 'item3']);
+        script.saveAllItemsToStorage(['item2', 'item3']);
     });
 
     test('아이템을 저장한다', () => {
         script.onAddItemSubmit(event);
 
-        expect(localStorageItems()).toContain(inputValue);
+        expect(script.allItemsFromStorage()).toContain(inputValue);
     });
 
     test('화면에 새로운 아이템을 표시한다', () => {
@@ -58,7 +58,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
         event = dummyUIEvent();
         inputValue = 'item1';
         setItemInputValue(inputValue);
-        setLocalStorageItems([inputValue]);
+        script.saveAllItemsToStorage([inputValue]);
     });
 
     test('아이템을 중복 저장하지 않는다', () => {
@@ -87,7 +87,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
       updateUserInputAndSubmitAdd(itemTitle);
       // 2
       const filtered = filteredItemElementsBy(itemTitle);
-      setItemElementToEdit(filtered[0]);
+      script.setItemToEdit(filtered[0]);
       // 3
       setItemInputValue(updatedItemTitle);
     });
@@ -95,7 +95,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
     test('저장된 아이템을 제거한다', () => {
         script.onAddItemSubmit(event);
 
-        expect(localStorageItems()).not.toContain(itemTitle);
+        expect(script.allItemsFromStorage()).not.toContain(itemTitle);
     });
 
     test('화면에서 해당 아이템을 제거한다', () => {
@@ -108,13 +108,13 @@ describe('Update Item 버튼이 눌렸을 때', () => {
     test("아이템 편집 상태를 해제한다", () => {
         script.onAddItemSubmit(event);
 
-        expect(isEditModeEnabled()).toBeFalsy();
+        expect(script.isEditingItem()).toBeFalsy();
     });
 
     test('새로운 아이템을 저장한다', () => {
         script.onAddItemSubmit(event);
 
-        expect(localStorageItems()).toContain(updatedItemTitle);
+        expect(script.allItemsFromStorage()).toContain(updatedItemTitle);
     });
 
     test('화면에 새로운 아이템을 표시한다', () => {
@@ -175,7 +175,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   test('아이템 편집 상태를 활성화한다', () => {
     script.onClickItem(itemClickEvent);
 
-    expect(isEditModeEnabled()).toBeTruthy();
+    expect(script.isEditingItem()).toBeTruthy();
   });
 
   test('해당 아이템을 편집 모드로 표시한다', () => {
@@ -260,7 +260,7 @@ describe('삭제 여부 확인 창에서 취소 버튼이 눌렸을 때', () => 
   test('아이템을 저장소에서 제거하지 않는다', () => {
     script.removeItem(item);
 
-    expect(localStorageItems()).toContain(itemTitle);
+    expect(script.allItemsFromStorage()).toContain(itemTitle);
   });
 
   test('아이템을 DOM에서 제거하지 않는다', () => {
@@ -293,19 +293,19 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   test('아이템을 저장소에서 제거한다', () => {
     script.removeItem(item);
 
-    expect(localStorageItems()).not.toContain(itemTitle);
+    expect(script.allItemsFromStorage()).not.toContain(itemTitle);
   });
 
   test('필터링 영역을 표시하지 않는다', () => {
     script.removeItem(item);
 
-    expect(isFilterHidden()).toBeTruthy();
+    expect(script.isFilterHidden()).toBeTruthy();
   });
 
   test('전체 삭제 버튼을 표시하지 않는다', () => {
     script.removeItem(item);
 
-    expect(isClearButtonHidden()).toBeTruthy();
+    expect(script.isClearButtonHidden()).toBeTruthy();
   });
 });
 
@@ -332,19 +332,19 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   test('아이템을 저장소에서 제거한다', () => {
     script.removeItem(item1);
 
-    expect(localStorageItems()).not.toContain(itemTitle1);
+    expect(script.allItemsFromStorage()).not.toContain(itemTitle1);
   });
 
   test('필터링 영역을 표시한다', () => {
     script.removeItem(item1);
 
-    expect(isFilterDisplayed()).toBeTruthy();
+    expect(script.isFilterDisplayed()).toBeTruthy();
   });
 
   test('전체 삭제 버튼을 표시하지 않는다', () => {
     script.removeItem(item1);
 
-    expect(isClearButtonDisplayed()).toBeTruthy();
+    expect(script.isClearButtonDisplayed()).toBeTruthy();
   });
 });
 
@@ -384,13 +384,13 @@ describe('검색어를 입력했을 때', () => {
 
 describe('Clear All 버튼이 눌렸을 때', () => {
   beforeEach(() => {
-    setLocalStorageItems(['item1', 'item2']);
+    script.saveAllItemsToStorage(['item1', 'item2']);
   });
 
   test('모든 아이템을 저장소에서 제거한다', () => {
     script.onClickClearAll();
 
-    expect(localStorageItems()).toBeNull();
+    expect(script.allItemsFromStorage()).toHaveLength(0);
   });
 
   test('모든 아이템을 화면에서 제거한다', () => {
@@ -403,7 +403,7 @@ describe('Clear All 버튼이 눌렸을 때', () => {
 describe('Dom Content가 로드되었을 때', () => {
   let contents = ['item1', 'item2'];
   beforeEach(() => {
-    setLocalStorageItems(contents);
+    script.saveAllItemsToStorage(contents);
   });
 
   test('저장된 아이템을 화면에 표시한다', () => {
@@ -428,7 +428,7 @@ describe('Dom Content가 로드되었을 때', () => {
   test('아이템 편집상태가 아니어야 한다', () => {
     script.onDOMContentLoad();
 
-    expect(isEditModeEnabled()).toBeFalsy();
+    expect(script.isEditingItem()).toBeFalsy();
   });
 });
 
@@ -441,16 +441,8 @@ function dummyUIEvent() {
   };
 }
 
-function localStorageItems() {
-  return JSON.parse(localStorage.getItem(localStorageKey));
-}
-
 function filteredLocalStorageItemsBy(itemTitle) {
-  return localStorageItems().filter(item => item === itemTitle);
-}
-
-function setLocalStorageItems(items) {
-  localStorage.setItem(localStorageKey, JSON.stringify(items));
+  return script.allItemsFromStorage().filter(item => item === itemTitle);
 }
 
 function setItemInputValue(value) {
@@ -490,31 +482,6 @@ function updateUserInputAndSubmitAdd(itemTitle) {
   script.onAddItemSubmit(dummyUIEvent());
 }
 
-function isEditModeEnabled() {
-  return script.isEditingItem();
-}
-
 function clearItems() {
   script.clearItems();
-}
-
-function setItemElementToEdit(element){
-  script.setItemToEdit(element);
-}
-
-function isFilterHidden() {
-  return script.isFilterHidden();
-}
-
-function isClearButtonHidden() {
-  return script.isClearButtonHidden();
-}
-
-function isFilterDisplayed() {
-  return script.isFilterDisplayed();
-}
-
-function isClearButtonDisplayed() {
-  return script.isClearButtonDisplayed();
-  ;
 }

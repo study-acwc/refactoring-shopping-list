@@ -78,7 +78,7 @@ export function addItemToStorage(item) {
   saveAllItemsToStorage(itemsFromStorage);
 }
 
-function saveAllItemsToStorage(newItems) {
+export function saveAllItemsToStorage(newItems) {
   localStorage.setItem(ITEMS_STORAGE_KEY, JSON.stringify(newItems));
 }
 

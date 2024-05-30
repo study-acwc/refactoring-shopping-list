@@ -168,26 +168,26 @@ function clearItemsFromLocalStorage() {
 }
 
 export function isClearButtonHidden() {
-  return clearBtn.style.display == 'none';
+  return clearBtn.style.display == CSSDisplay.NONE;
 }
 
 export function isClearButtonDisplayed() {
-  return clearBtn.style.display == 'block';
+  return clearBtn.style.display == CSSDisplay.BLOCK;
 }
 
 function filterItems(inputText) {
   allItemsFromDOM().forEach((item) => {
     const itemName = item.firstChild.textContent.toLowerCase();
-    item.style.display = itemName.indexOf(inputText) != -1 ? 'flex' : 'none';
+    item.style.display = itemName.indexOf(inputText) != -1 ? CSSDisplay.FLEX : CSSDisplay.NONE;
   });
 }
 
 export function isFilterHidden() {
-  return itemFilter.style.display == 'none';
+  return itemFilter.style.display == CSSDisplay.NONE;
 }
 
 export function isFilterDisplayed() {
-  return itemFilter.style.display == 'block';
+  return itemFilter.style.display == CSSDisplay.BLOCK;
 }
 
 export function updateUIBasedOnListState() {
@@ -211,14 +211,20 @@ function setAddItemButtonStyle() {
   formBtn.style.backgroundColor = '#333';
 }
 
+export const CSSDisplay = {
+  NONE: 'none',
+  BLOCK: 'block',
+  FLEX: 'flex'
+}
+
 function hideListControls() {
-  clearBtn.style.display = 'none';
-  itemFilter.style.display = 'none'; 
+  clearBtn.style.display = CSSDisplay.NONE;
+  itemFilter.style.display = CSSDisplay.NONE; 
 }
 
 function showListControls() {
-  clearBtn.style.display = 'block';
-  itemFilter.style.display = 'block';
+  clearBtn.style.display = CSSDisplay.BLOCK;
+  itemFilter.style.display = CSSDisplay.BLOCK;
 }
 
 export function allItemsFromDOM() {

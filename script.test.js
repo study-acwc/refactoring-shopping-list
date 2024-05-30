@@ -470,11 +470,11 @@ function filteredItemElementsBy(itemTitle) {
 }
 
 function hasFilteredItemStyle(element) {
-  return element.style.display == 'flex';
+  return element.style.display == script.CSSDisplay.FLEX;
 }
 
 function hasUnfilteredItemStyle(element) {
-  return element.style.display == 'none';
+  return element.style.display == script.CSSDisplay.NONE;
 }
 
 function deleteButtonInItemElement(element) {

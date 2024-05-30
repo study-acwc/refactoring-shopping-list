@@ -75,8 +75,11 @@ export function addItemToStorage(item) {
   // Add new item to array
   itemsFromStorage.push(item);
 
-  // Convert to JSON string and set to local storage
-  localStorage.setItem(ITEMS_STORAGE_KEY, JSON.stringify(itemsFromStorage));
+  saveAllItemsToStorage(itemsFromStorage);
+}
+
+function saveAllItemsToStorage(newItems) {
+  localStorage.setItem(ITEMS_STORAGE_KEY, JSON.stringify(newItems));
 }
 
 export function allItemsFromStorage() {
@@ -148,8 +151,7 @@ function confirmItemRemoval(textContent) {
 
 export function removeItemFromStorage(item) {
   const filteredOutItems = allItemsFromStorage().filter((i) => i !== item);
-  // Re-set to localstorage
-  localStorage.setItem(ITEMS_STORAGE_KEY, JSON.stringify(filteredOutItems));
+  saveAllItemsToStorage(filteredOutItems);
 }
 
 export function clearItems() {

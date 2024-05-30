@@ -248,7 +248,7 @@ export function uniqueInput() {
   return itemInput.value.trim()
 }
 
-function alertIfItemExists (newItem) {
+function alertIfItemExists(newItem) {
   alert(`The item "${newItem}" already exists!`);
 }
 

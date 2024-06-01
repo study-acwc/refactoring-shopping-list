@@ -9,7 +9,8 @@ export class Storage {
     }
 
     get allItems() {
-        return this._storage.getItem(this._key);
+        const itemsJsonString = this._storage.getItem(this._key);
+        return itemsJsonString === null ? [] : JSON.parse(itemsJsonString);
     }
     
     saveAllItems(newItems) {

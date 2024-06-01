@@ -120,7 +120,7 @@ function editingItem() {
 // <-----
 
 export function checkIfItemExists(item) {
-  return allItemsFromStorage().includes(item);
+  return aStorage.allItems.includes(item);
 }
 
 function alertIfItemExists(newItem) {
@@ -160,7 +160,7 @@ export function iconWithClasses(classes) {
 // <------
 
 export function addItemToStorage(item) {
-  const itemsFromStorage = allItemsFromStorage();
+  const itemsFromStorage = aStorage.allItems;
 
   // Add new item to array
   itemsFromStorage.push(item);
@@ -301,19 +301,14 @@ function turnOffEditMode() {
 // <-------
 
 function displayItems() {
-  allItemsFromStorage()
+  aStorage.allItems
     .forEach((item) => addItemToDOM(item));
   updateUIBasedOnListState();
 }
 
 export function removeItemFromStorage(item) {
-  const filteredOutItems = allItemsFromStorage().filter((i) => i !== item);
+  const filteredOutItems = aStorage.allItems.filter((i) => i !== item);
   aStorage.saveAllItems(filteredOutItems);
-}
-
-export function allItemsFromStorage() {
-  const itemsJsonString = aStorage.allItems;
-  return itemsJsonString === null ? [] : JSON.parse(itemsJsonString);
 }
 
 function disableEditModeClassFor(item) {

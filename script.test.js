@@ -17,7 +17,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
     test('아이템을 저장하지 않는다', () => {
         script.onAddItemSubmit(event);
 
-        expect(script.allItemsFromStorage()).toHaveLength(0);
+        expect(script.aStorage.allItems).toHaveLength(0);
     });
 });
 
@@ -34,7 +34,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
     test('아이템을 저장한다', () => {
         script.onAddItemSubmit(event);
 
-        expect(script.allItemsFromStorage()).toContain(inputValue);
+        expect(script.aStorage.allItems).toContain(inputValue);
     });
 
     test('화면에 새로운 아이템을 표시한다', () => {
@@ -95,7 +95,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
     test('저장된 아이템을 제거한다', () => {
         script.onAddItemSubmit(event);
 
-        expect(script.allItemsFromStorage()).not.toContain(itemTitle);
+        expect(script.aStorage.allItems).not.toContain(itemTitle);
     });
 
     test('화면에서 해당 아이템을 제거한다', () => {
@@ -114,7 +114,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
     test('새로운 아이템을 저장한다', () => {
         script.onAddItemSubmit(event);
 
-        expect(script.allItemsFromStorage()).toContain(updatedItemTitle);
+        expect(script.aStorage.allItems).toContain(updatedItemTitle);
     });
 
     test('화면에 새로운 아이템을 표시한다', () => {
@@ -260,7 +260,7 @@ describe('삭제 여부 확인 창에서 취소 버튼이 눌렸을 때', () => 
   test('아이템을 저장소에서 제거하지 않는다', () => {
     script.removeItem(item);
 
-    expect(script.allItemsFromStorage()).toContain(itemTitle);
+    expect(script.aStorage.allItems).toContain(itemTitle);
   });
 
   test('아이템을 DOM에서 제거하지 않는다', () => {
@@ -293,7 +293,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   test('아이템을 저장소에서 제거한다', () => {
     script.removeItem(item);
 
-    expect(script.allItemsFromStorage()).not.toContain(itemTitle);
+    expect(script.aStorage.allItems).not.toContain(itemTitle);
   });
 
   test('필터링 영역을 표시하지 않는다', () => {
@@ -332,7 +332,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   test('아이템을 저장소에서 제거한다', () => {
     script.removeItem(item1);
 
-    expect(script.allItemsFromStorage()).not.toContain(itemTitle1);
+    expect(script.aStorage.allItems).not.toContain(itemTitle1);
   });
 
   test('필터링 영역을 표시한다', () => {
@@ -390,7 +390,7 @@ describe('Clear All 버튼이 눌렸을 때', () => {
   test('모든 아이템을 저장소에서 제거한다', () => {
     script.onClickClearAll();
 
-    expect(script.allItemsFromStorage()).toHaveLength(0);
+    expect(script.aStorage.allItems).toHaveLength(0);
   });
 
   test('모든 아이템을 화면에서 제거한다', () => {
@@ -442,7 +442,7 @@ function dummyUIEvent() {
 }
 
 function filteredLocalStorageItemsBy(itemTitle) {
-  return script.allItemsFromStorage().filter(item => item === itemTitle);
+  return script.aStorage.allItems.filter(item => item === itemTitle);
 }
 
 function setItemInputValue(value) {

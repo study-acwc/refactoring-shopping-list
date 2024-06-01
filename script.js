@@ -4,19 +4,17 @@ import * as itemElements from './itemElementList.js';
 
 // MARK: - 변수 선언
 
-const BUTTON_ELEMENT = 'button';
-const LI_ELEMENT = 'li';
 export const ITEM_INPUT_ID = 'item-input';
+
+export const aStorage = new storage.Storage('items');
+export const anItemList = new itemElements.ItemElementList(document.getElementById('item-list'));
 
 const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
 const clearBtn = document.getElementById('clear');
 const itemFilter = document.getElementById('filter');
-const formBtn = itemForm.querySelector(BUTTON_ELEMENT);
+const formBtn = itemForm.querySelector(anItemList.BUTTON_ELEMENT);
 let isEditMode = false;
-
-export const aStorage = new storage.Storage('items');
-export const anItemList = new itemElements.ItemElementList(document.getElementById('item-list'));
 
 export const CSSDisplay = {
   NONE: 'none',
@@ -56,7 +54,7 @@ export function onAddItemSubmit(e) {
     alertIfItemExists();
     return;
   }
-  addItemToDOM(newItem);
+  anItemList.appendItemWith(newItem);
   addItemToStorage(newItem);
   updateUIBasedOnListState();
   clearInput();
@@ -108,7 +106,7 @@ function removeEditingItem() {
   const item = anItemList.editingItem;
   removeItemFromStorage(item.textContent);
   anItemList.disableEditModeClassFor(item);
-  removeItemFromDOM(item);
+  anItemList.removeItem(item);
   turnOffEditMode();
 }
 // <-----
@@ -116,37 +114,6 @@ function removeEditingItem() {
 function alertIfItemExists(newItem) {
   alert(`The item "${newItem}" already exists!`);
 }
-
-// ------>
-export function addItemToDOM(item) {
-  const li = listItem(item)
-  anItemList.appendItem(li);
-}
-
-function listItem(item) {
-  const li = document.createElement(LI_ELEMENT);
-  li.appendChild(document.createTextNode(item));
-
-  const button = buttonWithClasses('remove-item btn-link text-red');
-  li.appendChild(button);
-
-  return li;
-}
-
-export function buttonWithClasses(classes) {
-  const button = document.createElement(BUTTON_ELEMENT);
-  button.className = classes;
-  const icon = iconWithClasses('fa-solid fa-xmark');
-  button.appendChild(icon);
-  return button;
-}
-
-export function iconWithClasses(classes) {
-  const icon = document.createElement('i');
-  icon.className = classes;
-  return icon;
-}
-// <------
 
 export function addItemToStorage(item) {
   const itemsFromStorage = aStorage.allItems;
@@ -169,7 +136,7 @@ export function removeItem(item) {
   if (false == confirmItemRemoval(item.textContent)) {
     return;
   }
-  removeItemFromDOM(item);
+  anItemList.removeItem(item);
   removeItemFromStorage(item.textContent);
   updateUIBasedOnListState();
 }
@@ -180,7 +147,7 @@ function confirmItemRemoval(textContent) {
 // <------
 
 function isItemClicked(e) {
-  return e.target.closest(LI_ELEMENT);
+  return e.target.closest(anItemList.LI_ELEMENT);
 }
 
 // ------->
@@ -262,17 +229,13 @@ function turnOffEditMode() {
 
 function displayItems() {
   aStorage.allItems
-    .forEach((item) => addItemToDOM(item));
+    .forEach((item) => anItemList.appendItemWith(item));
   updateUIBasedOnListState();
 }
 
 export function removeItemFromStorage(item) {
   const filteredOutItems = aStorage.allItems.filter((i) => i !== item);
   aStorage.saveAllItems(filteredOutItems);
-}
-
-function removeItemFromDOM(item) {
-  item.remove();
 }
 
 // MARK: - only for Unit Testing

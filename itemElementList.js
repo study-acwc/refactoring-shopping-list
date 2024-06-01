@@ -8,6 +8,8 @@ export class ItemElementList {
             FLEX: 'flex'
         }
         this.EDITMODE_ELEMENT_CLASS = 'edit-mode';
+        this.LI_ELEMENT = 'li';
+        this.BUTTON_ELEMENT = 'button';
     }
 
     get editingItem() {
@@ -16,10 +18,6 @@ export class ItemElementList {
 
     get allItems() {
         return this._list.querySelectorAll(this.LI_ELEMENT);
-    }
-
-    appendItem(element) {
-        this._list.appendChild(element)
     }
 
     clearItems() {
@@ -47,5 +45,42 @@ export class ItemElementList {
 
     disableEditModeClassFor(item) {
         item.classList.remove(this.EDITMODE_ELEMENT_CLASS);
+    }
+
+    removeItem(item) {
+        item.remove();
+    }
+
+    appendItemWith(itemTitle) {
+        const li = this.listItem(itemTitle)
+        this.appendItem(li);
+    }
+
+    appendItem(element) {
+        this._list.appendChild(element)
+    }
+      
+    listItem(item) {
+        const li = document.createElement(this.LI_ELEMENT);
+        li.appendChild(document.createTextNode(item));
+        
+        const button = this.buttonWithClasses('remove-item btn-link text-red');
+        li.appendChild(button);
+        
+        return li;
+    }
+      
+    buttonWithClasses(classes) {
+        const button = document.createElement(this.BUTTON_ELEMENT);
+        button.className = classes;
+        const icon = this.iconWithClasses('fa-solid fa-xmark');
+        button.appendChild(icon);
+        return button;
+    }
+      
+    iconWithClasses(classes) {
+        const icon = document.createElement('i');
+        icon.className = classes;
+        return icon;
     }
 }

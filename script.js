@@ -1,4 +1,5 @@
 import * as thisModule from './script.js';
+import * as storage from './storage.js';
 
 // MARK: - 변수 선언
 
@@ -236,7 +237,7 @@ function clearItemsFromDOM() {
 }
 
 function clearItemsFromLocalStorage() {
-  localStorage.removeItem(ITEMS_STORAGE_KEY);
+  storage.rawDateOfStorage().removeItem(ITEMS_STORAGE_KEY);
 }
 
 // <------
@@ -309,12 +310,12 @@ export function removeItemFromStorage(item) {
 }
 
 export function allItemsFromStorage() {
-  const itemsJsonString = localStorage.getItem(ITEMS_STORAGE_KEY);
+  const itemsJsonString = storage.rawDateOfStorage().getItem(ITEMS_STORAGE_KEY);
   return itemsJsonString === null ? [] : JSON.parse(itemsJsonString);
 }
 
 export function saveAllItemsToStorage(newItems) {
-  localStorage.setItem(ITEMS_STORAGE_KEY, JSON.stringify(newItems));
+  storage.rawDateOfStorage().setItem(ITEMS_STORAGE_KEY, JSON.stringify(newItems));
 }
 
 function disableEditModeClassFor(item) {

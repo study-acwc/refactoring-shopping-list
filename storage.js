@@ -17,6 +17,11 @@ export class Storage {
         this._storage.setItem(this._key, JSON.stringify(newItems));
     }
 
+    removeItem(item) {
+        const filteredOutItems = this.allItems.filter((i) => i !== item);
+        this.saveAllItems(filteredOutItems);
+    }
+
     hasItem(item) {
         return this.allItems.includes(item);
     }

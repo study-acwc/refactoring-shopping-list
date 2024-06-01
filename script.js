@@ -104,7 +104,7 @@ export function isEditingItem() {
 
 function removeEditingItem() {
   const item = anItemList.editingItem;
-  removeItemFromStorage(item.textContent);
+  aStorage.removeItem(item.textContent);
   anItemList.disableEditModeClassFor(item);
   anItemList.removeItem(item);
   turnOffEditMode();
@@ -137,7 +137,7 @@ export function removeItem(item) {
     return;
   }
   anItemList.removeItem(item);
-  removeItemFromStorage(item.textContent);
+  aStorage.removeItem(item.textContent);
   updateUIBasedOnListState();
 }
 
@@ -231,11 +231,6 @@ function displayItems() {
   aStorage.allItems
     .forEach((item) => anItemList.appendItemWith(item));
   updateUIBasedOnListState();
-}
-
-export function removeItemFromStorage(item) {
-  const filteredOutItems = aStorage.allItems.filter((i) => i !== item);
-  aStorage.saveAllItems(filteredOutItems);
 }
 
 // MARK: - only for Unit Testing

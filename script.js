@@ -224,7 +224,7 @@ function turnOnEditMode() {
 // ------>
 export function clearItems() {
   clearItemsFromDOM();
-  clearItemsFromLocalStorage();
+  aStorage.clearItems();
   updateUIBasedOnListState();
 }
 
@@ -232,10 +232,6 @@ function clearItemsFromDOM() {
   while (itemList.firstChild) {
     itemList.removeChild(itemList.firstChild);
   }
-}
-
-function clearItemsFromLocalStorage() {
-  aStorage.clearItems();
 }
 
 // <------

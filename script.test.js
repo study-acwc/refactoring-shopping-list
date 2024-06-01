@@ -454,7 +454,7 @@ function itemInputValue() {
 }
 
 function itemElements() {
-  return Array.from(script.allItemsFromDOM());
+  return Array.from(script.anItemList.allItems);
 }
 
 function filteredItemElementsBy(itemTitle) {
@@ -474,7 +474,7 @@ function deleteButtonInItemElement(element) {
 }
 
 function editingItemElement(element) {
-  return element.classList.contains(script.EDITMODE_ELEMENT_CLASS)
+  return element.classList.contains(script.anItemList.EDITMODE_ELEMENT_CLASS)
 }
 
 function updateUserInputAndSubmitAdd(itemTitle) {

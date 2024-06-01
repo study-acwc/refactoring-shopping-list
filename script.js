@@ -1,23 +1,23 @@
 import * as thisModule from './script.js';
 import * as storage from './storage.js';
+import * as itemElements from './itemElementList.js';
 
 // MARK: - 변수 선언
 
 const BUTTON_ELEMENT = 'button';
 const LI_ELEMENT = 'li';
 const ITEMS_STORAGE_KEY = 'items';
-export const EDITMODE_ELEMENT_CLASS = 'edit-mode';
 export const ITEM_INPUT_ID = 'item-input';
 
 const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
-const itemList = document.getElementById('item-list');
 const clearBtn = document.getElementById('clear');
 const itemFilter = document.getElementById('filter');
 const formBtn = itemForm.querySelector(BUTTON_ELEMENT);
 let isEditMode = false;
 
 export const aStorage = new storage.Storage('items');
+export const anItemList = new itemElements.ItemElementList(document.getElementById('item-list'));
 
 export const CSSDisplay = {
   NONE: 'none',
@@ -38,7 +38,7 @@ function initializeApp() {
 
 function registerEventListeners() {
   itemForm.addEventListener('submit', onAddItemSubmit);
-  itemList.addEventListener('click', onClickItem);
+  anItemList._list.addEventListener('click', onClickItem);
   clearBtn.addEventListener('click', onClickClearAll);
   itemFilter.addEventListener('input', onEditingInput);
   document.addEventListener('DOMContentLoaded', onDOMContentLoad);
@@ -78,7 +78,7 @@ export function onClickClearAll() {
 }
 
 export function onEditingInput(e) {
-  filterItems(e.target.value.toLowerCase());
+  anItemList.filterItems(e.target.value.toLowerCase());
 }
 
 export function onDOMContentLoad() {
@@ -106,17 +106,12 @@ export function isEditingItem() {
 // ---->
 
 function removeEditingItem() {
-  const item = editingItem();
+  const item = anItemList.editingItem;
   removeItemFromStorage(item.textContent);
-  disableEditModeClassFor(item);
+  anItemList.disableEditModeClassFor(item);
   removeItemFromDOM(item);
   turnOffEditMode();
 }
-
-function editingItem() {
-  return itemList.querySelector('.edit-mode');
-}
-
 // <-----
 
 function alertIfItemExists(newItem) {
@@ -126,8 +121,7 @@ function alertIfItemExists(newItem) {
 // ------>
 export function addItemToDOM(item) {
   const li = listItem(item)
-  // Add li to the DOM
-  itemList.appendChild(li);
+  anItemList.appendItem(li);
 }
 
 function listItem(item) {
@@ -193,7 +187,7 @@ function isItemClicked(e) {
 // ------->
 export function setItemToEdit(item) {
   turnOnEditMode();
-  toggleEditModeForSingleItem(item);
+  anItemList.toggleEditModeForSingleItem(item);
   styleFormButtonToEditMode();
   updateInput(item.textContent);
 }
@@ -201,12 +195,6 @@ export function setItemToEdit(item) {
 function styleFormButtonToEditMode() {
   formBtn.innerHTML = '<i class="fa-solid fa-pen"></i>   Update Item';
   formBtn.style.backgroundColor = '#228B22';
-}
-
-function toggleEditModeForSingleItem(item) {
-  allItemsFromDOM()
-    .forEach((i) => disableEditModeClassFor(i));
-  item.classList.add(EDITMODE_ELEMENT_CLASS);
 }
 
 function updateInput(newValue) {
@@ -223,27 +211,12 @@ function turnOnEditMode() {
 
 // ------>
 export function clearItems() {
-  clearItemsFromDOM();
+  anItemList.clearItems();
   aStorage.clearItems();
   updateUIBasedOnListState();
 }
 
-function clearItemsFromDOM() {
-  while (itemList.firstChild) {
-    itemList.removeChild(itemList.firstChild);
-  }
-}
-
 // <------
-
-// MARK: - for onEditingInput()
-
-function filterItems(inputText) {
-  allItemsFromDOM().forEach((item) => {
-    const itemName = item.firstChild.textContent.toLowerCase();
-    item.style.display = itemName.indexOf(inputText) != -1 ? CSSDisplay.FLEX : CSSDisplay.NONE;
-  });
-}
 
 // MARK: - for onDOMContentLoad()
 
@@ -254,7 +227,7 @@ function filterItems(inputText) {
 export function updateUIBasedOnListState() {
   clearInput();
 
-  if (isItemListEmptyInDOM()) {
+  if (anItemList.isItemListEmptyInDOM()) {
     hideListControls()
   } else {
     showListControls()
@@ -265,10 +238,6 @@ export function updateUIBasedOnListState() {
 
 function clearInput() {
   itemInput.value = '';
-}
-
-function isItemListEmptyInDOM () {
-  return allItemsFromDOM().length === 0
 }
 
 function setAddItemButtonStyle() {
@@ -303,16 +272,8 @@ export function removeItemFromStorage(item) {
   aStorage.saveAllItems(filteredOutItems);
 }
 
-function disableEditModeClassFor(item) {
-  item.classList.remove(EDITMODE_ELEMENT_CLASS);
-}
-
 function removeItemFromDOM(item) {
   item.remove();
-}
-
-export function allItemsFromDOM() {
-  return itemList.querySelectorAll(LI_ELEMENT);
 }
 
 // MARK: - only for Unit Testing

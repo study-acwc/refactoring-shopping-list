@@ -6,7 +6,6 @@ import * as itemElements from './itemElementList.js';
 
 const BUTTON_ELEMENT = 'button';
 const LI_ELEMENT = 'li';
-const ITEMS_STORAGE_KEY = 'items';
 export const ITEM_INPUT_ID = 'item-input';
 
 const itemForm = document.getElementById('item-form');

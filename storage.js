@@ -1,9 +1,22 @@
 export class Storage {
-    constructor() {
+    constructor(key) {
         this._storage = localStorage;
+        this._key = key;
     }
-}
 
-const aStorage = new Storage();
+    clearItems() {
+        this._storage.removeItem(this._key);
+    }
 
-export function rawDateOfStorage() { return aStorage._storage; }
+    get allItems() {
+        return this._storage.getItem(this._key);
+    }
+    
+    saveAllItems(newItems) {
+        this._storage.setItem(this._key, JSON.stringify(newItems));
+    }
+ }
+
+const aStorage = new Storage('items');
+
+export function storage() { return aStorage; }

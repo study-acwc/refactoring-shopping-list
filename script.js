@@ -163,7 +163,7 @@ export function addItemToStorage(item) {
   // Add new item to array
   itemsFromStorage.push(item);
 
-  saveAllItemsToStorage(itemsFromStorage);
+  storage.storage().saveAllItems(itemsFromStorage);
 }
 
 // MARK: - for onClickItem()
@@ -237,7 +237,7 @@ function clearItemsFromDOM() {
 }
 
 function clearItemsFromLocalStorage() {
-  storage.rawDateOfStorage().removeItem(ITEMS_STORAGE_KEY);
+  storage.storage().clearItems();
 }
 
 // <------
@@ -306,16 +306,12 @@ function displayItems() {
 
 export function removeItemFromStorage(item) {
   const filteredOutItems = allItemsFromStorage().filter((i) => i !== item);
-  saveAllItemsToStorage(filteredOutItems);
+  storage.storage().saveAllItems(filteredOutItems);
 }
 
 export function allItemsFromStorage() {
-  const itemsJsonString = storage.rawDateOfStorage().getItem(ITEMS_STORAGE_KEY);
+  const itemsJsonString = storage.storage().allItems;
   return itemsJsonString === null ? [] : JSON.parse(itemsJsonString);
-}
-
-export function saveAllItemsToStorage(newItems) {
-  storage.rawDateOfStorage().setItem(ITEMS_STORAGE_KEY, JSON.stringify(newItems));
 }
 
 function disableEditModeClassFor(item) {

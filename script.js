@@ -17,6 +17,8 @@ const itemFilter = document.getElementById('filter');
 const formBtn = itemForm.querySelector(BUTTON_ELEMENT);
 let isEditMode = false;
 
+export const aStorage = new storage.Storage('items');
+
 export const CSSDisplay = {
   NONE: 'none',
   BLOCK: 'block',
@@ -163,7 +165,7 @@ export function addItemToStorage(item) {
   // Add new item to array
   itemsFromStorage.push(item);
 
-  storage.storage().saveAllItems(itemsFromStorage);
+  aStorage.saveAllItems(itemsFromStorage);
 }
 
 // MARK: - for onClickItem()
@@ -237,7 +239,7 @@ function clearItemsFromDOM() {
 }
 
 function clearItemsFromLocalStorage() {
-  storage.storage().clearItems();
+  aStorage.clearItems();
 }
 
 // <------
@@ -306,11 +308,11 @@ function displayItems() {
 
 export function removeItemFromStorage(item) {
   const filteredOutItems = allItemsFromStorage().filter((i) => i !== item);
-  storage.storage().saveAllItems(filteredOutItems);
+  aStorage.saveAllItems(filteredOutItems);
 }
 
 export function allItemsFromStorage() {
-  const itemsJsonString = storage.storage().allItems;
+  const itemsJsonString = aStorage.allItems;
   return itemsJsonString === null ? [] : JSON.parse(itemsJsonString);
 }
 

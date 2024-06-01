@@ -1,6 +1,5 @@
 import * as innerHTMLForTest from './scriptTestHTMLSetup.js';
 import * as script from './script.js';
-import * as storage from './storage.js';
 
 window.alert = jest.fn();
 
@@ -29,7 +28,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
         event = dummyUIEvent();
         inputValue = 'item1';
         setItemInputValue(inputValue);
-        storage.storage().saveAllItems(['item2', 'item3']);
+        script.aStorage.saveAllItems(['item2', 'item3']);
     });
 
     test('아이템을 저장한다', () => {
@@ -59,7 +58,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
         event = dummyUIEvent();
         inputValue = 'item1';
         setItemInputValue(inputValue);
-        storage.storage().saveAllItems([inputValue]);
+        script.aStorage.saveAllItems([inputValue]);
     });
 
     test('아이템을 중복 저장하지 않는다', () => {
@@ -385,7 +384,7 @@ describe('검색어를 입력했을 때', () => {
 
 describe('Clear All 버튼이 눌렸을 때', () => {
   beforeEach(() => {
-    storage.storage().saveAllItems(['item1', 'item2']);
+    script.aStorage.saveAllItems(['item1', 'item2']);
   });
 
   test('모든 아이템을 저장소에서 제거한다', () => {
@@ -404,7 +403,7 @@ describe('Clear All 버튼이 눌렸을 때', () => {
 describe('Dom Content가 로드되었을 때', () => {
   let contents = ['item1', 'item2'];
   beforeEach(() => {
-    storage.storage().saveAllItems(contents);
+    script.aStorage.saveAllItems(contents);
   });
 
   test('저장된 아이템을 화면에 표시한다', () => {

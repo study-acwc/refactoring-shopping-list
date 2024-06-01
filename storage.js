@@ -16,7 +16,3 @@ export class Storage {
         this._storage.setItem(this._key, JSON.stringify(newItems));
     }
  }
-
-const aStorage = new Storage('items');
-
-export function storage() { return aStorage; }

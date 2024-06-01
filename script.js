@@ -55,7 +55,7 @@ export function onAddItemSubmit(e) {
     return;
   }
   anItemList.appendItemWith(newItem);
-  addItemToStorage(newItem);
+  aStorage.addItem(newItem);
   updateUIBasedOnListState();
   clearInput();
 }
@@ -113,15 +113,6 @@ function removeEditingItem() {
 
 function alertIfItemExists(newItem) {
   alert(`The item "${newItem}" already exists!`);
-}
-
-export function addItemToStorage(item) {
-  const itemsFromStorage = aStorage.allItems;
-
-  // Add new item to array
-  itemsFromStorage.push(item);
-
-  aStorage.saveAllItems(itemsFromStorage);
 }
 
 // MARK: - for onClickItem()

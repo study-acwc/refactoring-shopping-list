@@ -16,4 +16,8 @@ export class Storage {
     saveAllItems(newItems) {
         this._storage.setItem(this._key, JSON.stringify(newItems));
     }
+
+    hasItem(item) {
+        return this.allItems.includes(item);
+    }
  }

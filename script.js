@@ -53,7 +53,7 @@ export function onAddItemSubmit(e) {
   }
   if (isEditingItem()) {
     removeEditingItem()
-  } else if (checkIfItemExists(newItem)) {
+  } else if (aStorage.hasItem(newItem)) {
     alertIfItemExists();
     return;
   }
@@ -118,10 +118,6 @@ function editingItem() {
 }
 
 // <-----
-
-export function checkIfItemExists(item) {
-  return aStorage.allItems.includes(item);
-}
 
 function alertIfItemExists(newItem) {
   alert(`The item "${newItem}" already exists!`);

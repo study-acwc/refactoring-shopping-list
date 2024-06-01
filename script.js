@@ -170,6 +170,11 @@ function resetFormButton() {
   formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
   formBtn.style.backgroundColor = "#333";
 }
+function clearAllItemsFromDOM() {
+  while (itemList.firstChild) {
+    itemList.removeChild(itemList.firstChild);
+  }
+}
 //====================== Storage ======================
 export function getItemsFromStorage() {
   const items = isLocalStorageNull()
@@ -195,12 +200,6 @@ export function addItemToStorage(item) {
 
   // Convert to JSON string and set to local storage
   localStorage.setItem("items", JSON.stringify(itemsFromStorage));
-}
-
-function clearAllItemsFromDOM() {
-  while (itemList.firstChild) {
-    itemList.removeChild(itemList.firstChild);
-  }
 }
 function isLocalStorageNull() {
   return localStorage.getItem("items") === null;

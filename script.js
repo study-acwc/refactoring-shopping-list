@@ -1,5 +1,7 @@
 import * as thisModule from './script.js';
 
+// MARK: - 변수 선언
+
 const BUTTON_ELEMENT = 'button';
 const LI_ELEMENT = 'li';
 const ITEMS_STORAGE_KEY = 'items';
@@ -14,10 +16,29 @@ const itemFilter = document.getElementById('filter');
 const formBtn = itemForm.querySelector(BUTTON_ELEMENT);
 let isEditMode = false;
 
-function displayItems() {
-  allItemsFromStorage()
-    .forEach((item) => addItemToDOM(item));
+export const CSSDisplay = {
+  NONE: 'none',
+  BLOCK: 'block',
+  FLEX: 'flex'
+}
+
+// MARK: - 함수 실행문
+
+initializeApp();
+
+// MARK: - initializeApp()
+
+function initializeApp() {
+  registerEventListeners();
   updateUIBasedOnListState();
+}
+
+function registerEventListeners() {
+  itemForm.addEventListener('submit', onAddItemSubmit);
+  itemList.addEventListener('click', onClickItem);
+  clearBtn.addEventListener('click', onClickClearAll);
+  itemFilter.addEventListener('input', onEditingInput);
+  document.addEventListener('DOMContentLoaded', onDOMContentLoad);
 }
 
 export function onAddItemSubmit(e) {
@@ -39,6 +60,71 @@ export function onAddItemSubmit(e) {
   clearInput();
 }
 
+export function onClickItem(e) {
+  if (isRemoveButtonClicked(e)) {
+    const listItemElement = e.target.parentElement.parentElement;
+    thisModule.removeItem(listItemElement);
+  } else if (isItemClicked(e)) {
+    const listItemElement = e.target;
+    thisModule.setItemToEdit(listItemElement);
+  }
+}
+
+export function onClickClearAll() {
+  clearItems();
+}
+
+export function onEditingInput(e) {
+  filterItems(e.target.value.toLowerCase());
+}
+
+export function onDOMContentLoad() {
+  displayItems();
+}
+
+// MARK: - for onAddItemSubmit()
+
+export function uniqueInput() {
+  return itemInput.value.trim()
+}
+
+function validateInput(input) {
+  return input != ''
+}
+
+function alertAddAnItem() {
+  alert('Please add an item');
+}
+
+export function isEditingItem() {
+  return isEditMode
+}
+
+// ---->
+
+function removeEditingItem() {
+  const item = editingItem();
+  removeItemFromStorage(item.textContent);
+  disableEditModeClassFor(item);
+  removeItemFromDOM(item);
+  turnOffEditMode();
+}
+
+function editingItem() {
+  return itemList.querySelector('.edit-mode');
+}
+
+// <-----
+
+export function checkIfItemExists(item) {
+  return allItemsFromStorage().includes(item);
+}
+
+function alertIfItemExists(newItem) {
+  alert(`The item "${newItem}" already exists!`);
+}
+
+// ------>
 export function addItemToDOM(item) {
   const li = listItem(item)
   // Add li to the DOM
@@ -46,13 +132,13 @@ export function addItemToDOM(item) {
 }
 
 function listItem(item) {
-    const li = document.createElement(LI_ELEMENT);
-    li.appendChild(document.createTextNode(item));
-  
-    const button = buttonWithClasses('remove-item btn-link text-red');
-    li.appendChild(button);
+  const li = document.createElement(LI_ELEMENT);
+  li.appendChild(document.createTextNode(item));
 
-    return li;
+  const button = buttonWithClasses('remove-item btn-link text-red');
+  li.appendChild(button);
+
+  return li;
 }
 
 export function buttonWithClasses(classes) {
@@ -68,6 +154,7 @@ export function iconWithClasses(classes) {
   icon.className = classes;
   return icon;
 }
+// <------
 
 export function addItemToStorage(item) {
   const itemsFromStorage = allItemsFromStorage();
@@ -78,38 +165,33 @@ export function addItemToStorage(item) {
   saveAllItemsToStorage(itemsFromStorage);
 }
 
-export function saveAllItemsToStorage(newItems) {
-  localStorage.setItem(ITEMS_STORAGE_KEY, JSON.stringify(newItems));
-}
-
-export function allItemsFromStorage() {
-  const itemsJsonString = localStorage.getItem(ITEMS_STORAGE_KEY);
-  return itemsJsonString === null ? [] : JSON.parse(itemsJsonString);
-}
-
-export function onClickItem(e) {
-  if (isRemoveButtonClicked(e)) {
-    const listItemElement = e.target.parentElement.parentElement;
-    thisModule.removeItem(listItemElement);
-  } else if (isItemClicked(e)) {
-    const listItemElement = e.target;
-    thisModule.setItemToEdit(listItemElement);
-  }
-}
+// MARK: - for onClickItem()
 
 function isRemoveButtonClicked(e) {
   const buttonElement = e.target.parentElement
   return buttonElement.classList.contains('remove-item');
 }
 
+//----->
+export function removeItem(item) {
+  if (false == confirmItemRemoval(item.textContent)) {
+    return;
+  }
+  removeItemFromDOM(item);
+  removeItemFromStorage(item.textContent);
+  updateUIBasedOnListState();
+}
+
+function confirmItemRemoval(textContent) {
+  return confirm(`Are you sure you want to remove the item "${textContent}"?`)
+}
+// <------
+
 function isItemClicked(e) {
   return e.target.closest(LI_ELEMENT);
 }
 
-export function checkIfItemExists(item) {
-  return allItemsFromStorage().includes(item);
-}
-
+// ------->
 export function setItemToEdit(item) {
   turnOnEditMode();
   toggleEditModeForSingleItem(item);
@@ -128,32 +210,19 @@ function toggleEditModeForSingleItem(item) {
   item.classList.add(EDITMODE_ELEMENT_CLASS);
 }
 
-function disableEditModeClassFor(item) {
-  item.classList.remove(EDITMODE_ELEMENT_CLASS);
+function updateInput(newValue) {
+  itemInput.value = newValue;
 }
 
-export function removeItem(item) {
-  if (false == confirmItemRemoval(item.textContent)) {
-    return;
-  }
-  removeItemFromDOM(item);
-  removeItemFromStorage(item.textContent);
-  updateUIBasedOnListState();
+function turnOnEditMode() {
+  isEditMode = true;
 }
 
-function removeItemFromDOM(item) {
-  item.remove();
-}
+// <-------
 
-function confirmItemRemoval(textContent) {
-  return confirm(`Are you sure you want to remove the item "${textContent}"?`)
-}
+// MARK: - for onClickClearAll()
 
-export function removeItemFromStorage(item) {
-  const filteredOutItems = allItemsFromStorage().filter((i) => i !== item);
-  saveAllItemsToStorage(filteredOutItems);
-}
-
+// ------>
 export function clearItems() {
   clearItemsFromDOM();
   clearItemsFromLocalStorage();
@@ -170,13 +239,9 @@ function clearItemsFromLocalStorage() {
   localStorage.removeItem(ITEMS_STORAGE_KEY);
 }
 
-export function isClearButtonHidden() {
-  return clearBtn.style.display == CSSDisplay.NONE;
-}
+// <------
 
-export function isClearButtonDisplayed() {
-  return clearBtn.style.display == CSSDisplay.BLOCK;
-}
+// MARK: - for onEditingInput()
 
 function filterItems(inputText) {
   allItemsFromDOM().forEach((item) => {
@@ -185,14 +250,12 @@ function filterItems(inputText) {
   });
 }
 
-export function isFilterHidden() {
-  return itemFilter.style.display == CSSDisplay.NONE;
-}
+// MARK: - for onDOMContentLoad()
 
-export function isFilterDisplayed() {
-  return itemFilter.style.display == CSSDisplay.BLOCK;
-}
 
+// MARK: - common
+
+// ----->
 export function updateUIBasedOnListState() {
   clearInput();
 
@@ -205,6 +268,10 @@ export function updateUIBasedOnListState() {
   turnOffEditMode();
 }
 
+function clearInput() {
+  itemInput.value = '';
+}
+
 function isItemListEmptyInDOM () {
   return allItemsFromDOM().length === 0
 }
@@ -212,12 +279,6 @@ function isItemListEmptyInDOM () {
 function setAddItemButtonStyle() {
   formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
   formBtn.style.backgroundColor = '#333';
-}
-
-export const CSSDisplay = {
-  NONE: 'none',
-  BLOCK: 'block',
-  FLEX: 'flex'
 }
 
 function hideListControls() {
@@ -230,81 +291,58 @@ function showListControls() {
   itemFilter.style.display = CSSDisplay.BLOCK;
 }
 
-export function allItemsFromDOM() {
-  return itemList.querySelectorAll(LI_ELEMENT);
-}
-
-function validateInput(input) {
-  return input != ''
-}
-
-function clearInput() {
-  itemInput.value = '';
-}
-
-function updateInput(newValue) {
-  itemInput.value = newValue;
-}
-
-export function uniqueInput() {
-  return itemInput.value.trim()
-}
-
-function alertIfItemExists(newItem) {
-  alert(`The item "${newItem}" already exists!`);
-}
-
-function alertAddAnItem() {
-  alert('Please add an item');
-}
-
-export function isEditingItem() {
-  return isEditMode
-}
-
-function editingItem() {
-  return itemList.querySelector('.edit-mode');
-}
-
-function removeEditingItem() {
-  const item = editingItem();
-  removeItemFromStorage(item.textContent);
-  disableEditModeClassFor(item);
-  removeItemFromDOM(item);
-  turnOffEditMode();
-}
-
 function turnOffEditMode() {
   isEditMode = false;
 }
 
-function turnOnEditMode() {
-  isEditMode = true;
-}
+// <-------
 
-export function onClickClearAll() {
-  clearItems();
-}
-
-export function onEditingInput(e) {
-  filterItems(e.target.value.toLowerCase());
-}
-
-export function onDOMContentLoad() {
-  displayItems();
-}
-
-function registerEventListeners() {
-  itemForm.addEventListener('submit', onAddItemSubmit);
-  itemList.addEventListener('click', onClickItem);
-  clearBtn.addEventListener('click', onClickClearAll);
-  itemFilter.addEventListener('input', onEditingInput);
-  document.addEventListener('DOMContentLoaded', onDOMContentLoad);
-}
-
-function initializeApp() {
-  registerEventListeners();
+function displayItems() {
+  allItemsFromStorage()
+    .forEach((item) => addItemToDOM(item));
   updateUIBasedOnListState();
 }
 
-initializeApp();
+export function removeItemFromStorage(item) {
+  const filteredOutItems = allItemsFromStorage().filter((i) => i !== item);
+  saveAllItemsToStorage(filteredOutItems);
+}
+
+export function allItemsFromStorage() {
+  const itemsJsonString = localStorage.getItem(ITEMS_STORAGE_KEY);
+  return itemsJsonString === null ? [] : JSON.parse(itemsJsonString);
+}
+
+export function saveAllItemsToStorage(newItems) {
+  localStorage.setItem(ITEMS_STORAGE_KEY, JSON.stringify(newItems));
+}
+
+function disableEditModeClassFor(item) {
+  item.classList.remove(EDITMODE_ELEMENT_CLASS);
+}
+
+function removeItemFromDOM(item) {
+  item.remove();
+}
+
+export function allItemsFromDOM() {
+  return itemList.querySelectorAll(LI_ELEMENT);
+}
+
+// MARK: - only for Unit Testing
+
+export function isClearButtonHidden() {
+  return clearBtn.style.display == CSSDisplay.NONE;
+}
+
+export function isClearButtonDisplayed() {
+  return clearBtn.style.display == CSSDisplay.BLOCK;
+}
+
+export function isFilterHidden() {
+  return itemFilter.style.display == CSSDisplay.NONE;
+}
+
+export function isFilterDisplayed() {
+  return itemFilter.style.display == CSSDisplay.BLOCK;
+}

@@ -1,4 +1,5 @@
 import * as selfModule from "./script.js";
+import Storage from "./Storage.js";
 
 export const itemForm = document.getElementById("item-form");
 export const itemInput = document.getElementById("item-input");
@@ -10,7 +11,7 @@ export let isEditMode = false;
 
 //====================== Event Handlers ======================
 export function handleDisplayItems() {
-  const itemsFromStorage = selfModule.getItemsFromStorage();
+  const itemsFromStorage = Storage.getItems();
   itemsFromStorage.forEach((item) => selfModule.addItemToDOM(item));
   selfModule.checkUI();
 }
@@ -84,19 +85,19 @@ function isItemMatch(item, text) {
 }
 function createNewItem(item) {
   addItemToDOM(item);
-  addItemToStorage(item);
+  Storage.addItem(item);
   selfModule.checkUI();
   itemInput.value = "";
 }
 function removeEditItem(item) {
-  selfModule.removeItemFromStorage(item.textContent);
+  Storage.removeItem(item.textContent);
   removeItemUI(item);
 }
 function containRemoveItem(event) {
   return event.target.parentElement.classList.contains("remove-item");
 }
 export function isItemExists(item) {
-  const itemsFromStorage = selfModule.getItemsFromStorage();
+  const itemsFromStorage = Storage.getItems();
   return itemsFromStorage.includes(item);
 }
 export function removeItem(item) {
@@ -107,7 +108,7 @@ export function removeItem(item) {
   // Remove item from DOM
   item.remove();
   // Remove item from storage
-  selfModule.removeItemFromStorage(item.textContent);
+  Storage.removeItem(item.textContent);
   selfModule.checkUI();
 }
 
@@ -174,35 +175,6 @@ function clearAllItemsFromDOM() {
   while (itemList.firstChild) {
     itemList.removeChild(itemList.firstChild);
   }
-}
-//====================== Storage ======================
-export function getItemsFromStorage() {
-  const items = isLocalStorageNull()
-    ? []
-    : JSON.parse(localStorage.getItem("items"));
-  return items;
-}
-
-export function removeItemFromStorage(item) {
-  let itemsFromStorage = selfModule.getItemsFromStorage();
-
-  // Filter out item to be removed
-  itemsFromStorage = itemsFromStorage.filter((i) => i !== item);
-
-  // Re-set to localstorage
-  localStorage.setItem("items", JSON.stringify(itemsFromStorage));
-}
-export function addItemToStorage(item) {
-  const itemsFromStorage = selfModule.getItemsFromStorage();
-
-  // Add new item to array
-  itemsFromStorage.push(item);
-
-  // Convert to JSON string and set to local storage
-  localStorage.setItem("items", JSON.stringify(itemsFromStorage));
-}
-function isLocalStorageNull() {
-  return localStorage.getItem("items") === null;
 }
 
 //====================== Initialization ======================

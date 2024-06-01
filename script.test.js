@@ -1,5 +1,6 @@
 import * as innerHTMLForTest from "./scriptTestHTMLSetup.js";
 import * as script from "./script.js";
+import Storage from "./Storage.js";
 
 window.alert = jest.fn();
 
@@ -296,9 +297,7 @@ describe("displayItems 함수 테스트", () => {
       preventDefault: jest.fn(),
     };
 
-    jest
-      .spyOn(script, "getItemsFromStorage")
-      .mockReturnValue(["Item1", "Item2"]);
+    jest.spyOn(Storage, "getItems").mockReturnValue(["Item1", "Item2"]);
     jest.spyOn(script, "addItemToDOM");
     jest.spyOn(script, "checkUI");
     script.handleClickItem(e);
@@ -318,14 +317,14 @@ describe("displayItems 함수 테스트", () => {
 });
 describe("checkIfItemExists", () => {
   test("스토리지에 item이 있는경우 true 리턴", () => {
-    script.getItemsFromStorage = jest.fn(() => ["item1", "item2", "item3"]);
+    Storage.getItems = jest.fn(() => ["item1", "item2", "item3"]);
 
     const itemExists = script.isItemExists("item2");
     expect(itemExists).toBe(true);
   });
 
   test("스토리지에 item이없는경우 true 리턴", () => {
-    script.getItemsFromStorage = jest.fn(() => ["item1", "item2", "item3"]);
+    Storage.getItems = jest.fn(() => ["item1", "item2", "item3"]);
 
     const itemExists = script.isItemExists("item4");
     expect(itemExists).toBe(false);

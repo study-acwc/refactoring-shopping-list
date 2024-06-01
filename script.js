@@ -1,4 +1,4 @@
-import * as script from "./script.js";
+import * as selfModule from "./script.js";
 
 export const itemForm = document.getElementById("item-form");
 export const itemInput = document.getElementById("item-input");
@@ -8,20 +8,20 @@ export const itemFilter = document.getElementById("filter");
 export const formBtn = itemForm.querySelector("button");
 export let isEditMode = false;
 
-export function displayItems() {
-  const itemsFromStorage = script.getItemsFromStorage();
-  itemsFromStorage.forEach((item) => script.addItemToDOM(item));
-  script.checkUI();
+export function handleDisplayItems() {
+  const itemsFromStorage = selfModule.getItemsFromStorage();
+  itemsFromStorage.forEach((item) => selfModule.addItemToDOM(item));
+  selfModule.checkUI();
 }
 
-export function onAddItemSubmit(e) {
-  e.preventDefault();
+export function handleAddItemSubmit(event) {
+  event.preventDefault();
 
   // trim the input value to remove whitespace - disallowing duplicate items due to white space in the process
-  const newItem = itemInput.value.trim();
+  const item = itemInput.value.trim();
   // Validate Input
   //[10-3] Gaurd Clause
-  if (isItemEmpty(newItem)) {
+  if (isItemEmpty(item)) {
     alert("Please add an item");
     return;
   }
@@ -32,30 +32,18 @@ export function onAddItemSubmit(e) {
 
   //Validate if item already exists
   //[10-3] Gaurd Clause
-  if (script.checkIfItemExists(newItem)) {
-    alert(`The item "${newItem}" already exists!`);
+  if (selfModule.isItemExists(item)) {
+    alert(`The item "${item}" already exists!`);
     return;
   }
 
-  createItem(newItem);
-}
-
-export function addItemToDOM(item) {
-  // Create list item
-  const li = document.createElement("li");
-  li.appendChild(document.createTextNode(item));
-
-  const button = createButton("remove-item btn-link text-red");
-  li.appendChild(button);
-
-  // Add li to the DOM
-  itemList.appendChild(li);
+  createNewItem(item);
 }
 
 export function createButton(classes) {
   const button = document.createElement("button");
   button.className = classes;
-  const icon = script.createIcon("fa-solid fa-xmark");
+  const icon = selfModule.createIcon("fa-solid fa-xmark");
   button.appendChild(icon);
   return button;
 }
@@ -66,16 +54,6 @@ export function createIcon(classes) {
   return icon;
 }
 
-export function addItemToStorage(item) {
-  const itemsFromStorage = script.getItemsFromStorage();
-
-  // Add new item to array
-  itemsFromStorage.push(item);
-
-  // Convert to JSON string and set to local storage
-  localStorage.setItem("items", JSON.stringify(itemsFromStorage));
-}
-
 export function getItemsFromStorage() {
   const items = isLocalStorageNull()
     ? []
@@ -83,17 +61,17 @@ export function getItemsFromStorage() {
   return items;
 }
 
-export function onClickItem(e) {
+export function handleClickItem(event) {
   //[10-3] 참과 거짓 경로 모두 정상 동작
-  if (containRemoveItem(e)) {
-    script.removeItem(e.target.parentElement.parentElement);
-  } else if (isListItem(e)) {
-    script.setItemToEdit(e.target);
+  if (containRemoveItem(event)) {
+    selfModule.removeItem(event.target.parentElement.parentElement);
+  } else if (isListItem(event)) {
+    selfModule.setItemToEdit(event.target);
   }
 }
 
-export function checkIfItemExists(item) {
-  const itemsFromStorage = script.getItemsFromStorage();
+export function isItemExists(item) {
+  const itemsFromStorage = selfModule.getItemsFromStorage();
   return itemsFromStorage.includes(item);
 }
 
@@ -110,19 +88,18 @@ export function setItemToEdit(item) {
 }
 export function removeItem(item) {
   //[10-3] Gaurd Clause
-  if (!script.confirmRemoveItem(item)) {
-    console.log("removeItem not confirmed");
+  if (!selfModule.confirmRemoveItem(item)) {
     return;
   }
   // Remove item from DOM
   item.remove();
   // Remove item from storage
-  script.removeItemFromStorage(item.textContent);
-  script.checkUI();
+  selfModule.removeItemFromStorage(item.textContent);
+  selfModule.checkUI();
 }
 
 export function removeItemFromStorage(item) {
-  let itemsFromStorage = script.getItemsFromStorage();
+  let itemsFromStorage = selfModule.getItemsFromStorage();
 
   // Filter out item to be removed
   itemsFromStorage = itemsFromStorage.filter((i) => i !== item);
@@ -131,20 +108,22 @@ export function removeItemFromStorage(item) {
   localStorage.setItem("items", JSON.stringify(itemsFromStorage));
 }
 
-export function clearItems() {
+export function handleClearItems() {
+  clearAllItemsFromDOM();
+  localStorage.removeItem("items");
+
+  selfModule.checkUI();
+}
+
+function clearAllItemsFromDOM() {
   while (itemList.firstChild) {
     itemList.removeChild(itemList.firstChild);
   }
-
-  // Clear from localStorage
-  localStorage.removeItem("items");
-
-  script.checkUI();
 }
 
-export function filterItems(e) {
+export function handleFilterItems(event) {
   const items = itemList.querySelectorAll("li");
-  const text = e.target.value.toLowerCase();
+  const text = event.target.value.toLowerCase();
 
   items.forEach((item) => {
     const itemName = item.firstChild.textContent.toLowerCase();
@@ -154,8 +133,8 @@ export function filterItems(e) {
 }
 export function checkUI() {
   clearInput();
-  updateVisibility(clearBtn);
-  updateVisibility(itemFilter);
+  toggleVisibility(clearBtn);
+  toggleVisibility(itemFilter);
   resetFormButton();
   isEditMode = false;
 }
@@ -163,7 +142,7 @@ export function checkUI() {
 function clearInput() {
   itemInput.value = "";
 }
-function updateVisibility(element) {
+function toggleVisibility(element) {
   const hasItems = itemList.querySelectorAll("li").length > 0;
   element.style.display = hasItems ? "block" : "none";
 }
@@ -176,13 +155,13 @@ function resetFormButton() {
 // Initialize app
 export function init() {
   // Event Listeners
-  itemForm.addEventListener("submit", onAddItemSubmit);
-  itemList.addEventListener("click", onClickItem);
-  clearBtn.addEventListener("click", clearItems);
-  itemFilter.addEventListener("input", filterItems);
-  document.addEventListener("DOMContentLoaded", displayItems);
+  itemForm.addEventListener("submit", handleAddItemSubmit);
+  itemList.addEventListener("click", handleClickItem);
+  clearBtn.addEventListener("click", handleClearItems);
+  itemFilter.addEventListener("input", handleFilterItems);
+  document.addEventListener("DOMContentLoaded", handleDisplayItems);
 
-  script.checkUI();
+  selfModule.checkUI();
 }
 
 init();
@@ -191,16 +170,14 @@ function isLocalStorageNull() {
   return localStorage.getItem("items") === null;
 }
 
-function containRemoveItem(e) {
-  return e.target.parentElement.classList.contains("remove-item");
+function containRemoveItem(event) {
+  return event.target.parentElement.classList.contains("remove-item");
 }
-function isListItem(e) {
-  return e.target.closest("li");
+function isListItem(event) {
+  return event.target.closest("li");
 }
 export function confirmRemoveItem(item) {
-  var test = global.confirm();
-  console.log("confirmRemoveItem", test);
-  return global.confirm(
+  return confirm(
     `Are you sure you want to remove the item "${item.textContent}"?`,
   );
 }
@@ -210,20 +187,39 @@ function isItemEmpty(item) {
 function isItemMatch(item, text) {
   return item.indexOf(text) != -1;
 }
-function createItem(newItem) {
-  // Create item DOM element
-  script.addItemToDOM(newItem);
-
-  // Add item to local storage
-  script.addItemToStorage(newItem);
-
-  script.checkUI();
-
+function createNewItem(item) {
+  addItem(item);
+  selfModule.checkUI();
   itemInput.value = "";
 }
 function removeEditItem(item) {
-  script.removeItemFromStorage(item.textContent);
+  selfModule.removeItemFromStorage(item.textContent);
   item.classList.remove("edit-mode");
   item.remove();
-  isEditMode = false;
+}
+
+//Add item
+function addItem(item) {
+  addItemToDOM(item);
+  addItemToStorage(item);
+}
+export function addItemToDOM(item) {
+  // Create list item
+  const li = document.createElement("li");
+  li.appendChild(document.createTextNode(item));
+
+  const button = createButton("remove-item btn-link text-red");
+  li.appendChild(button);
+
+  // Add li to the DOM
+  itemList.appendChild(li);
+}
+export function addItemToStorage(item) {
+  const itemsFromStorage = selfModule.getItemsFromStorage();
+
+  // Add new item to array
+  itemsFromStorage.push(item);
+
+  // Convert to JSON string and set to local storage
+  localStorage.setItem("items", JSON.stringify(itemsFromStorage));
 }

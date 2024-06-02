@@ -40,17 +40,16 @@ class ShoppingListPage {
       return;
     }
     const newItem = this.anItemInput.uniqueValue;
-    const addItemCommand = new commands.AddItemCommand(this.anItemList, this.aStorage);
     if (this.aFormButton.isEditMode) {
       new commands.RemoveEditingItemCommand(this.anItemList, this.aStorage).execute();
-      addItemCommand.execute(newItem);
+      new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
       this.refreshUICommand.execute();
     } else {
       if (this.aStorage.hasItem(newItem)) {
         this.alertIfItemExists();
         return;
       }
-      addItemCommand.execute(newItem);
+      new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
       this.refreshUICommand.execute();
     }
   }

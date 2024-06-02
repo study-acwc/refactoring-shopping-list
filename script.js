@@ -14,6 +14,7 @@ export const anItemInput = new elements.ItemInput(document.getElementById('item-
 const aFormButton = new elements.FormButton(anItemForm.formButton);
 
 const clearAllCommand = new commands.ClearAllCommand(anItemList, aStorage);
+const filterItemsCommand = new commands.FilterItemsCommand(anItemList);
 
 let isEditMode = false;
 
@@ -143,7 +144,7 @@ export function clearItems() {
 // MARK: - onEditingInput
 
 export function onEditingInput(e) {
-  anItemList.filterItemsWith(e.target.value.toLowerCase());
+  filterItemsCommand.execute(e.target.value);
 }
 
 // MARK: - onDOMContentLoad

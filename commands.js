@@ -9,3 +9,13 @@ export class ClearAllCommand {
         this._aStorage.clearItems();
     }
 }
+
+export class FilterItemsCommand {
+    constructor(anItemList) {
+        this._anItemList = anItemList;
+    }
+
+    execute(itemTitle) {
+        this._anItemList.filterItemsWith(itemTitle.toLowerCase());
+    }
+}

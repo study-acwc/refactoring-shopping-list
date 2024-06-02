@@ -1,5 +1,6 @@
 import * as innerHTMLForTest from './scriptTestHTMLSetup.js';
 import * as script from './script.js';
+import * as elements from './elements.js';
 
 window.alert = jest.fn();
 
@@ -299,7 +300,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   test('필터링 영역을 표시하지 않는다', () => {
     script.removeItem(item);
 
-    expect(script.isFilterHidden()).toBeTruthy();
+    expect(script.anItemFilter.isHidden).toBeTruthy();
   });
 
   test('전체 삭제 버튼을 표시하지 않는다', () => {
@@ -338,7 +339,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   test('필터링 영역을 표시한다', () => {
     script.removeItem(item1);
 
-    expect(script.isFilterDisplayed()).toBeTruthy();
+    expect(script.anItemFilter.isDisplayed).toBeTruthy();
   });
 
   test('전체 삭제 버튼을 표시하지 않는다', () => {
@@ -462,11 +463,11 @@ function filteredItemElementsBy(itemTitle) {
 }
 
 function hasFilteredItemStyle(element) {
-  return element.style.display == script.CSSDisplay.FLEX;
+  return element.style.display == elements.CSSDisplay.FLEX;
 }
 
 function hasUnfilteredItemStyle(element) {
-  return element.style.display == script.CSSDisplay.NONE;
+  return element.style.display == elements.CSSDisplay.NONE;
 }
 
 function deleteButtonInItemElement(element) {

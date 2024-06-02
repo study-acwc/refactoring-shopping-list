@@ -1,4 +1,4 @@
-const CSSDisplay = {
+export const CSSDisplay = {
     NONE: 'none',
     BLOCK: 'block',
     FLEX: 'flex'
@@ -113,4 +113,28 @@ export class ClearButton {
   show() {
     this._element.style.display = CSSDisplay.BLOCK;
   }
+}
+
+export class ItemFilter {
+    constructor(element) {
+        this._element = element;
+    }
+
+    // only for unit tesing
+    get isHidden() {
+        return this._element.style.display == CSSDisplay.NONE;
+    }
+
+    // only for unit tesing
+    get isDisplayed() {
+        return this._element.style.display == CSSDisplay.BLOCK;
+    }
+
+    hide() {
+        this._element.style.display = CSSDisplay.NONE;
+    }
+
+    show() {
+        this._element.style.display = CSSDisplay.BLOCK;
+    }
 }

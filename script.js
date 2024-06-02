@@ -9,18 +9,12 @@ export const ITEM_INPUT_ID = 'item-input';
 export const aStorage = new storage.Storage('items');
 export const anItemList = new elements.ItemElementList(document.getElementById('item-list'));
 export const aClearButton = new elements.ClearButton(document.getElementById('clear'));
+export const anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
 
 const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
-const itemFilter = document.getElementById('filter');
 const formBtn = itemForm.querySelector(anItemList.BUTTON_ELEMENT);
 let isEditMode = false;
-
-export const CSSDisplay = {
-  NONE: 'none',
-  BLOCK: 'block',
-  FLEX: 'flex'
-}
 
 // MARK: - 함수 실행문
 
@@ -37,7 +31,7 @@ function registerEventListeners() {
   itemForm.addEventListener('submit', onAddItemSubmit);
   anItemList._list.addEventListener('click', onClickItem);
   aClearButton._element.addEventListener('click', onClickClearAll);
-  itemFilter.addEventListener('input', onEditingInput);
+  anItemFilter._element.addEventListener('input', onEditingInput);
   document.addEventListener('DOMContentLoaded', onDOMContentLoad);
 }
 
@@ -204,12 +198,12 @@ function setAddItemButtonStyle() {
 
 function hideListControls() {
   aClearButton.hide();
-  itemFilter.style.display = CSSDisplay.NONE; 
+  anItemFilter.hide();
 }
 
 function showListControls() {
   aClearButton.show();
-  itemFilter.style.display = CSSDisplay.BLOCK;
+  anItemFilter.show();
 }
 
 function turnOffEditMode() {
@@ -222,14 +216,4 @@ function displayItems() {
   aStorage.allItems
     .forEach((item) => anItemList.appendItemWith(item));
   updateUIBasedOnListState();
-}
-
-// MARK: - only for Unit Testing
-
-export function isFilterHidden() {
-  return itemFilter.style.display == CSSDisplay.NONE;
-}
-
-export function isFilterDisplayed() {
-  return itemFilter.style.display == CSSDisplay.BLOCK;
 }

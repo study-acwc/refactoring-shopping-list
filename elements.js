@@ -10,11 +10,6 @@ export class ItemElementList {
     constructor(list) {
         this._list = list;
         this.LI_ELEMENT = 'li';
-        this.CSSDisplay = {
-            NONE: 'none',
-            BLOCK: 'block',
-            FLEX: 'flex'
-        };
         this.EDITMODE_ELEMENT_CLASS = 'edit-mode';
         this.LI_ELEMENT = 'li';
         this.BUTTON_ELEMENT = 'button';
@@ -41,7 +36,7 @@ export class ItemElementList {
     filterItemsWith(keyword) {
         this.allItems.forEach((item) => {
             const itemName = item.firstChild.textContent.toLowerCase();
-            item.style.display = itemName.indexOf(keyword) != -1 ? this.CSSDisplay.FLEX : this.CSSDisplay.NONE;
+            item.style.display = itemName.indexOf(keyword) != -1 ? CSSDisplay.FLEX : CSSDisplay.NONE;
         });
     }
 

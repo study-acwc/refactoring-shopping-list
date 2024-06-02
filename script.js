@@ -118,10 +118,4 @@ export const page = new ShoppingListPage();
 
 // MARK: - 함수 실행문
 
-initializeApp();
-
-// MARK: - initializeApp()
-
-function initializeApp() {
-  page.initiallize();
-}
+page.initiallize()

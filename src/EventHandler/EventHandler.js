@@ -1,6 +1,6 @@
-import Item from "./Item.js";
-import UI from "./UI.js";
-import Storage from "./Storage.js";
+import Item from "../Item/Item.js";
+import UI from "../UI/UI.js";
+import Storage from "../Storage/Storage.js";
 
 export default class EventHandler {
   static handleDisplayItems() {

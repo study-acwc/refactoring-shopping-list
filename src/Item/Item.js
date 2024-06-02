@@ -1,7 +1,25 @@
-import Storage from "./Storage.js";
-import UI from "./UI.js";
+import Storage from "../Storage/Storage.js";
+import UI from "../UI/UI.js";
 
 export default class Item {
+  constructor(name) {
+    this.name = name;
+  }
+
+  static add(item) {
+    UI.addItemToDOM(item);
+    Storage.addItem(item);
+    UI.checkUI();
+  }
+
+  static remove(itemElement) {
+    Storage.removeItem(itemElement.textContent);
+    itemElement.remove();
+    UI.checkUI();
+  }
+  static edit(itemElement) {
+    UI.setItemToEdit(itemElement);
+  }
   static getNewItem() {
     const itemInput = document.getElementById("item-input");
     return itemInput.value.trim();

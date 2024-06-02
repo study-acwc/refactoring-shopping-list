@@ -1,4 +1,4 @@
-import UI from "./UI.js";
+import UI from "./UI/UI.js";
 
 export function init() {
   UI.addEventListeners();

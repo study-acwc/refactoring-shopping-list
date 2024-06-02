@@ -1,4 +1,4 @@
-import EventHandler from "./EventHandler.js";
+import EventHandler from "../EventHandler/EventHandler.js";
 
 export default class UI {
   constructor() {

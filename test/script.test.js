@@ -1,9 +1,8 @@
 import * as innerHTMLForTest from "./scriptTestHTMLSetup.js";
-import * as script from "./main.js";
-import Storage from "./Storage.js";
-import UI from "./UI.js";
-import Item from "./Item.js";
-import EventHandler from "./eventHandler.js";
+import Storage from "../src/Storage/Storage.js";
+import UI from "../src/UI/UI.js";
+import Item from "../src/Item/Item.js";
+import EventHandler from "../src/EventHandler/eventHandler.js";
 
 window.alert = jest.fn();
 

@@ -1,9 +1,26 @@
-import EventHandler from "../EventHandler/EventHandler.js";
+import EventHandler from "../event/EventHandler.js";
 
 export default class UI {
-  constructor() {
-    this.isEditMode = false;
+  static init() {
+    this.cacheDOM();
+    this.addEventListeners();
+    this.checkUI();
   }
+  static cacheDOM() {
+    this.isEditMode = false;
+    this.itemList = document.querySelector("#item-list");
+    this.form = document.querySelector("#item-form");
+    this.clearBtn = document.querySelector("#clear");
+    this.itemFilter = document.querySelector("#filter");
+    this.itemInput = document.querySelector("#item-input");
+  }
+  static addEventListeners() {
+    this.form.addEventListener("submit", EventHandler.handleAddItemSubmit);
+    this.itemList.addEventListener("click", EventHandler.handleItemClick);
+    this.clearBtn.addEventListener("click", EventHandler.handleClearItems);
+    this.itemFilter.addEventListener("input", EventHandler.handleFilterItems);
+  }
+
   static createButton(classes) {
     const button = document.createElement("button");
     button.className = classes;
@@ -28,8 +45,7 @@ export default class UI {
   }
   static setItemToEdit(item) {
     this.isEditMode = true;
-    const itemList = document.querySelector("#item-list");
-    itemList
+    this.itemList
       .querySelectorAll("li")
       .forEach((i) => i.classList.remove("edit-mode"));
 
@@ -41,8 +57,7 @@ export default class UI {
     document.getElementById("item-input").value = item.textContent;
   }
   static toggleVisibility(element) {
-    const itemList = document.querySelector("#item-list");
-    const hasItems = itemList.querySelectorAll("li").length > 0;
+    const hasItems = this.itemList.querySelectorAll("li").length > 0;
     element.style.display = hasItems ? "block" : "none";
   }
   static resetFormButton() {
@@ -52,8 +67,7 @@ export default class UI {
     formBtn.style.backgroundColor = "#333";
   }
   static clearInput() {
-    const itemInput = document.getElementById("item-input");
-    itemInput.value = "";
+    this.itemInput.value = "";
   }
   static checkUI() {
     const clearBtn = document.getElementById("clear");
@@ -68,9 +82,8 @@ export default class UI {
     return event.target.closest("li");
   }
   static clearAllItemsFromDOM() {
-    const itemList = document.querySelector("#item-list");
-    while (itemList.firstChild) {
-      itemList.removeChild(itemList.firstChild);
+    while (this.itemList.firstChild) {
+      this.itemList.removeChild(this.itemList.firstChild);
     }
   }
   static removeItemFromDom(item) {
@@ -79,19 +92,5 @@ export default class UI {
   static removeItemUI(item) {
     item.classList.remove("edit-mode");
     item.remove();
-  }
-  static addEventListeners() {
-    const itemForm = document.getElementById("item-form");
-    const itemList = document.querySelector("#item-list");
-    const clearBtn = document.getElementById("clear");
-    const itemFilter = document.getElementById("filter");
-    itemForm.addEventListener("submit", EventHandler.handleAddItemSubmit);
-    itemList.addEventListener("click", EventHandler.handleClickItem);
-    clearBtn.addEventListener("click", EventHandler.handleClearItems);
-    itemFilter.addEventListener("input", EventHandler.handleFilterItems);
-    document.addEventListener(
-      "DOMContentLoaded",
-      EventHandler.handleDisplayItems,
-    );
   }
 }

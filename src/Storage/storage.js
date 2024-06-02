@@ -14,4 +14,7 @@ export default class Storage {
     items.push(item);
     localStorage.setItem("items", JSON.stringify(items));
   }
+  static clearItems() {
+    localStorage.removeItem("items");
+  }
 }

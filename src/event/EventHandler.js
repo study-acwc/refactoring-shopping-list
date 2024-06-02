@@ -1,6 +1,6 @@
-import Item from "../Item/Item.js";
-import UI from "../UI/UI.js";
-import Storage from "../Storage/Storage.js";
+import Item from "../models/Item.js";
+import UI from "../ui/UI.js";
+import Storage from "../storage/Storage.js";
 
 export default class EventHandler {
   static handleDisplayItems() {
@@ -11,41 +11,34 @@ export default class EventHandler {
 
   static handleAddItemSubmit(event) {
     event.preventDefault();
-    const item = Item.getNewItem();
+    const item = Item.getInput();
     const itemList = document.querySelector("#item-list");
 
-    // Validate Input
-    //[10-3] Gaurd Clause
-    if (Item.isItemEmpty(item)) {
+    if (Item.isEmpty(item)) {
       alert("Please add an item");
       return;
     }
-    // Check for edit mode
     if (UI.isEditMode) {
       Item.removeEditItem(itemList.querySelector(".edit-mode"));
     }
 
-    //Validate if item already exists
-    //[10-3] Gaurd Clause
-    if (Item.isItemExists(item)) {
+    if (Item.isExists(item)) {
       alert(`The item "${item}" already exists!`);
       return;
     }
 
-    Item.createNewItem(item);
+    Item.create(item);
   }
   static handleClickItem(event) {
-    //[10-3] 참과 거짓 경로 모두 정상 동작
     if (Item.containRemoveItem(event)) {
-      Item.removeItem(event.target.parentElement.parentElement);
+      Item.remove(event.target.parentElement.parentElement);
     } else if (UI.isListItem(event)) {
-      UI.setItemToEdit(event.target);
+      Item.edit(event.target);
     }
   }
   static handleClearItems() {
     UI.clearAllItemsFromDOM();
-    localStorage.removeItem("items");
-
+    Storage.clearItems();
     UI.checkUI();
   }
   static handleFilterItems(event) {
@@ -55,7 +48,7 @@ export default class EventHandler {
 
     items.forEach((item) => {
       const itemName = item.firstChild.textContent.toLowerCase();
-      const shouldDisplay = Item.isItemMatch(itemName, text);
+      const shouldDisplay = Item.isMatch(itemName, text);
       item.style.display = shouldDisplay ? "flex" : "none";
     });
   }

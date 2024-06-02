@@ -305,7 +305,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   test('전체 삭제 버튼을 표시하지 않는다', () => {
     script.removeItem(item);
 
-    expect(script.isClearButtonHidden()).toBeTruthy();
+    expect(script.aClearButton.isHidden).toBeTruthy();
   });
 });
 
@@ -344,7 +344,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   test('전체 삭제 버튼을 표시하지 않는다', () => {
     script.removeItem(item1);
 
-    expect(script.isClearButtonDisplayed()).toBeTruthy();
+    expect(script.aClearButton.isDisplayed).toBeTruthy();
   });
 });
 

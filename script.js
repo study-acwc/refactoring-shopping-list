@@ -1,17 +1,17 @@
 import * as thisModule from './script.js';
 import * as storage from './storage.js';
-import * as itemElements from './itemElementList.js';
+import * as elements from './elements.js';
 
 // MARK: - 변수 선언
 
 export const ITEM_INPUT_ID = 'item-input';
 
 export const aStorage = new storage.Storage('items');
-export const anItemList = new itemElements.ItemElementList(document.getElementById('item-list'));
+export const anItemList = new elements.ItemElementList(document.getElementById('item-list'));
+export const aClearButton = new elements.ClearButton(document.getElementById('clear'));
 
 const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
-const clearBtn = document.getElementById('clear');
 const itemFilter = document.getElementById('filter');
 const formBtn = itemForm.querySelector(anItemList.BUTTON_ELEMENT);
 let isEditMode = false;
@@ -36,7 +36,7 @@ function initializeApp() {
 function registerEventListeners() {
   itemForm.addEventListener('submit', onAddItemSubmit);
   anItemList._list.addEventListener('click', onClickItem);
-  clearBtn.addEventListener('click', onClickClearAll);
+  aClearButton._element.addEventListener('click', onClickClearAll);
   itemFilter.addEventListener('input', onEditingInput);
   document.addEventListener('DOMContentLoaded', onDOMContentLoad);
 }
@@ -203,12 +203,12 @@ function setAddItemButtonStyle() {
 }
 
 function hideListControls() {
-  clearBtn.style.display = CSSDisplay.NONE;
+  aClearButton.hide();
   itemFilter.style.display = CSSDisplay.NONE; 
 }
 
 function showListControls() {
-  clearBtn.style.display = CSSDisplay.BLOCK;
+  aClearButton.show();
   itemFilter.style.display = CSSDisplay.BLOCK;
 }
 
@@ -225,14 +225,6 @@ function displayItems() {
 }
 
 // MARK: - only for Unit Testing
-
-export function isClearButtonHidden() {
-  return clearBtn.style.display == CSSDisplay.NONE;
-}
-
-export function isClearButtonDisplayed() {
-  return clearBtn.style.display == CSSDisplay.BLOCK;
-}
 
 export function isFilterHidden() {
   return itemFilter.style.display == CSSDisplay.NONE;

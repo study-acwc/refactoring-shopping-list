@@ -1,3 +1,9 @@
+const CSSDisplay = {
+    NONE: 'none',
+    BLOCK: 'block',
+    FLEX: 'flex'
+};
+
 export class ItemElementList {
     constructor(list) {
         this._list = list;
@@ -6,7 +12,7 @@ export class ItemElementList {
             NONE: 'none',
             BLOCK: 'block',
             FLEX: 'flex'
-        }
+        };
         this.EDITMODE_ELEMENT_CLASS = 'edit-mode';
         this.LI_ELEMENT = 'li';
         this.BUTTON_ELEMENT = 'button';
@@ -83,4 +89,28 @@ export class ItemElementList {
         icon.className = classes;
         return icon;
     }
+}
+
+export class ClearButton {
+  constructor(element) {
+      this._element = element;
+  }
+
+  // only for unit tesing
+  get isHidden() {
+    return this._element.style.display == CSSDisplay.NONE;
+  }
+
+  // only for unit tesing
+  get isDisplayed() {
+    return this._element.style.display == CSSDisplay.BLOCK;
+  }
+
+  hide() {
+    this._element.style.display = CSSDisplay.NONE;
+  }
+
+  show() {
+    this._element.style.display = CSSDisplay.BLOCK;
+  }
 }

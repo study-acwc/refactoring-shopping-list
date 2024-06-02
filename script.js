@@ -87,10 +87,6 @@ export function addItemToDOM(item) {
 export function createElement(tagName, className) {
   let element = null;
 
-  if (!tagName) {
-    return element;
-  }
-
   element = document.createElement(tagName);
 
   if (className) {

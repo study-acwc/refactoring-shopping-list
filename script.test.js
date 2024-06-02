@@ -121,7 +121,7 @@ describe("Update Item 버튼이 눌렸을 때", () => {
       (i) => i.textContent == "oldItem"
     );
     // 그 아이템을 업데이트 모드로 변경
-    script.setItemToEdit(filtered[0]);
+    filtered[0].click();
     // 3. "updatedItem" 으로 변경된 이름 입력
     document.getElementById("item-input").value = "updatedItem";
   });
@@ -150,7 +150,7 @@ describe("Update Item 버튼이 눌렸을 때", () => {
   });
 });
 
-//NOTE: william test case begin
+// //NOTE: william test case begin
 
 describe("목록 아이템 추가", () => {
   beforeEach(() => {
@@ -203,7 +203,7 @@ describe("목록 아이템 삭제", () => {
     const itemList = getElementList();
 
     // 아이템을 DOM에서 유지
-    script.removeItem(itemList.children[0]);
+    itemList.children[0].querySelector("i").click();
     expect(itemList.children.length).toBe(1);
     expect(itemList.children[0].textContent).toBe(inputValue);
   });
@@ -212,8 +212,8 @@ describe("목록 아이템 삭제", () => {
     global.confirm.mockReturnValueOnce(false);
 
     const itemList = getElementList();
-    script.removeItem(itemList.children[0]);
 
+    itemList.children[0].querySelector("i").click();
     const storageList = getLocalStorageList();
     expect(storageList).toContain(inputValue);
   });
@@ -224,7 +224,7 @@ describe("목록 아이템 삭제", () => {
 
     const itemList = getElementList();
 
-    script.removeItem(itemList.children[0]);
+    itemList.children[0].querySelector("i").click();
     expect(itemList.children.length).toBe(0);
   });
 
@@ -233,7 +233,7 @@ describe("목록 아이템 삭제", () => {
 
     const itemList = getElementList();
 
-    script.removeItem(itemList.children[0]);
+    itemList.children[0].querySelector("i").click();
 
     const storageList = getLocalStorageList();
     expect(storageList).not.toContain(inputValue);
@@ -340,7 +340,7 @@ describe("아이템 편집", () => {
     expect(script.isEditMode).toBe(false);
     expect(buttonSubmit.textContent.trim()).toBe("Add Item");
     expect(inputElement.value.length).toBe(0);
-    expect(item.className).not.toContain("edit-mode");
+    expect(itemList.children[0].className).not.toContain("edit-mode");
   });
 });
 
@@ -350,17 +350,17 @@ describe("이닛 후 아이템 목록", () => {
   beforeEach(() => {
     initialize();
     inputValues.map(script.addItemToStorage);
+    script.init();
   });
 
   test("local에 저장된 아이템을 있는 겨웅 목록의 아이템을 보여준다", () => {
-    script.displayItems();
+    document.addEventListener("DOMContentLoaded", () => {
+      const itemList = getElementList();
+      expect(itemList.children.length).toBe(inputValues.length);
 
-    const itemList = getElementList();
-
-    expect(itemList.children.length).toBe(inputValues.length);
-
-    [...itemList.children].forEach((element, index) => {
-      expect(element.textContent).toBe(inputValues[index]);
+      [...itemList.children].forEach((element, index) => {
+        expect(element.textContent).toBe(inputValues[index]);
+      });
     });
   });
 });

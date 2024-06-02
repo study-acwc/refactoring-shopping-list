@@ -31,7 +31,7 @@ export class ItemElementList {
         }
     }
 
-    isItemListEmptyInDOM () {
+    isItemListEmptyInDOM() {
         return this.allItems.length === 0
     }
 
@@ -57,33 +57,33 @@ export class ItemElementList {
     }
 
     appendItemWith(itemTitle) {
-        const li = this.listItem(itemTitle)
-        this.appendItem(li);
+        const li = this.#listItem(itemTitle)
+        this.#appendItem(li);
     }
 
-    appendItem(element) {
+    #appendItem(element) {
         this.#list.appendChild(element)
     }
       
-    listItem(item) {
+    #listItem(item) {
         const li = document.createElement(this.LI_ELEMENT);
         li.appendChild(document.createTextNode(item));
         
-        const button = this.buttonWithClasses('remove-item btn-link text-red');
+        const button = this.#buttonWithClasses('remove-item btn-link text-red');
         li.appendChild(button);
         
         return li;
     }
       
-    buttonWithClasses(classes) {
+    #buttonWithClasses(classes) {
         const button = document.createElement(this.BUTTON_ELEMENT);
         button.className = classes;
-        const icon = this.iconWithClasses('fa-solid fa-xmark');
+        const icon = this.#iconWithClasses('fa-solid fa-xmark');
         button.appendChild(icon);
         return button;
     }
       
-    iconWithClasses(classes) {
+    #iconWithClasses(classes) {
         const icon = document.createElement('i');
         icon.className = classes;
         return icon;

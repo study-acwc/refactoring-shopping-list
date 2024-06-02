@@ -1,4 +1,5 @@
 import { Storage } from './storage'
+import { TODO } from './const'
 
 const itemForm = document.getElementById('item-form')
 const itemInput = document.getElementById('item-input')
@@ -9,24 +10,20 @@ const formBtn = itemForm.querySelector('button')
 export let isEditMode = false
 
 export function displayItems() {
-	const itemsFromStorage = getItemsFromStorage()
-	itemsFromStorage.forEach((item) => addItemToDOM(item))
+	Storage.getItem(TODO.STORAGE_KEY).forEach((item) => addItemToDOM(item))
 	checkUI()
 }
 
 export function onAddItemSubmit(e) {
 	e.preventDefault()
 
-	// trim the input value to remove whitespace - disallowing duplicate items due to white space in the process
 	const newItem = itemInput.value.trim()
 
-	// Validate Input
 	if (newItem === '') {
 		alert('Please add an item')
 		return
 	}
 
-	// Check for edit mode
 	if (isEditMode) {
 		const itemToEdit = itemList.querySelector('.edit-mode')
 
@@ -44,8 +41,7 @@ export function onAddItemSubmit(e) {
 	// Create item DOM element
 	addItemToDOM(newItem)
 
-	// Add item to local storage
-	addItemToStorage(newItem)
+	Storage.updateItem(TODO.STORAGE_KEY, newItem)
 
 	checkUI()
 
@@ -78,19 +74,6 @@ export function createIcon(classes) {
 	return icon
 }
 
-export function addItemToStorage(item) {
-	const itemsFromStorage = getItemsFromStorage()
-
-	// Add new item to array
-	itemsFromStorage.push(item)
-
-	Storage.setItem('items', itemsFromStorage)
-}
-
-export function getItemsFromStorage() {
-	return Storage.getItem('items')
-}
-
 export function onClickItem(e) {
 	if (e.target.parentElement.classList.contains('remove-item')) {
 		removeItem(e.target.parentElement.parentElement)
@@ -100,8 +83,7 @@ export function onClickItem(e) {
 }
 
 export function checkIfItemExists(item) {
-	const itemsFromStorage = getItemsFromStorage()
-	return itemsFromStorage.includes(item)
+	return Storage.getItem(TODO.STORAGE_KEY).includes(item)
 }
 
 export function setItemToEdit(item) {
@@ -132,9 +114,8 @@ export function removeItem(item) {
 }
 
 export function removeItemFromStorage(item) {
-	let itemsFromStorage = getItemsFromStorage()
-	itemsFromStorage = itemsFromStorage.filter((i) => i !== item)
-	Storage.setItem('items', itemsFromStorage)
+	const updated = Storage.getItem(TODO.STORAGE_KEY).filter((i) => i !== item)
+	Storage.setItem(TODO.STORAGE_KEY, updated)
 }
 
 export function clearItems() {
@@ -142,7 +123,7 @@ export function clearItems() {
 		itemList.removeChild(itemList.firstChild)
 	}
 
-	Storage.remove('items')
+	Storage.remove(TODO.STORAGE_KEY)
 
 	checkUI()
 }

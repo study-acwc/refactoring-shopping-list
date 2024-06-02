@@ -1,3 +1,5 @@
+import { Storage } from './storage'
+
 const itemForm = document.getElementById('item-form')
 const itemInput = document.getElementById('item-input')
 const itemList = document.getElementById('item-list')
@@ -82,20 +84,11 @@ export function addItemToStorage(item) {
 	// Add new item to array
 	itemsFromStorage.push(item)
 
-	// Convert to JSON string and set to local storage
-	localStorage.setItem('items', JSON.stringify(itemsFromStorage))
+	Storage.setItem('items', itemsFromStorage)
 }
 
 export function getItemsFromStorage() {
-	let itemsFromStorage
-
-	if (localStorage.getItem('items') === null) {
-		itemsFromStorage = []
-	} else {
-		itemsFromStorage = JSON.parse(localStorage.getItem('items'))
-	}
-
-	return itemsFromStorage
+	return Storage.getItem('items')
 }
 
 export function onClickItem(e) {
@@ -140,12 +133,8 @@ export function removeItem(item) {
 
 export function removeItemFromStorage(item) {
 	let itemsFromStorage = getItemsFromStorage()
-
-	// Filter out item to be removed
 	itemsFromStorage = itemsFromStorage.filter((i) => i !== item)
-
-	// Re-set to localstorage
-	localStorage.setItem('items', JSON.stringify(itemsFromStorage))
+	Storage.setItem('items', itemsFromStorage)
 }
 
 export function clearItems() {
@@ -153,8 +142,7 @@ export function clearItems() {
 		itemList.removeChild(itemList.firstChild)
 	}
 
-	// Clear from localStorage
-	localStorage.removeItem('items')
+	Storage.remove('items')
 
 	checkUI()
 }

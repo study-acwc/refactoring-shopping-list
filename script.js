@@ -95,7 +95,6 @@ function isRemoveButtonClicked(e) {
   return buttonElement.classList.contains('remove-item');
 }
 
-//----->
 export function removeItem(item) {
   removeItemCommand.execute(item);
   refreshUICommand.execute();
@@ -105,12 +104,9 @@ function isItemClicked(e) {
   return e.target.closest(anItemList.LI_ELEMENT);
 }
 
-// -----> setItemToEdit
 export function setItemToEdit(item) {
   setItemToEditCommand.execute(item);
 }
-
-// <------ setItemToEdit
 
 // MARK: - onClickClearAll
 
@@ -132,10 +128,6 @@ export function onEditingInput(e) {
 // MARK: - onDOMContentLoad
 
 export function onDOMContentLoad() {
-  displayItems();
-}
-
-function displayItems() {
   displayAllItemsCommand.execute();
   refreshUICommand.execute();
 }

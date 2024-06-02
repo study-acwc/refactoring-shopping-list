@@ -15,14 +15,7 @@ class ShoppingListPage {
     this.anItemInput = new elements.ItemInput(document.getElementById('item-input'));
     this.aFormButton = new elements.FormButton(this.anItemForm.formButton);
     
-    this.clearAllCommand = new commands.ClearAllCommand(this.anItemList, this.aStorage);
-    this.filterItemsCommand = new commands.FilterItemsCommand(this.anItemList);
-    this.displayAllItemsCommand = new commands.DisplayAllItemsCommand(this.anItemList, this.aStorage);
     this.refreshUICommand = new commands.refreshUICommand(this.anItemInput, this.anItemList, this.aFormButton, this.aClearButton, this.anItemFilter);
-    this.removeItemCommand = new commands.RemoveItemCommand(this.anItemList, this.aStorage);
-    this.setItemToEditCommand = new commands.SetItemToEditCommand(this.anItemList, this.aFormButton, this.anItemInput);
-    this.addItemCommand = new commands.AddItemCommand(this.anItemList, this.aStorage);
-    this.removeEditingItemCommand = new commands.RemoveEditingItemCommand(this.anItemList, this.aStorage);
   }
 
   initiallize() {
@@ -47,16 +40,18 @@ class ShoppingListPage {
       return;
     }
     const newItem = this.anItemInput.uniqueValue;
+    const addItemCommand = new commands.AddItemCommand(this.anItemList, this.aStorage);
     if (this.aFormButton.isEditMode) {
-      this.removeEditingItemCommand.execute();
-      this.addItemCommand.execute(newItem);
+      const removeEditingItemCommand = new commands.RemoveEditingItemCommand(this.anItemList, this.aStorage);
+      removeEditingItemCommand.execute();
+      addItemCommand.execute(newItem);
       this.refreshUICommand.execute();
     } else {
       if (this.aStorage.hasItem(newItem)) {
         this.alertIfItemExists();
         return;
       }
-      this.addItemCommand.execute(newItem);
+      addItemCommand.execute(newItem);
       this.refreshUICommand.execute();
     }
   }
@@ -87,7 +82,8 @@ class ShoppingListPage {
   }
 
   removeItem(item) {
-    this.removeItemCommand.execute(item);
+    const command = new commands.RemoveItemCommand(this.anItemList, this.aStorage);
+    command.execute(item);
     this.refreshUICommand.execute();
   }
 
@@ -96,26 +92,30 @@ class ShoppingListPage {
   }
 
   setItemToEdit(item) {
-    this.setItemToEditCommand.execute(item);
+    const command = new commands.SetItemToEditCommand(this.anItemList, this.aFormButton, this.anItemInput);
+    command.execute(item);
   }
 
   // MARK: - onClickClearAll
 
   onClickClearAll() {
-    this.clearAllCommand.execute();
+    const command = new commands.ClearAllCommand(this.anItemList, this.aStorage);
+    command.execute();
     this.refreshUICommand.execute();
   }
 
   // MARK: - onEditingInput
 
   onEditingInput(e) {
-    this.filterItemsCommand.execute(e.target.value);
+    const command = new commands.FilterItemsCommand(this.anItemList);
+    command.execute(e.target.value);
   }
 
   // MARK: - onDOMContentLoad
 
   onDOMContentLoad() {
-    this.displayAllItemsCommand.execute();
+    const command = new commands.DisplayAllItemsCommand(this.anItemList, this.aStorage)
+    command.execute();
     this.refreshUICommand.execute();
   }
 }

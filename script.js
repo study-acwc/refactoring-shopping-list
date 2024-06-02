@@ -1,12 +1,14 @@
 import { Storage } from './storage'
 import { TODO } from './const'
+import { $ } from './src/util'
 
-const itemForm = document.getElementById('item-form')
-const itemInput = document.getElementById('item-input')
-const itemList = document.getElementById('item-list')
-const clearBtn = document.getElementById('clear')
-const itemFilter = document.getElementById('filter')
-const formBtn = itemForm.querySelector('button')
+const itemForm = $('#item-form')
+const itemInput = $('#item-input')
+const itemList = $('#item-list')
+const clearBtn = $('#clear')
+const itemFilter = $('#filter')
+const formBtn = $('button')
+
 export let isEditMode = false
 
 export function displayItems() {
@@ -123,7 +125,7 @@ export function clearItems() {
 		itemList.removeChild(itemList.firstChild)
 	}
 
-	Storage.remove(TODO.STORAGE_KEY)
+	Storage.removeItem(TODO.STORAGE_KEY)
 
 	checkUI()
 }
@@ -173,5 +175,4 @@ export function init() {
 
 	checkUI()
 }
-
 init()

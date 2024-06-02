@@ -4,15 +4,13 @@ import * as elements from './elements.js';
 
 // MARK: - 변수 선언
 
-export const ITEM_INPUT_ID = 'item-input';
-
 export const aStorage = new storage.Storage('items');
 export const anItemList = new elements.ItemElementList(document.getElementById('item-list'));
 export const aClearButton = new elements.ClearButton(document.getElementById('clear'));
 export const anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
+export const anItemInput = new elements.ItemInput(document.getElementById('item-input'));
 
 const itemForm = document.getElementById('item-form');
-const itemInput = document.getElementById('item-input');
 const formBtn = itemForm.querySelector(anItemList.BUTTON_ELEMENT);
 let isEditMode = false;
 
@@ -37,11 +35,11 @@ function registerEventListeners() {
 
 export function onAddItemSubmit(e) {
   e.preventDefault();
-  const newItem = uniqueInput();
-  if (false == validateInput(newItem)) {
+  if (false == anItemInput.hasValidValue) {
     alertAddAnItem();
     return;
   }
+  const newItem = anItemInput.uniqueValue;
   if (isEditingItem()) {
     removeEditingItem()
   } else if (aStorage.hasItem(newItem)) {
@@ -51,7 +49,7 @@ export function onAddItemSubmit(e) {
   anItemList.appendItemWith(newItem);
   aStorage.addItem(newItem);
   updateUIBasedOnListState();
-  clearInput();
+  anItemInput.clearValue();
 }
 
 export function onClickItem(e) {
@@ -77,15 +75,6 @@ export function onDOMContentLoad() {
 }
 
 // MARK: - for onAddItemSubmit()
-
-export function uniqueInput() {
-  return itemInput.value.trim()
-}
-
-function validateInput(input) {
-  return input != ''
-}
-
 function alertAddAnItem() {
   alert('Please add an item');
 }
@@ -140,16 +129,12 @@ export function setItemToEdit(item) {
   turnOnEditMode();
   anItemList.toggleEditModeForSingleItem(item);
   styleFormButtonToEditMode();
-  updateInput(item.textContent);
+  anItemInput.updateValue(item.textContent);
 }
 
 function styleFormButtonToEditMode() {
   formBtn.innerHTML = '<i class="fa-solid fa-pen"></i>   Update Item';
   formBtn.style.backgroundColor = '#228B22';
-}
-
-function updateInput(newValue) {
-  itemInput.value = newValue;
 }
 
 function turnOnEditMode() {
@@ -176,7 +161,7 @@ export function clearItems() {
 
 // ----->
 export function updateUIBasedOnListState() {
-  clearInput();
+  anItemInput.clearValue();
 
   if (anItemList.isItemListEmptyInDOM()) {
     hideListControls()
@@ -185,10 +170,6 @@ export function updateUIBasedOnListState() {
   }
   setAddItemButtonStyle();
   turnOffEditMode();
-}
-
-function clearInput() {
-  itemInput.value = '';
 }
 
 function setAddItemButtonStyle() {

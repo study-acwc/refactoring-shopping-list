@@ -447,11 +447,11 @@ function filteredLocalStorageItemsBy(itemTitle) {
 }
 
 function setItemInputValue(value) {
-  document.getElementById(script.ITEM_INPUT_ID).value = value;
+  script.anItemInput.updateValue(value);
 }
 
 function itemInputValue() {
-  return script.uniqueInput();
+  return script.anItemInput.uniqueValue;
 }
 
 function itemElements() {

@@ -138,3 +138,25 @@ export class ItemFilter {
         this._element.style.display = CSSDisplay.BLOCK;
     }
 }
+
+export class ItemInput {
+    constructor(element) {
+        this._element = element;
+    }
+
+    get uniqueValue() {
+        return this._element.value.trim()
+    }
+
+    get hasValidValue() {
+        return this._element.value != ''
+    }
+
+    updateValue(newValue) {
+        this._element.value = newValue;
+    }
+
+    clearValue() {
+        this._element.value = '';
+    }
+}

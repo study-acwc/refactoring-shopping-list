@@ -28,7 +28,7 @@ initializeApp();
 
 function initializeApp() {
   registerEventListeners();
-  updateUIBasedOnListState();
+  refreshUICommand.execute();
 }
 
 function registerEventListeners() {
@@ -75,7 +75,7 @@ function alertIfItemExists(newItem) {
 function addItemWith(newItem) {
   anItemList.appendItemWith(newItem);
   aStorage.addItem(newItem);
-  updateUIBasedOnListState();
+  refreshUICommand.execute();
 }
 
 // MARK: - onClickItem
@@ -98,7 +98,7 @@ function isRemoveButtonClicked(e) {
 //----->
 export function removeItem(item) {
   removeItemCommand.execute(item);
-  updateUIBasedOnListState();
+  refreshUICommand.execute();
 }
 
 function isItemClicked(e) {
@@ -120,7 +120,7 @@ export function onClickClearAll() {
 
 export function clearItems() {
   clearAllCommand.execute();
-  updateUIBasedOnListState();
+  refreshUICommand.execute();
 }
 
 // MARK: - onEditingInput
@@ -137,11 +137,5 @@ export function onDOMContentLoad() {
 
 function displayItems() {
   displayAllItemsCommand.execute();
-  updateUIBasedOnListState();
-}
-
-// MARK: - common
-
-export function updateUIBasedOnListState() {
-  refreshUICommand.execute()
+  refreshUICommand.execute();
 }

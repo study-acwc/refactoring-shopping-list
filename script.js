@@ -33,7 +33,8 @@ function registerEventListeners() {
   document.addEventListener('DOMContentLoaded', onDOMContentLoad);
 }
 
-// ---->
+// MARK: - onAddItemSubmit
+
 export function onAddItemSubmit(e) {
   e.preventDefault();
   if (false == anItemInput.hasValidValue) {
@@ -50,6 +51,26 @@ export function onAddItemSubmit(e) {
   addItemWith(newItem);
 }
 
+function alertAddAnItem() {
+  alert('Please add an item');
+}
+
+export function isEditingItem() {
+  return isEditMode
+}
+
+function removeEditingItem() {
+  const item = anItemList.editingItem;
+  aStorage.removeItem(item.textContent);
+  anItemList.disableEditModeClassFor(item);
+  anItemList.removeItem(item);
+  turnOffEditMode();
+}
+
+function alertIfItemExists(newItem) {
+  alert(`The item "${newItem}" already exists!`);
+}
+
 function addItemWith(newItem) {
   anItemList.appendItemWith(newItem);
   aStorage.addItem(newItem);
@@ -57,7 +78,7 @@ function addItemWith(newItem) {
   anItemInput.clearValue();
 }
 
-// <-----
+// MARK: - onClickItem
 
 export function onClickItem(e) {
   if (isRemoveButtonClicked(e)) {
@@ -68,44 +89,6 @@ export function onClickItem(e) {
     thisModule.setItemToEdit(listItemElement);
   }
 }
-
-export function onClickClearAll() {
-  clearItems();
-}
-
-export function onEditingInput(e) {
-  anItemList.filterItemsWith(e.target.value.toLowerCase());
-}
-
-export function onDOMContentLoad() {
-  displayItems();
-}
-
-// MARK: - for onAddItemSubmit()
-function alertAddAnItem() {
-  alert('Please add an item');
-}
-
-export function isEditingItem() {
-  return isEditMode
-}
-
-// ---->
-
-function removeEditingItem() {
-  const item = anItemList.editingItem;
-  aStorage.removeItem(item.textContent);
-  anItemList.disableEditModeClassFor(item);
-  anItemList.removeItem(item);
-  turnOffEditMode();
-}
-// <-----
-
-function alertIfItemExists(newItem) {
-  alert(`The item "${newItem}" already exists!`);
-}
-
-// MARK: - for onClickItem()
 
 function isRemoveButtonClicked(e) {
   const buttonElement = e.target.parentElement
@@ -122,16 +105,15 @@ export function removeItem(item) {
   updateUIBasedOnListState();
 }
 
-function confirmItemRemoval(textContent) {
-  return confirm(`Are you sure you want to remove the item "${textContent}"?`)
-}
-// <------
-
 function isItemClicked(e) {
   return e.target.closest(anItemList.LI_ELEMENT);
 }
 
-// ------->
+function confirmItemRemoval(textContent) {
+  return confirm(`Are you sure you want to remove the item "${textContent}"?`)
+}
+
+// -----> setItemToEdit
 export function setItemToEdit(item) {
   turnOnEditMode();
   anItemList.toggleEditModeForSingleItem(item);
@@ -143,25 +125,42 @@ function turnOnEditMode() {
   isEditMode = true;
 }
 
-// <-------
+// <------ setItemToEdit
 
-// MARK: - for onClickClearAll()
+// MARK: - onClickClearAll
 
-// ------>
+export function onClickClearAll() {
+  clearItems();
+}
+
 export function clearItems() {
   anItemList.clearItems();
   aStorage.clearItems();
   updateUIBasedOnListState();
 }
 
-// <------
+// MARK: - onEditingInput
 
-// MARK: - for onDOMContentLoad()
+export function onEditingInput(e) {
+  anItemList.filterItemsWith(e.target.value.toLowerCase());
+}
 
+// MARK: - onDOMContentLoad
+
+export function onDOMContentLoad() {
+  displayItems();
+}
+
+function displayItems() {
+  aStorage.allItems
+    .forEach((item) => anItemList.appendItemWith(item));
+  updateUIBasedOnListState();
+}
 
 // MARK: - common
 
-// ----->
+// -----> updateUIBasedOnListState
+
 export function updateUIBasedOnListState() {
   anItemInput.clearValue();
 
@@ -188,10 +187,4 @@ function turnOffEditMode() {
   isEditMode = false;
 }
 
-// <-------
-
-function displayItems() {
-  aStorage.allItems
-    .forEach((item) => anItemList.appendItemWith(item));
-  updateUIBasedOnListState();
-}
+// <------- updateUIBasedOnListState

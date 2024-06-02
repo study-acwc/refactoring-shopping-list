@@ -19,7 +19,7 @@ const displayAllItemsCommand = new commands.DisplayAllItemsCommand(anItemList, a
 const refreshUICommand = new commands.refreshUICommand(anItemInput, anItemList, aFormButton, aClearButton, anItemFilter);
 const removeItemCommand = new commands.RemoveItemCommand(anItemList, aStorage);
 const setItemToEditCommand = new commands.SetItemToEditCommand(anItemList, aFormButton, anItemInput);
-const AddItemCommand = new commands.AddItemCommand(anItemList, aStorage);
+const addItemCommand = new commands.AddItemCommand(anItemList, aStorage);
 
 // MARK: - 함수 실행문
 
@@ -51,14 +51,14 @@ export function onAddItemSubmit(e) {
   const newItem = anItemInput.uniqueValue;
   if (aFormButton.isEditMode) {
     removeEditingItem();
-    addItemWith(newItem);
+    addItemCommand.execute(newItem);
     refreshUICommand.execute();
   } else {
     if (aStorage.hasItem(newItem)) {
       alertIfItemExists();
       return;
     }
-    addItemWith(newItem);
+    addItemCommand.execute(newItem);
     refreshUICommand.execute();
   }
 }
@@ -76,11 +76,6 @@ function removeEditingItem() {
 
 function alertIfItemExists(newItem) {
   alert(`The item "${newItem}" already exists!`);
-}
-
-function addItemWith(newItem) {
-  anItemList.appendItemWith(newItem);
-  aStorage.addItem(newItem);
 }
 
 // MARK: - onClickItem

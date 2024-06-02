@@ -95,3 +95,15 @@ export class SetItemToEditCommand {
         this._anItemInput.updateValue(item.textContent);
     }
 }
+
+export class AddItemCommand {
+    constructor(anItemList, aStorage) {
+        this._anItemList = anItemList;
+        this._aStorage = aStorage;
+    }
+
+    execute(newItem) {
+        this._anItemList.appendItemWith(newItem);
+        this._aStorage.addItem(newItem);
+    }
+}

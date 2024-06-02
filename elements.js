@@ -166,16 +166,23 @@ export class ItemInput {
 export class FormButton {
     constructor(element) {
         this._element = element;
+        this._isEditMode = false;
+    }
+
+    get isEditMode() {
+        return this._isEditMode;
     }
 
     applyEditModeStyle() {
         this._element.innerHTML = '<i class="fa-solid fa-pen"></i>   Update Item';
         this._element.style.backgroundColor = '#228B22';
+        this._isEditMode = true;
     }
 
     applyAddModeStyle() {
         this._element.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
         this._element.style.backgroundColor = '#333';
+        this._isEditMode = false;
     }
 }
 

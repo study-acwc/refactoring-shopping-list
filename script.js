@@ -11,7 +11,7 @@ const anItemForm = new elements.ItemForm(document.getElementById('item-form'));
 export const aClearButton = new elements.ClearButton(document.getElementById('clear'));
 export const anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
 export const anItemInput = new elements.ItemInput(document.getElementById('item-input'));
-const aFormButton = new elements.FormButton(anItemForm.formButton);
+export const aFormButton = new elements.FormButton(anItemForm.formButton);
 
 const clearAllCommand = new commands.ClearAllCommand(anItemList, aStorage);
 const filterItemsCommand = new commands.FilterItemsCommand(anItemList);
@@ -19,8 +19,6 @@ const displayAllItemsCommand = new commands.DisplayAllItemsCommand(anItemList, a
 const refreshUICommand = new commands.refreshUICommand(anItemInput, anItemList, aFormButton, aClearButton, anItemFilter);
 const removeItemCommand = new commands.RemoveItemCommand(anItemList, aStorage);
 const setItemToEditCommand = new commands.SetItemToEditCommand(anItemList, aFormButton, anItemInput);
-
-let isEditMode = false;
 
 // MARK: - 함수 실행문
 
@@ -50,7 +48,7 @@ export function onAddItemSubmit(e) {
     return;
   }
   const newItem = anItemInput.uniqueValue;
-  if (isEditingItem()) {
+  if (aFormButton.isEditMode) {
     removeEditingItem()
   } else if (aStorage.hasItem(newItem)) {
     alertIfItemExists();
@@ -63,16 +61,11 @@ function alertAddAnItem() {
   alert('Please add an item');
 }
 
-export function isEditingItem() {
-  return isEditMode
-}
-
 function removeEditingItem() {
   const item = anItemList.editingItem;
   aStorage.removeItem(item.textContent);
   anItemList.disableEditModeClassFor(item);
   anItemList.removeItem(item);
-  turnOffEditMode();
 }
 
 function alertIfItemExists(newItem) {
@@ -114,12 +107,7 @@ function isItemClicked(e) {
 
 // -----> setItemToEdit
 export function setItemToEdit(item) {
-  turnOnEditMode();
   setItemToEditCommand.execute(item);
-}
-
-function turnOnEditMode() {
-  isEditMode = true;
 }
 
 // <------ setItemToEdit
@@ -154,15 +142,6 @@ function displayItems() {
 
 // MARK: - common
 
-// -----> updateUIBasedOnListState
-
 export function updateUIBasedOnListState() {
   refreshUICommand.execute()
-  turnOffEditMode();
 }
-
-function turnOffEditMode() {
-  isEditMode = false;
-}
-
-// <------- updateUIBasedOnListState

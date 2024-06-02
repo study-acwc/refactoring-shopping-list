@@ -75,7 +75,6 @@ function addItemWith(newItem) {
   anItemList.appendItemWith(newItem);
   aStorage.addItem(newItem);
   updateUIBasedOnListState();
-  anItemInput.clearValue();
 }
 
 // MARK: - onClickItem

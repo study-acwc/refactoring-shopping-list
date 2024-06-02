@@ -2,6 +2,7 @@ import * as innerHTMLForTest from "./scriptTestHTMLSetup.js";
 import * as script from "./script.js";
 import Storage from "./Storage.js";
 import UI from "./UI.js";
+import Item from "./Item.js";
 
 window.alert = jest.fn();
 
@@ -169,24 +170,24 @@ describe("아이템을 클릭했을 때", () => {
 
   test("삭제 버튼을 누른경우 삭제되어야 한다.", () => {
     e.target.parentElement.classList.contains.mockReturnValue(true);
-    removeItemSpy = jest.spyOn(script, "removeItem");
-    script.removeItem(itemList.children[0]);
+    removeItemSpy = jest.spyOn(Item, "removeItem");
+    Item.removeItem(itemList.children[0]);
     expect(UI.isEditMode).toBe(false);
   });
   test("삭제 버튼을 누른경우 취소하면 삭제되지 않는다.", () => {
     e.target.parentElement.classList.contains.mockReturnValue(true);
-    confirmRemoveItemSpy = jest.spyOn(script, "confirmRemoveItem");
-    script.removeItem(itemList.children[0]);
+    confirmRemoveItemSpy = jest.spyOn(Item, "confirmRemoveItem");
+    Item.removeItem(itemList.children[0]);
     expect(confirmRemoveItemSpy).toHaveBeenCalledTimes(1);
   });
 
   test("삭제 버튼을 누른경우 값이 없는 경우", () => {
     e.target.parentElement.classList.contains.mockReturnValue(true);
-    const removeItemSpy = jest.spyOn(script, "removeItem");
+    const removeItemSpy = jest.spyOn(Item, "removeItem");
     const itemElements = Array.from(script.itemList.querySelectorAll("li"));
 
     script.handleClickItem(e);
-    script.removeItem(e.target.parentElement.parentElement); // 함수 호출
+    Item.removeItem(e.target.parentElement.parentElement); // 함수 호출
     expect(UI.isEditMode).toBe(false);
   });
 });
@@ -241,12 +242,12 @@ describe("아이템을 삭제했을 때", () => {
       global.confirm = jest.fn(() => true);
       e.target.parentElement.classList.contains.mockReturnValue(true);
       script.handleClickItem(e);
-      expect(script.removeItem).toHaveBeenCalledTimes(1);
+      expect(Item.removeItem).toHaveBeenCalledTimes(1);
     });
     test("item 삭제confirm이 안된경우", () => {
       e.target.parentElement.classList.contains.mockReturnValue(true);
       script.handleClickItem(e);
-      expect(script.removeItem).toHaveBeenCalledTimes(1);
+      expect(Item.removeItem).toHaveBeenCalledTimes(1);
     });
   });
 });
@@ -320,14 +321,14 @@ describe("checkIfItemExists", () => {
   test("스토리지에 item이 있는경우 true 리턴", () => {
     Storage.getItems = jest.fn(() => ["item1", "item2", "item3"]);
 
-    const itemExists = script.isItemExists("item2");
+    const itemExists = Item.isItemExists("item2");
     expect(itemExists).toBe(true);
   });
 
   test("스토리지에 item이없는경우 true 리턴", () => {
     Storage.getItems = jest.fn(() => ["item1", "item2", "item3"]);
 
-    const itemExists = script.isItemExists("item4");
+    const itemExists = Item.isItemExists("item4");
     expect(itemExists).toBe(false);
   });
 });

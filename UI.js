@@ -72,4 +72,11 @@ export default class UI {
       itemList.removeChild(itemList.firstChild);
     }
   }
+  static removeItemFromDom(item) {
+    item.remove();
+  }
+  static removeItemUI(item) {
+    item.classList.remove("edit-mode");
+    item.remove();
+  }
 }

@@ -1,6 +1,7 @@
 import * as selfModule from "./script.js";
 import Storage from "./Storage.js";
 import UI from "./UI.js";
+import Item from "./Item.js";
 
 export const itemForm = document.getElementById("item-form");
 export const itemInput = document.getElementById("item-input");
@@ -18,32 +19,32 @@ export function handleDisplayItems() {
 
 export function handleAddItemSubmit(event) {
   event.preventDefault();
-  const item = getNewItem();
+  const item = Item.getNewItem();
 
   // Validate Input
   //[10-3] Gaurd Clause
-  if (isItemEmpty(item)) {
+  if (Item.isItemEmpty(item)) {
     alert("Please add an item");
     return;
   }
   // Check for edit mode
   if (UI.isEditMode) {
-    removeEditItem(itemList.querySelector(".edit-mode"));
+    Item.removeEditItem(itemList.querySelector(".edit-mode"));
   }
 
   //Validate if item already exists
   //[10-3] Gaurd Clause
-  if (selfModule.isItemExists(item)) {
+  if (Item.isItemExists(item)) {
     alert(`The item "${item}" already exists!`);
     return;
   }
 
-  createNewItem(item);
+  Item.createNewItem(item);
 }
 export function handleClickItem(event) {
   //[10-3] 참과 거짓 경로 모두 정상 동작
-  if (containRemoveItem(event)) {
-    selfModule.removeItem(event.target.parentElement.parentElement);
+  if (Item.containRemoveItem(event)) {
+    Item.removeItem(event.target.parentElement.parentElement);
   } else if (UI.isListItem(event)) {
     UI.setItemToEdit(event.target);
   }
@@ -60,57 +61,9 @@ export function handleFilterItems(event) {
 
   items.forEach((item) => {
     const itemName = item.firstChild.textContent.toLowerCase();
-    const shouldDisplay = isItemMatch(itemName, text);
+    const shouldDisplay = Item.isItemMatch(itemName, text);
     item.style.display = shouldDisplay ? "flex" : "none";
   });
-}
-
-//===================== Item ======================
-function getNewItem() {
-  return itemInput.value.trim();
-}
-export function confirmRemoveItem(item) {
-  return confirm(
-    `Are you sure you want to remove the item "${item.textContent}"?`,
-  );
-}
-function isItemEmpty(item) {
-  return item === "";
-}
-function isItemMatch(item, text) {
-  return item.indexOf(text) != -1;
-}
-function createNewItem(item) {
-  UI.addItemToDOM(item);
-  Storage.addItem(item);
-  UI.checkUI();
-  itemInput.value = "";
-}
-function removeEditItem(item) {
-  Storage.removeItem(item.textContent);
-  removeItemUI(item);
-}
-function containRemoveItem(event) {
-  return event.target.parentElement.classList.contains("remove-item");
-}
-export function isItemExists(item) {
-  const itemsFromStorage = Storage.getItems();
-  return itemsFromStorage.includes(item);
-}
-export function removeItem(item) {
-  //[10-3] Gaurd Clause
-  if (!selfModule.confirmRemoveItem(item)) {
-    return;
-  }
-  // Remove item from DOM
-  item.remove();
-  // Remove item from storage
-  Storage.removeItem(item.textContent);
-  UI.checkUI();
-}
-function removeItemUI(item) {
-  item.classList.remove("edit-mode");
-  item.remove();
 }
 
 //====================== Initialization ======================

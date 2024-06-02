@@ -4,14 +4,15 @@ import * as elements from './elements.js';
 
 // MARK: - 변수 선언
 
+const itemForm = document.getElementById('item-form');
+
 export const aStorage = new storage.Storage('items');
 export const anItemList = new elements.ItemElementList(document.getElementById('item-list'));
 export const aClearButton = new elements.ClearButton(document.getElementById('clear'));
 export const anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
 export const anItemInput = new elements.ItemInput(document.getElementById('item-input'));
+export const aFormButton = new elements.FormButton(itemForm.querySelector(anItemList.BUTTON_ELEMENT));
 
-const itemForm = document.getElementById('item-form');
-const formBtn = itemForm.querySelector(anItemList.BUTTON_ELEMENT);
 let isEditMode = false;
 
 // MARK: - 함수 실행문
@@ -128,13 +129,8 @@ function isItemClicked(e) {
 export function setItemToEdit(item) {
   turnOnEditMode();
   anItemList.toggleEditModeForSingleItem(item);
-  styleFormButtonToEditMode();
+  aFormButton.applyEditModeStyle();
   anItemInput.updateValue(item.textContent);
-}
-
-function styleFormButtonToEditMode() {
-  formBtn.innerHTML = '<i class="fa-solid fa-pen"></i>   Update Item';
-  formBtn.style.backgroundColor = '#228B22';
 }
 
 function turnOnEditMode() {
@@ -168,13 +164,8 @@ export function updateUIBasedOnListState() {
   } else {
     showListControls()
   }
-  setAddItemButtonStyle();
+  aFormButton.applyAddModeStyle();
   turnOffEditMode();
-}
-
-function setAddItemButtonStyle() {
-  formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
-  formBtn.style.backgroundColor = '#333';
 }
 
 function hideListControls() {

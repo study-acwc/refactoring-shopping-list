@@ -141,33 +141,30 @@ export function clearItems() {
 }
 
 export function filterItems(e) {
-  const items = itemList.querySelectorAll("li");
+  const elementList = itemList.querySelectorAll("li");
   const text = e.target.value.toLowerCase();
 
-  items.forEach((item) => {
-    const itemName = item.firstChild.textContent.toLowerCase();
+  elementList.forEach((element) => {
+    const isIncludeText =
+      element.firstChild.textContent.toLowerCase().indexOf(text) != -1;
 
-    if (itemName.indexOf(text) != -1) {
-      item.style.display = "flex";
-    } else {
-      item.style.display = "none";
-    }
+    setStyleDisplay(element, isIncludeText ? "flex" : "none");
   });
 }
 
 export function styleDisplayItems() {
   const items = itemList.querySelectorAll("li");
 
-  if (items.length === 0) {
-    clearBtn.style.display = "none";
-    itemFilter.style.display = "none";
-  } else {
-    clearBtn.style.display = "block";
-    itemFilter.style.display = "block";
-  }
+  [clearBtn, itemFilter].forEach((element) =>
+    setStyleDisplay(element, items.length === 0 ? "none" : "block")
+  );
 
   formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
   formBtn.style.backgroundColor = "#333";
+}
+
+function setStyleDisplay(element, display) {
+  element.style.display = display;
 }
 
 export function initInputEditMode() {

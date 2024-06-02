@@ -1,13 +1,13 @@
-import { Storage } from './storage'
-import { TODO } from './const'
-import { $ } from './src/util'
+import { Storage } from './storage.js'
+import { TODO } from './const.js'
+import { $ } from './src/util.js'
 
 const itemForm = $('#item-form')
 const itemInput = $('#item-input')
 const itemList = $('#item-list')
 const clearBtn = $('#clear')
 const itemFilter = $('#filter')
-const formBtn = $('button')
+const formBtn = itemForm.querySelector('button')
 
 export let isEditMode = false
 

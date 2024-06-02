@@ -7,8 +7,10 @@ export const CSSDisplay = {
 const BUTTON_ELEMENT = 'button';
 
 export class ItemElementList {
+    #list;
+
     constructor(list) {
-        this._list = list;
+        this.#list = list;
         this.LI_ELEMENT = 'li';
         this.EDITMODE_ELEMENT_CLASS = 'edit-mode';
         this.LI_ELEMENT = 'li';
@@ -16,16 +18,16 @@ export class ItemElementList {
     }
 
     get editingItem() {
-        return this._list.querySelector('.edit-mode');
+        return this.#list.querySelector('.edit-mode');
     }
 
     get allItems() {
-        return this._list.querySelectorAll(this.LI_ELEMENT);
+        return this.#list.querySelectorAll(this.LI_ELEMENT);
     }
 
     clearItems() {
-        while (this._list.firstChild) {
-          this._list.removeChild(this._list.firstChild);
+        while (this.#list.firstChild) {
+          this.#list.removeChild(this.#list.firstChild);
         }
     }
 
@@ -60,7 +62,7 @@ export class ItemElementList {
     }
 
     appendItem(element) {
-        this._list.appendChild(element)
+        this.#list.appendChild(element)
     }
       
     listItem(item) {
@@ -88,91 +90,100 @@ export class ItemElementList {
     }
 
     addListener(listener) {
-        this._list.addEventListener('click', listener);
+        this.#list.addEventListener('click', listener);
     }
 }
 
 export class ClearButton {
+  #element;
+
   constructor(element) {
-      this._element = element;
+      this.#element = element;
   }
 
   // only for unit tesing
   get isHidden() {
-    return this._element.style.display == CSSDisplay.NONE;
+    return this.#element.style.display == CSSDisplay.NONE;
   }
 
   // only for unit tesing
   get isDisplayed() {
-    return this._element.style.display == CSSDisplay.BLOCK;
+    return this.#element.style.display == CSSDisplay.BLOCK;
   }
 
   hide() {
-    this._element.style.display = CSSDisplay.NONE;
+    this.#element.style.display = CSSDisplay.NONE;
   }
 
   show() {
-    this._element.style.display = CSSDisplay.BLOCK;
+    this.#element.style.display = CSSDisplay.BLOCK;
   }
 
   addListener(listener) {
-    this._element.addEventListener('click', listener);
+    this.#element.addEventListener('click', listener);
   }
 }
 
 export class ItemFilter {
+    #element;
+
     constructor(element) {
-        this._element = element;
+        this.#element = element;
     }
 
     // only for unit tesing
     get isHidden() {
-        return this._element.style.display == CSSDisplay.NONE;
+        return this.#element.style.display == CSSDisplay.NONE;
     }
 
     // only for unit tesing
     get isDisplayed() {
-        return this._element.style.display == CSSDisplay.BLOCK;
+        return this.#element.style.display == CSSDisplay.BLOCK;
     }
 
     hide() {
-        this._element.style.display = CSSDisplay.NONE;
+        this.#element.style.display = CSSDisplay.NONE;
     }
 
     show() {
-        this._element.style.display = CSSDisplay.BLOCK;
+        this.#element.style.display = CSSDisplay.BLOCK;
     }
 
     addListener(listener) {
-        this._element.addEventListener('input', listener);
+        this.#element.addEventListener('input', listener);
     }
 }
 
 export class ItemInput {
+    #element;
+
     constructor(element) {
-        this._element = element;
+        this.#element = element;
     }
 
     get uniqueValue() {
-        return this._element.value.trim()
+        return this.#element.value.trim()
     }
 
     get hasValidValue() {
-        return this._element.value != ''
+        return this.#element.value != ''
     }
 
     updateValue(newValue) {
-        this._element.value = newValue;
+        this.#element.value = newValue;
     }
 
     clearValue() {
-        this._element.value = '';
+        this.#element.value = '';
     }
 }
 
 export class FormButton {
+    #element;
+    #isEditMode;
+
     constructor(element) {
-        this._element = element;
+        this.#element = element;
         this._isEditMode = false;
     }
 
@@ -181,28 +192,30 @@ export class FormButton {
     }
 
     applyEditModeStyle() {
-        this._element.innerHTML = '<i class="fa-solid fa-pen"></i>   Update Item';
-        this._element.style.backgroundColor = '#228B22';
+        this.#element.innerHTML = '<i class="fa-solid fa-pen"></i>   Update Item';
+        this.#element.style.backgroundColor = '#228B22';
         this._isEditMode = true;
     }
 
     applyAddModeStyle() {
-        this._element.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
-        this._element.style.backgroundColor = '#333';
+        this.#element.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
+        this.#element.style.backgroundColor = '#333';
         this._isEditMode = false;
     }
 }
 
 export class ItemForm {
+    #element;
+
     constructor(element) {
-        this._element = element;
+        this.#element = element;
     }
 
     get formButton() {
-        return this._element.querySelector(BUTTON_ELEMENT);
+        return this.#element.querySelector(BUTTON_ELEMENT);
     }
 
     addListener(listener) {
-        this._element.addEventListener('submit', listener);
+        this.#element.addEventListener('submit', listener);
     }
 }

@@ -1,6 +1,7 @@
 import * as thisModule from './script.js';
 import * as storage from './storage.js';
 import * as elements from './elements.js';
+import * as commands from './commands.js';
 
 // MARK: - 변수 선언
 
@@ -11,6 +12,8 @@ export const aClearButton = new elements.ClearButton(document.getElementById('cl
 export const anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
 export const anItemInput = new elements.ItemInput(document.getElementById('item-input'));
 const aFormButton = new elements.FormButton(anItemForm.formButton);
+
+const clearAllCommand = new commands.ClearAllCommand(anItemList, aStorage);
 
 let isEditMode = false;
 
@@ -133,8 +136,7 @@ export function onClickClearAll() {
 }
 
 export function clearItems() {
-  anItemList.clearItems();
-  aStorage.clearItems();
+  clearAllCommand.execute();
   updateUIBasedOnListState();
 }
 

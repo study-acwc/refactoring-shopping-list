@@ -33,6 +33,7 @@ function registerEventListeners() {
   document.addEventListener('DOMContentLoaded', onDOMContentLoad);
 }
 
+// ---->
 export function onAddItemSubmit(e) {
   e.preventDefault();
   if (false == anItemInput.hasValidValue) {
@@ -46,11 +47,17 @@ export function onAddItemSubmit(e) {
     alertIfItemExists();
     return;
   }
+  addItemWith(newItem);
+}
+
+function addItemWith(newItem) {
   anItemList.appendItemWith(newItem);
   aStorage.addItem(newItem);
   updateUIBasedOnListState();
   anItemInput.clearValue();
 }
+
+// <-----
 
 export function onClickItem(e) {
   if (isRemoveButtonClicked(e)) {

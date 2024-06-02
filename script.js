@@ -10,7 +10,7 @@ const anItemForm = new elements.ItemForm(document.getElementById('item-form'));
 export const aClearButton = new elements.ClearButton(document.getElementById('clear'));
 export const anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
 export const anItemInput = new elements.ItemInput(document.getElementById('item-input'));
-export const aFormButton = new elements.FormButton(anItemForm.formButton);
+const aFormButton = new elements.FormButton(anItemForm.formButton);
 
 let isEditMode = false;
 

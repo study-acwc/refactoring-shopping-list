@@ -19,3 +19,15 @@ export class FilterItemsCommand {
         this._anItemList.filterItemsWith(itemTitle.toLowerCase());
     }
 }
+
+export class DisplayAllItemsCommand {
+    constructor(anItemList, aStorage) {
+        this._anItemList = anItemList;
+        this._aStorage = aStorage;
+    }
+    
+    execute() {
+        this._aStorage.allItems
+            .forEach((item) => this._anItemList.appendItemWith(item));
+    }
+}

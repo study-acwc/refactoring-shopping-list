@@ -15,6 +15,7 @@ const aFormButton = new elements.FormButton(anItemForm.formButton);
 
 const clearAllCommand = new commands.ClearAllCommand(anItemList, aStorage);
 const filterItemsCommand = new commands.FilterItemsCommand(anItemList);
+const displayAllItemsCommand = new commands.DisplayAllItemsCommand(anItemList, aStorage);
 
 let isEditMode = false;
 
@@ -154,8 +155,7 @@ export function onDOMContentLoad() {
 }
 
 function displayItems() {
-  aStorage.allItems
-    .forEach((item) => anItemList.appendItemWith(item));
+  displayAllItemsCommand.execute();
   updateUIBasedOnListState();
 }
 

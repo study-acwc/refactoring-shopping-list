@@ -1,19 +1,19 @@
 import * as selfModule from "./script.js";
 import Storage from "./Storage.js";
+import UI from "./UI.js";
 
 export const itemForm = document.getElementById("item-form");
 export const itemInput = document.getElementById("item-input");
-export const itemList = document.getElementById("item-list");
 export const clearBtn = document.getElementById("clear");
 export const itemFilter = document.getElementById("filter");
 export const formBtn = itemForm.querySelector("button");
-export let isEditMode = false;
+export const itemList = document.getElementById("item-list");
 
 //====================== Event Handlers ======================
 export function handleDisplayItems() {
   const itemsFromStorage = Storage.getItems();
-  itemsFromStorage.forEach((item) => selfModule.addItemToDOM(item));
-  selfModule.checkUI();
+  itemsFromStorage.forEach((item) => UI.addItemToDOM(item));
+  UI.checkUI();
 }
 
 export function handleAddItemSubmit(event) {
@@ -27,7 +27,7 @@ export function handleAddItemSubmit(event) {
     return;
   }
   // Check for edit mode
-  if (isEditMode) {
+  if (UI.isEditMode) {
     removeEditItem(itemList.querySelector(".edit-mode"));
   }
 
@@ -44,15 +44,15 @@ export function handleClickItem(event) {
   //[10-3] 참과 거짓 경로 모두 정상 동작
   if (containRemoveItem(event)) {
     selfModule.removeItem(event.target.parentElement.parentElement);
-  } else if (isListItem(event)) {
-    selfModule.setItemToEdit(event.target);
+  } else if (UI.isListItem(event)) {
+    UI.setItemToEdit(event.target);
   }
 }
 export function handleClearItems() {
-  clearAllItemsFromDOM();
+  UI.clearAllItemsFromDOM();
   localStorage.removeItem("items");
 
-  selfModule.checkUI();
+  UI.checkUI();
 }
 export function handleFilterItems(event) {
   const items = itemList.querySelectorAll("li");
@@ -69,9 +69,6 @@ export function handleFilterItems(event) {
 function getNewItem() {
   return itemInput.value.trim();
 }
-function clearInput() {
-  itemInput.value = "";
-}
 export function confirmRemoveItem(item) {
   return confirm(
     `Are you sure you want to remove the item "${item.textContent}"?`,
@@ -84,9 +81,9 @@ function isItemMatch(item, text) {
   return item.indexOf(text) != -1;
 }
 function createNewItem(item) {
-  addItemToDOM(item);
+  UI.addItemToDOM(item);
   Storage.addItem(item);
-  selfModule.checkUI();
+  UI.checkUI();
   itemInput.value = "";
 }
 function removeEditItem(item) {
@@ -109,72 +106,11 @@ export function removeItem(item) {
   item.remove();
   // Remove item from storage
   Storage.removeItem(item.textContent);
-  selfModule.checkUI();
+  UI.checkUI();
 }
-
-//====================== UI ======================
 function removeItemUI(item) {
   item.classList.remove("edit-mode");
   item.remove();
-}
-export function createButton(classes) {
-  const button = document.createElement("button");
-  button.className = classes;
-  const icon = selfModule.createIcon("fa-solid fa-xmark");
-  button.appendChild(icon);
-  return button;
-}
-
-export function createIcon(classes) {
-  const icon = document.createElement("i");
-  icon.className = classes;
-  return icon;
-}
-export function setItemToEdit(item) {
-  isEditMode = true;
-  itemList
-    .querySelectorAll("li")
-    .forEach((i) => i.classList.remove("edit-mode"));
-
-  item.classList.add("edit-mode");
-  formBtn.innerHTML = '<i class="fa-solid fa-pen"></i>   Update Item';
-  formBtn.style.backgroundColor = "#228B22";
-  itemInput.value = item.textContent;
-}
-export function addItemToDOM(item) {
-  // Create list item
-  const li = document.createElement("li");
-  li.appendChild(document.createTextNode(item));
-
-  const button = createButton("remove-item btn-link text-red");
-  li.appendChild(button);
-
-  // Add li to the DOM
-  itemList.appendChild(li);
-}
-export function checkUI() {
-  clearInput();
-  toggleVisibility(clearBtn);
-  toggleVisibility(itemFilter);
-  resetFormButton();
-  isEditMode = false;
-}
-function isListItem(event) {
-  return event.target.closest("li");
-}
-function toggleVisibility(element) {
-  const hasItems = itemList.querySelectorAll("li").length > 0;
-  element.style.display = hasItems ? "block" : "none";
-}
-
-function resetFormButton() {
-  formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
-  formBtn.style.backgroundColor = "#333";
-}
-function clearAllItemsFromDOM() {
-  while (itemList.firstChild) {
-    itemList.removeChild(itemList.firstChild);
-  }
 }
 
 //====================== Initialization ======================
@@ -186,7 +122,7 @@ export function init() {
   itemFilter.addEventListener("input", handleFilterItems);
   document.addEventListener("DOMContentLoaded", handleDisplayItems);
 
-  selfModule.checkUI();
+  UI.checkUI();
 }
 
 init();

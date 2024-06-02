@@ -1,6 +1,7 @@
 import * as innerHTMLForTest from "./scriptTestHTMLSetup.js";
 import * as script from "./script.js";
 import Storage from "./Storage.js";
+import UI from "./UI.js";
 
 window.alert = jest.fn();
 
@@ -99,7 +100,7 @@ describe("Update Item 버튼이 눌렸을 때", () => {
       (i) => i.textContent == "oldItem",
     );
     // 그 아이템을 업데이트 모드로 변경
-    script.setItemToEdit(filtered[0]);
+    UI.setItemToEdit(filtered[0]);
     // 3. "updatedItem" 으로 변경된 이름 입력
     document.getElementById("item-input").value = "updatedItem";
   });
@@ -112,7 +113,7 @@ describe("Update Item 버튼이 눌렸을 때", () => {
 
   test("아이템 편집 상태를 해제한다", () => {
     script.handleAddItemSubmit(e);
-    expect(script.isEditMode).toBe(false);
+    expect(UI.isEditMode).toBe(false);
   });
 });
 
@@ -147,7 +148,7 @@ describe("아이템을 클릭했을 때", () => {
 
     document.getElementById("item-input").value = "item1";
     script.handleAddItemSubmit(e);
-    script.addItemToDOM("item2");
+    UI.addItemToDOM("item2");
     global.confirm = jest.fn().mockReturnValue(true);
 
     itemElements = Array.from(script.itemList.querySelectorAll("li"));
@@ -160,9 +161,9 @@ describe("아이템을 클릭했을 때", () => {
 
   test("아이템을 누른경우 편집모드로 설정되어야 한다.", () => {
     e.target.parentElement.classList.contains.mockReturnValue(false);
-    setItemToEditSpy = jest.spyOn(script, "setItemToEdit");
+    setItemToEditSpy = jest.spyOn(UI, "setItemToEdit");
     script.handleClickItem(e);
-    expect(script.isEditMode).toBe(true);
+    expect(UI.isEditMode).toBe(true);
     expect(setItemToEditSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -170,7 +171,7 @@ describe("아이템을 클릭했을 때", () => {
     e.target.parentElement.classList.contains.mockReturnValue(true);
     removeItemSpy = jest.spyOn(script, "removeItem");
     script.removeItem(itemList.children[0]);
-    expect(script.isEditMode).toBe(false);
+    expect(UI.isEditMode).toBe(false);
   });
   test("삭제 버튼을 누른경우 취소하면 삭제되지 않는다.", () => {
     e.target.parentElement.classList.contains.mockReturnValue(true);
@@ -186,7 +187,7 @@ describe("아이템을 클릭했을 때", () => {
 
     script.handleClickItem(e);
     script.removeItem(e.target.parentElement.parentElement); // 함수 호출
-    expect(script.isEditMode).toBe(false);
+    expect(UI.isEditMode).toBe(false);
   });
 });
 
@@ -234,7 +235,7 @@ describe("아이템을 삭제했을 때", () => {
     });
     test("item 삭제", () => {
       script.handleClickItem(e);
-      expect(script.setItemToEdit).toHaveBeenCalledTimes(1);
+      expect(UI.setItemToEdit).toHaveBeenCalledTimes(1);
     });
     test("item 삭제confirm이되는경우", () => {
       global.confirm = jest.fn(() => true);
@@ -252,8 +253,8 @@ describe("아이템을 삭제했을 때", () => {
 
 describe("filterItems 함수 테스트", () => {
   beforeEach(() => {
-    script.addItemToDOM("Item1");
-    script.addItemToDOM("Item2");
+    UI.addItemToDOM("Item1");
+    UI.addItemToDOM("Item2");
   });
 
   test("입력된 텍스트와 일치하는 아이템만 표시한다", () => {
@@ -298,8 +299,8 @@ describe("displayItems 함수 테스트", () => {
     };
 
     jest.spyOn(Storage, "getItems").mockReturnValue(["Item1", "Item2"]);
-    jest.spyOn(script, "addItemToDOM");
-    jest.spyOn(script, "checkUI");
+    jest.spyOn(UI, "addItemToDOM");
+    jest.spyOn(UI, "checkUI");
     script.handleClickItem(e);
   });
 
@@ -309,10 +310,10 @@ describe("displayItems 함수 테스트", () => {
 
   test("아이템이 올바르게 표시되는지 확인", () => {
     script.handleDisplayItems();
-    expect(script.addItemToDOM).toHaveBeenCalledTimes(2);
-    expect(script.addItemToDOM).toHaveBeenCalledWith("Item1");
-    expect(script.addItemToDOM).toHaveBeenCalledWith("Item2");
-    expect(script.checkUI).toHaveBeenCalled();
+    expect(UI.addItemToDOM).toHaveBeenCalledTimes(2);
+    expect(UI.addItemToDOM).toHaveBeenCalledWith("Item1");
+    expect(UI.addItemToDOM).toHaveBeenCalledWith("Item2");
+    expect(UI.checkUI).toHaveBeenCalled();
   });
 });
 describe("checkIfItemExists", () => {

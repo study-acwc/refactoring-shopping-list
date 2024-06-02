@@ -1,3 +1,5 @@
+import LocalStorageController from "./LocalStorageController";
+
 export const itemForm = document.getElementById("item-form");
 export const itemInput = document.getElementById("item-input");
 export const itemList = document.getElementById("item-list");
@@ -97,35 +99,18 @@ export function createElement(tagName, className) {
 }
 
 export function addItemToStorage(item) {
-  const itemsFromStorage = getItemsFromStorage();
-
-  // Add new item to array
-  itemsFromStorage.push(item);
-
-  // Convert to JSON string and set to local storage
-  localStorage.setItem("items", JSON.stringify(itemsFromStorage));
+  const itemsFromStorage = JSON.stringify([...getItemsFromStorage(), item]);
+  LocalStorageController.setItem(itemsFromStorage);
 }
 
 export function getItemsFromStorage() {
-  let itemsFromStorage;
-
-  if (localStorage.getItem("items") === null) {
-    itemsFromStorage = [];
-  } else {
-    itemsFromStorage = JSON.parse(localStorage.getItem("items"));
-  }
-
-  return itemsFromStorage;
+  const itemsFromStorage = LocalStorageController.getItem();
+  return itemsFromStorage ? JSON.parse(itemsFromStorage) : [];
 }
 
 export function removeItemFromStorage(item) {
-  let itemsFromStorage = getItemsFromStorage();
-
-  // Filter out item to be removed
-  itemsFromStorage = itemsFromStorage.filter((i) => i !== item);
-
-  // Re-set to localstorage
-  localStorage.setItem("items", JSON.stringify(itemsFromStorage));
+  const itemsFromStorage = getItemsFromStorage().filter((i) => i !== item);
+  LocalStorageController.setItem(JSON.stringify(itemsFromStorage));
 }
 
 export function clearItems() {

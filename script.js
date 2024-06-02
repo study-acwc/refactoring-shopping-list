@@ -24,10 +24,10 @@ class ShoppingListPage {
   }
 
   registerEventListeners() {
-    this.anItemForm._element.addEventListener('submit', this.onAddItemSubmit);
-    this.anItemList._list.addEventListener('click', this.onClickItem);
-    this.aClearButton._element.addEventListener('click', this.onClickClearAll);
-    this.anItemFilter._element.addEventListener('input', this.onEditingInput);
+    this.anItemForm.addListener(this.onAddItemSubmit);
+    this.anItemList.addListener(this.onClickItem);
+    this.aClearButton.addListener(this.onClickClearAll);
+    this.anItemFilter.addListener(this.onEditingInput);
     document.addEventListener('DOMContentLoaded', this.onDOMContentLoad);
   }
 

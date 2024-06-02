@@ -86,6 +86,10 @@ export class ItemElementList {
         icon.className = classes;
         return icon;
     }
+
+    addListener(listener) {
+        this._list.addEventListener('click', listener);
+    }
 }
 
 export class ClearButton {
@@ -110,6 +114,10 @@ export class ClearButton {
   show() {
     this._element.style.display = CSSDisplay.BLOCK;
   }
+
+  addListener(listener) {
+    this._element.addEventListener('click', listener);
+  }
 }
 
 export class ItemFilter {
@@ -133,6 +141,10 @@ export class ItemFilter {
 
     show() {
         this._element.style.display = CSSDisplay.BLOCK;
+    }
+
+    addListener(listener) {
+        this._element.addEventListener('input', listener);
     }
 }
 
@@ -188,5 +200,9 @@ export class ItemForm {
 
     get formButton() {
         return this._element.querySelector(BUTTON_ELEMENT);
+    }
+
+    addListener(listener) {
+        this._element.addEventListener('submit', listener);
     }
 }

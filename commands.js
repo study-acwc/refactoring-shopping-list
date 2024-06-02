@@ -62,3 +62,22 @@ export class refreshUICommand {
         this._anItemFilter.show();
     }
 }
+
+export class RemoveItemCommand {
+    constructor(anItemList, aStorage) {
+        this._anItemList = anItemList;
+        this._aStorage = aStorage;
+    }
+
+    execute(item) {
+        if (false == this.confirmItemRemoval(item.textContent)) {
+            return;
+        }
+        this._anItemList.removeItem(item);
+        this._aStorage.removeItem(item.textContent);
+    }
+
+    confirmItemRemoval(textContent) {
+        return confirm(`Are you sure you want to remove the item "${textContent}"?`)
+    }
+}

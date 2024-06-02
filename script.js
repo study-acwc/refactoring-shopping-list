@@ -17,6 +17,7 @@ const clearAllCommand = new commands.ClearAllCommand(anItemList, aStorage);
 const filterItemsCommand = new commands.FilterItemsCommand(anItemList);
 const displayAllItemsCommand = new commands.DisplayAllItemsCommand(anItemList, aStorage);
 const refreshUICommand = new commands.refreshUICommand(anItemInput, anItemList, aFormButton, aClearButton, anItemFilter);
+const removeItemCommand = new commands.RemoveItemCommand(anItemList, aStorage);
 
 let isEditMode = false;
 
@@ -102,20 +103,12 @@ function isRemoveButtonClicked(e) {
 
 //----->
 export function removeItem(item) {
-  if (false == confirmItemRemoval(item.textContent)) {
-    return;
-  }
-  anItemList.removeItem(item);
-  aStorage.removeItem(item.textContent);
+  removeItemCommand.execute(item);
   updateUIBasedOnListState();
 }
 
 function isItemClicked(e) {
   return e.target.closest(anItemList.LI_ELEMENT);
-}
-
-function confirmItemRemoval(textContent) {
-  return confirm(`Are you sure you want to remove the item "${textContent}"?`)
 }
 
 // -----> setItemToEdit

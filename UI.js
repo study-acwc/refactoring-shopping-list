@@ -1,3 +1,5 @@
+import EventHandler from "./EventHandler.js";
+
 export default class UI {
   constructor() {
     this.isEditMode = false;
@@ -16,14 +18,13 @@ export default class UI {
   }
   static addItemToDOM(item) {
     const li = document.createElement("li");
-    const itemList = document.querySelector("#item-list");
 
     li.appendChild(document.createTextNode(item));
 
     const button = this.createButton("remove-item btn-link text-red");
     li.appendChild(button);
 
-    itemList.appendChild(li);
+    document.querySelector("#item-list").appendChild(li);
   }
   static setItemToEdit(item) {
     this.isEditMode = true;
@@ -78,5 +79,19 @@ export default class UI {
   static removeItemUI(item) {
     item.classList.remove("edit-mode");
     item.remove();
+  }
+  static addEventListeners() {
+    const itemForm = document.getElementById("item-form");
+    const itemList = document.querySelector("#item-list");
+    const clearBtn = document.getElementById("clear");
+    const itemFilter = document.getElementById("filter");
+    itemForm.addEventListener("submit", EventHandler.handleAddItemSubmit);
+    itemList.addEventListener("click", EventHandler.handleClickItem);
+    clearBtn.addEventListener("click", EventHandler.handleClearItems);
+    itemFilter.addEventListener("input", EventHandler.handleFilterItems);
+    document.addEventListener(
+      "DOMContentLoaded",
+      EventHandler.handleDisplayItems,
+    );
   }
 }

@@ -1,5 +1,5 @@
-import Storage from "./storage.js";
-import UI from "./ui.js";
+import Storage from "./Storage.js";
+import UI from "./UI.js";
 
 export default class Item {
   static getNewItem() {
@@ -18,10 +18,10 @@ export default class Item {
     return item.indexOf(text) != -1;
   }
   static createNewItem(item) {
-    const itemInput = document.getElementById("item-input");
     UI.addItemToDOM(item);
     Storage.addItem(item);
     UI.checkUI();
+    const itemInput = document.getElementById("item-input");
     itemInput.value = "";
   }
   static removeEditItem(item) {

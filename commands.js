@@ -81,3 +81,17 @@ export class RemoveItemCommand {
         return confirm(`Are you sure you want to remove the item "${textContent}"?`)
     }
 }
+
+export class SetItemToEditCommand {
+    constructor(anItemList, aFormButton, anItemInput) {
+        this._anItemList = anItemList;
+        this._anItemInput = anItemInput;
+        this._aFormButton = aFormButton;
+    }
+
+    execute(item) {
+        this._anItemList.toggleEditModeForSingleItem(item);
+        this._aFormButton.applyEditModeStyle();
+        this._anItemInput.updateValue(item.textContent);
+    }
+}

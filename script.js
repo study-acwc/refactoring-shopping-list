@@ -18,6 +18,7 @@ const filterItemsCommand = new commands.FilterItemsCommand(anItemList);
 const displayAllItemsCommand = new commands.DisplayAllItemsCommand(anItemList, aStorage);
 const refreshUICommand = new commands.refreshUICommand(anItemInput, anItemList, aFormButton, aClearButton, anItemFilter);
 const removeItemCommand = new commands.RemoveItemCommand(anItemList, aStorage);
+const setItemToEditCommand = new commands.SetItemToEditCommand(anItemList, aFormButton, anItemInput);
 
 let isEditMode = false;
 
@@ -114,9 +115,7 @@ function isItemClicked(e) {
 // -----> setItemToEdit
 export function setItemToEdit(item) {
   turnOnEditMode();
-  anItemList.toggleEditModeForSingleItem(item);
-  aFormButton.applyEditModeStyle();
-  anItemInput.updateValue(item.textContent);
+  setItemToEditCommand.execute(item);
 }
 
 function turnOnEditMode() {

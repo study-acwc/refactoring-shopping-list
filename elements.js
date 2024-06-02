@@ -4,6 +4,8 @@ export const CSSDisplay = {
     FLEX: 'flex'
 };
 
+const BUTTON_ELEMENT = 'button';
+
 export class ItemElementList {
     constructor(list) {
         this._list = list;
@@ -174,5 +176,15 @@ export class FormButton {
     applyAddModeStyle() {
         this._element.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
         this._element.style.backgroundColor = '#333';
+    }
+}
+
+export class ItemForm {
+    constructor(element) {
+        this._element = element;
+    }
+
+    get formButton() {
+        return this._element.querySelector(BUTTON_ELEMENT);
     }
 }

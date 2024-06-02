@@ -4,14 +4,13 @@ import * as elements from './elements.js';
 
 // MARK: - 변수 선언
 
-const itemForm = document.getElementById('item-form');
-
 export const aStorage = new storage.Storage('items');
 export const anItemList = new elements.ItemElementList(document.getElementById('item-list'));
+const anItemForm = new elements.ItemForm(document.getElementById('item-form'));
 export const aClearButton = new elements.ClearButton(document.getElementById('clear'));
 export const anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
 export const anItemInput = new elements.ItemInput(document.getElementById('item-input'));
-export const aFormButton = new elements.FormButton(itemForm.querySelector(anItemList.BUTTON_ELEMENT));
+export const aFormButton = new elements.FormButton(anItemForm.formButton);
 
 let isEditMode = false;
 
@@ -27,7 +26,7 @@ function initializeApp() {
 }
 
 function registerEventListeners() {
-  itemForm.addEventListener('submit', onAddItemSubmit);
+  anItemForm._element.addEventListener('submit', onAddItemSubmit);
   anItemList._list.addEventListener('click', onClickItem);
   aClearButton._element.addEventListener('click', onClickClearAll);
   anItemFilter._element.addEventListener('input', onEditingInput);

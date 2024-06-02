@@ -102,10 +102,6 @@ class ShoppingListPage {
   // MARK: - onClickClearAll
 
   onClickClearAll() {
-    this.clearItems();
-  }
-
-  clearItems() {
     this.clearAllCommand.execute();
     this.refreshUICommand.execute();
   }

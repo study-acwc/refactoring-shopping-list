@@ -5,7 +5,7 @@ import * as elements from './elements.js';
 window.alert = jest.fn();
 
 beforeEach(() => {
-  clearItems();
+  script.page.onClickClearAll();
 });
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
@@ -481,8 +481,4 @@ function editingItemElement(element) {
 function updateUserInputAndSubmitAdd(itemTitle) {
   setItemInputValue(itemTitle);
   script.page.onAddItemSubmit(dummyUIEvent());
-}
-
-function clearItems() {
-  script.page.clearItems();
 }

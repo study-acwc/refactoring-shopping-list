@@ -1,20 +1,23 @@
 export class Storage {
+    #storage;
+    #key;
+
     constructor(key) {
-        this._storage = localStorage;
-        this._key = key;
+        this.#storage = localStorage;
+        this.#key = key;
     }
-    
+
     get allItems() {
-        const itemsJsonString = this._storage.getItem(this._key);
+        const itemsJsonString = this.#storage.getItem(this.#key);
         return itemsJsonString === null ? [] : JSON.parse(itemsJsonString);
     }
 
     clearItems() {
-        this._storage.removeItem(this._key);
+        this.#storage.removeItem(this.#key);
     }
     
     saveAllItems(newItems) {
-        this._storage.setItem(this._key, JSON.stringify(newItems));
+        this.#storage.setItem(this.#key, JSON.stringify(newItems));
     }
 
     addItem(item) {
@@ -31,4 +34,4 @@ export class Storage {
     hasItem(item) {
         return this.allItems.includes(item);
     }
- }
+}

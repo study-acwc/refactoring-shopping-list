@@ -38,7 +38,7 @@ export class ItemElementList {
         return this.allItems.length === 0
     }
 
-    filterItems(keyword) {
+    filterItemsWith(keyword) {
         this.allItems.forEach((item) => {
             const itemName = item.firstChild.textContent.toLowerCase();
             item.style.display = itemName.indexOf(keyword) != -1 ? this.CSSDisplay.FLEX : this.CSSDisplay.NONE;

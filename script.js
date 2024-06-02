@@ -74,7 +74,7 @@ export function onClickClearAll() {
 }
 
 export function onEditingInput(e) {
-  anItemList.filterItems(e.target.value.toLowerCase());
+  anItemList.filterItemsWith(e.target.value.toLowerCase());
 }
 
 export function onDOMContentLoad() {

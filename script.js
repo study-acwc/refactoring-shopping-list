@@ -55,6 +55,7 @@ export function onAddItemSubmit(e) {
     return;
   }
   addItemWith(newItem);
+  refreshUICommand.execute();
 }
 
 function alertAddAnItem() {
@@ -75,7 +76,6 @@ function alertIfItemExists(newItem) {
 function addItemWith(newItem) {
   anItemList.appendItemWith(newItem);
   aStorage.addItem(newItem);
-  refreshUICommand.execute();
 }
 
 // MARK: - onClickItem

@@ -6,25 +6,28 @@ import * as commands from './commands.js';
 // MARK: - 변수 선언
 
 class ShoppingListPage {
+  #refreshUICommand;
+  #anItemForm;
+
   constructor() {
     this.aStorage = new storage.Storage('items');
     this.anItemList = new elements.ItemElementList(document.getElementById('item-list'));
-    this.anItemForm = new elements.ItemForm(document.getElementById('item-form'));
+    this.#anItemForm = new elements.ItemForm(document.getElementById('item-form'));
     this.aClearButton = new elements.ClearButton(document.getElementById('clear'));
     this.anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
     this.anItemInput = new elements.ItemInput(document.getElementById('item-input'));
-    this.aFormButton = new elements.FormButton(this.anItemForm.formButton);
+    this.aFormButton = new elements.FormButton(this.#anItemForm.formButton);
     
-    this.refreshUICommand = new commands.refreshUICommand(this.anItemInput, this.anItemList, this.aFormButton, this.aClearButton, this.anItemFilter);
+    this.#refreshUICommand = new commands.refreshUICommand(this.anItemInput, this.anItemList, this.aFormButton, this.aClearButton, this.anItemFilter);
   }
 
   initiallize() {
-    this.registerEventListeners();
-    this.refreshUICommand.execute();
+    this.#registerEventListeners();
+    this.#refreshUICommand.execute();
   }
 
-  registerEventListeners() {
-    this.anItemForm.addListener(this.onAddItemSubmit);
+  #registerEventListeners() {
+    this.#anItemForm.addListener(this.onAddItemSubmit);
     this.anItemList.addListener(this.onClickItem);
     this.aClearButton.addListener(this.onClickClearAll);
     this.anItemFilter.addListener(this.onEditingInput);
@@ -36,55 +39,55 @@ class ShoppingListPage {
   onAddItemSubmit(e) {
     e.preventDefault();
     if (false == this.anItemInput.hasValidValue) {
-      this.alertAddAnItem();
+      this.#alertAddAnItem();
       return;
     }
     const newItem = this.anItemInput.uniqueValue;
     if (this.aFormButton.isEditMode) {
       new commands.RemoveEditingItemCommand(this.anItemList, this.aStorage).execute();
       new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
-      this.refreshUICommand.execute();
+      this.#refreshUICommand.execute();
     } else {
       if (this.aStorage.hasItem(newItem)) {
-        this.alertIfItemExists();
+        this.#alertIfItemExists();
         return;
       }
       new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
-      this.refreshUICommand.execute();
+      this.#refreshUICommand.execute();
     }
   }
 
-  alertAddAnItem() {
+  #alertAddAnItem() {
     alert('Please add an item');
   }
 
-  alertIfItemExists(newItem) {
+  #alertIfItemExists(newItem) {
     alert(`The item "${newItem}" already exists!`);
   }
 
   // MARK: - onClickItem
 
   onClickItem(e) {
-    if (this.isRemoveButtonClicked(e)) {
+    if (this.#isRemoveButtonClicked(e)) {
       const listItemElement = e.target.parentElement.parentElement;
       this.removeItem(listItemElement);
-    } else if (this.isItemClicked(e)) {
+    } else if (this.#isItemClicked(e)) {
       const listItemElement = e.target;
       this.setItemToEdit(listItemElement);
     }
   }
 
-  isRemoveButtonClicked(e) {
+  #isRemoveButtonClicked(e) {
     const buttonElement = e.target.parentElement
     return buttonElement.classList.contains('remove-item');
   }
 
   removeItem(item) {
     new commands.RemoveItemCommand(this.anItemList, this.aStorage).execute(item);
-    this.refreshUICommand.execute();
+    this.#refreshUICommand.execute();
   }
 
-  isItemClicked(e) {
+  #isItemClicked(e) {
     return e.target.closest(this.anItemList.LI_ELEMENT);
   }
 
@@ -96,7 +99,7 @@ class ShoppingListPage {
 
   onClickClearAll() {
     new commands.ClearAllCommand(this.anItemList, this.aStorage).execute();
-    this.refreshUICommand.execute();
+    this.#refreshUICommand.execute();
   }
 
   // MARK: - onEditingInput
@@ -109,7 +112,7 @@ class ShoppingListPage {
 
   onDOMContentLoad() {
     new commands.DisplayAllItemsCommand(this.anItemList, this.aStorage).execute();
-    this.refreshUICommand.execute();
+    this.#refreshUICommand.execute();
   }
 }
 

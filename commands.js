@@ -107,3 +107,17 @@ export class AddItemCommand {
         this._aStorage.addItem(newItem);
     }
 }
+
+export class RemoveEditingItemCommand {
+    constructor(anItemList, aStorage) {
+        this._anItemList = anItemList;
+        this._aStorage = aStorage;
+    }
+
+    execute() {
+        const item = this._anItemList.editingItem;
+        this._aStorage.removeItem(item.textContent);
+        this._anItemList.disableEditModeClassFor(item);
+        this._anItemList.removeItem(item);
+    }
+}

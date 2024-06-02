@@ -20,6 +20,7 @@ const refreshUICommand = new commands.refreshUICommand(anItemInput, anItemList, 
 const removeItemCommand = new commands.RemoveItemCommand(anItemList, aStorage);
 const setItemToEditCommand = new commands.SetItemToEditCommand(anItemList, aFormButton, anItemInput);
 const addItemCommand = new commands.AddItemCommand(anItemList, aStorage);
+const removeEditingItemCommand = new commands.RemoveEditingItemCommand(anItemList, aStorage);
 
 // MARK: - 함수 실행문
 
@@ -50,7 +51,7 @@ export function onAddItemSubmit(e) {
   }
   const newItem = anItemInput.uniqueValue;
   if (aFormButton.isEditMode) {
-    removeEditingItem();
+    removeEditingItemCommand.execute();
     addItemCommand.execute(newItem);
     refreshUICommand.execute();
   } else {
@@ -65,13 +66,6 @@ export function onAddItemSubmit(e) {
 
 function alertAddAnItem() {
   alert('Please add an item');
-}
-
-function removeEditingItem() {
-  const item = anItemList.editingItem;
-  aStorage.removeItem(item.textContent);
-  anItemList.disableEditModeClassFor(item);
-  anItemList.removeItem(item);
 }
 
 function alertIfItemExists(newItem) {

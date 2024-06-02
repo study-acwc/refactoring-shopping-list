@@ -1,40 +1,54 @@
 export class ClearAllCommand {
+    #anItemList;
+    #aStorage;
+
     constructor(anItemList, aStorage) {
-        this._anItemList = anItemList;
-        this._aStorage = aStorage;
+        this.#anItemList = anItemList;
+        this.#aStorage = aStorage;
     }
 
     execute() {
-        this._anItemList.clearItems();
-        this._aStorage.clearItems();
+        this.#anItemList.clearItems();
+        this.#aStorage.clearItems();
     }
 }
 
 export class FilterItemsCommand {
+    #anItemList;
+
     constructor(anItemList) {
-        this._anItemList = anItemList;
+        this.#anItemList = anItemList;
     }
 
     execute(itemTitle) {
-        this._anItemList.filterItemsWith(itemTitle.toLowerCase());
+        this.#anItemList.filterItemsWith(itemTitle.toLowerCase());
     }
 }
 
 export class DisplayAllItemsCommand {
+    #anItemList;
+    #aStorage;
+
     constructor(anItemList, aStorage) {
-        this._anItemList = anItemList;
-        this._aStorage = aStorage;
+        this.#anItemList = anItemList;
+        this.#aStorage = aStorage;
     }
     
     execute() {
-        this._aStorage.allItems
-            .forEach((item) => this._anItemList.appendItemWith(item));
+        this.#aStorage.allItems
+            .forEach((item) => this.#anItemList.appendItemWith(item));
     }
 }
 
 export class refreshUICommand {
+    #anItemInput;
+    #anItemList;
+    #aFormButton;
+    #aClearButton;
+    #anItemFilter;
+
     constructor(anItemInput, anItemList, aFormButton, aClearButton, anItemFilter) {
-        this._anItemList = anItemList;
+        this.#anItemList = anItemList;
         this._anItemInput = anItemInput;
         this._aFormButton = aFormButton;
         this._aClearButton = aClearButton;
@@ -44,80 +58,93 @@ export class refreshUICommand {
     execute() {
         this._anItemInput.clearValue();
 
-        if (this._anItemList.isItemListEmptyInDOM()) {
-          this.hideListControls()
+        if (this.#anItemList.isItemListEmptyInDOM()) {
+          this.#hideListControls()
         } else {
-          this.showListControls()
+          this.#showListControls()
         }
         this._aFormButton.applyAddModeStyle();
     }
 
-    hideListControls() {
+    #hideListControls() {
         this._aClearButton.hide();
         this._anItemFilter.hide();
     }
       
-    showListControls() {
+    #showListControls() {
         this._aClearButton.show();
         this._anItemFilter.show();
     }
 }
 
 export class RemoveItemCommand {
+    #anItemList;
+    #aStorage;
+    
     constructor(anItemList, aStorage) {
-        this._anItemList = anItemList;
-        this._aStorage = aStorage;
+        this.#anItemList = anItemList;
+        this.#aStorage = aStorage;
     }
 
     execute(item) {
-        if (false == this.confirmItemRemoval(item.textContent)) {
+        if (false == this.#confirmItemRemoval(item.textContent)) {
             return;
         }
-        this._anItemList.removeItem(item);
-        this._aStorage.removeItem(item.textContent);
+        this.#anItemList.removeItem(item);
+        this.#aStorage.removeItem(item.textContent);
     }
 
-    confirmItemRemoval(textContent) {
+    #confirmItemRemoval(textContent) {
         return confirm(`Are you sure you want to remove the item "${textContent}"?`)
     }
 }
 
 export class SetItemToEditCommand {
+    #anItemList;
+    #aFormButton;
+    #anItemInput;
+
     constructor(anItemList, aFormButton, anItemInput) {
-        this._anItemList = anItemList;
+        this.#anItemList = anItemList;
         this._anItemInput = anItemInput;
         this._aFormButton = aFormButton;
     }
 
     execute(item) {
-        this._anItemList.toggleEditModeForSingleItem(item);
+        this.#anItemList.toggleEditModeForSingleItem(item);
         this._aFormButton.applyEditModeStyle();
         this._anItemInput.updateValue(item.textContent);
     }
 }
 
 export class AddItemCommand {
+    #anItemList;
+    #aStorage;
+
     constructor(anItemList, aStorage) {
-        this._anItemList = anItemList;
-        this._aStorage = aStorage;
+        this.#anItemList = anItemList;
+        this.#aStorage = aStorage;
     }
 
     execute(newItem) {
-        this._anItemList.appendItemWith(newItem);
-        this._aStorage.addItem(newItem);
+        this.#anItemList.appendItemWith(newItem);
+        this.#aStorage.addItem(newItem);
     }
 }
 
 export class RemoveEditingItemCommand {
+    #anItemList;
+    #aStorage;
+
     constructor(anItemList, aStorage) {
-        this._anItemList = anItemList;
-        this._aStorage = aStorage;
+        this.#anItemList = anItemList;
+        this.#aStorage = aStorage;
     }
 
     execute() {
-        const item = this._anItemList.editingItem;
-        this._aStorage.removeItem(item.textContent);
-        this._anItemList.disableEditModeClassFor(item);
-        this._anItemList.removeItem(item);
+        const item = this.#anItemList.editingItem;
+        this.#aStorage.removeItem(item.textContent);
+        this.#anItemList.disableEditModeClassFor(item);
+        this.#anItemList.removeItem(item);
     }
 }

@@ -16,6 +16,7 @@ const aFormButton = new elements.FormButton(anItemForm.formButton);
 const clearAllCommand = new commands.ClearAllCommand(anItemList, aStorage);
 const filterItemsCommand = new commands.FilterItemsCommand(anItemList);
 const displayAllItemsCommand = new commands.DisplayAllItemsCommand(anItemList, aStorage);
+const refreshUICommand = new commands.refreshUICommand(anItemInput, anItemList, aFormButton, aClearButton, anItemFilter);
 
 let isEditMode = false;
 
@@ -164,25 +165,8 @@ function displayItems() {
 // -----> updateUIBasedOnListState
 
 export function updateUIBasedOnListState() {
-  anItemInput.clearValue();
-
-  if (anItemList.isItemListEmptyInDOM()) {
-    hideListControls()
-  } else {
-    showListControls()
-  }
-  aFormButton.applyAddModeStyle();
+  refreshUICommand.execute()
   turnOffEditMode();
-}
-
-function hideListControls() {
-  aClearButton.hide();
-  anItemFilter.hide();
-}
-
-function showListControls() {
-  aClearButton.show();
-  anItemFilter.show();
 }
 
 function turnOffEditMode() {

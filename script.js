@@ -21,7 +21,7 @@ class ShoppingListPage {
     this.#refreshUICommand = new commands.refreshUICommand(this.anItemInput, this.anItemList, this.aFormButton, this.aClearButton, this.anItemFilter);
   }
 
-  initiallize() {
+  launchUI() {
     this.#registerEventListeners();
     this.#refreshUICommand.execute();
   }
@@ -120,4 +120,4 @@ export const page = new ShoppingListPage();
 
 // MARK: - 함수 실행문
 
-page.initiallize()
+page.launchUI()

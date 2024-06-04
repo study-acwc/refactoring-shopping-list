@@ -1,209 +1,122 @@
-import * as thisModule from './script.js';
+import * as storage from './storage.js';
+import * as elements from './elements.js';
+import * as commands from './commands.js';
 
-export const itemForm = document.getElementById('item-form');
-export const itemInput = document.getElementById('item-input');
-export const itemList = document.getElementById('item-list');
-export const clearBtn = document.getElementById('clear');
-export const itemFilter = document.getElementById('filter');
-export const formBtn = itemForm.querySelector('button');
-export let isEditMode = false;
+// MARK: - 변수 선언
 
-export function displayItems() {
-  const itemsFromStorage = getItemsFromStorage();
-  itemsFromStorage.forEach((item) => addItemToDOM(item));
-  checkUI();
-}
+class ShoppingListPage {
+  #refreshUICommand;
+  #anItemForm;
 
-export function onAddItemSubmit(e) {
-  e.preventDefault();
-
-  // trim the input value to remove whitespace - disallowing duplicate items due to white space in the process
-  const newItem = itemInput.value.trim();
-
-  // Validate Input
-  if (newItem === '') {
-    alert('Please add an item');
-    return;
+  constructor() {
+    this.aStorage = new storage.Storage('items');
+    this.anItemList = new elements.ItemElementList(document.getElementById('item-list'));
+    this.#anItemForm = new elements.ItemForm(document.getElementById('item-form'));
+    this.aClearButton = new elements.ClearButton(document.getElementById('clear'));
+    this.anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
+    this.anItemInput = new elements.ItemInput(document.getElementById('item-input'));
+    this.aFormButton = new elements.FormButton(this.#anItemForm.formButton);
+    
+    this.#refreshUICommand = new commands.refreshUICommand(this.anItemInput, this.anItemList, this.aFormButton, this.aClearButton, this.anItemFilter);
   }
 
-  // Check for edit mode
-  if (isEditMode) {
-    const itemToEdit = itemList.querySelector('.edit-mode');
+  launchUI() {
+    this.#registerEventListeners();
+    this.#refreshUICommand.execute();
+  }
 
-    removeItemFromStorage(itemToEdit.textContent);
-    itemToEdit.classList.remove('edit-mode');
-    itemToEdit.remove();
-    isEditMode = false;
-  } else {
-    if (checkIfItemExists(newItem)) {
-      alert(`The item "${newItem}" already exists!`);
+  #registerEventListeners() {
+    this.#anItemForm.addListener(this.onAddItemSubmit);
+    this.anItemList.addListener(this.onClickItem);
+    this.aClearButton.addListener(this.onClickClearAll);
+    this.anItemFilter.addListener(this.onEditingInput);
+    document.addEventListener('DOMContentLoaded', this.onDOMContentLoad);
+  }
+
+  // MARK: - onAddItemSubmit
+
+  onAddItemSubmit(e) {
+    e.preventDefault();
+    if (false == this.anItemInput.hasValidValue) {
+      this.#alertAddAnItem();
       return;
     }
-  }
-
-  // Create item DOM element
-  addItemToDOM(newItem);
-
-  // Add item to local storage
-  addItemToStorage(newItem);
-
-  checkUI();
-
-  itemInput.value = '';
-}
-
-export function addItemToDOM(item) {
-  // Create list item
-  const li = document.createElement('li');
-  li.appendChild(document.createTextNode(item));
-
-  const button = createButton('remove-item btn-link text-red');
-  li.appendChild(button);
-
-  // Add li to the DOM
-  itemList.appendChild(li);
-}
-
-export function createButton(classes) {
-  const button = document.createElement('button');
-  button.className = classes;
-  const icon = createIcon('fa-solid fa-xmark');
-  button.appendChild(icon);
-  return button;
-}
-
-export function createIcon(classes) {
-  const icon = document.createElement('i');
-  icon.className = classes;
-  return icon;
-}
-
-export function addItemToStorage(item) {
-  const itemsFromStorage = getItemsFromStorage();
-
-  // Add new item to array
-  itemsFromStorage.push(item);
-
-  // Convert to JSON string and set to local storage
-  localStorage.setItem('items', JSON.stringify(itemsFromStorage));
-}
-
-export function getItemsFromStorage() {
-  let itemsFromStorage;
-
-  if (localStorage.getItem('items') === null) {
-    itemsFromStorage = [];
-  } else {
-    itemsFromStorage = JSON.parse(localStorage.getItem('items'));
-  }
-
-  return itemsFromStorage;
-}
-
-export function onClickItem(e) {
-  if (e.target.parentElement.classList.contains('remove-item')) {
-    thisModule.removeItem(e.target.parentElement.parentElement);
-  } else if (e.target.closest('li')) {
-    thisModule.setItemToEdit(e.target);
-  }
-}
-
-export function checkIfItemExists(item) {
-  const itemsFromStorage = getItemsFromStorage();
-  return itemsFromStorage.includes(item);
-}
-
-export function setItemToEdit(item) {
-  isEditMode = true;
-
-  itemList
-    .querySelectorAll('li')
-    .forEach((i) => i.classList.remove('edit-mode'));
-
-  item.classList.add('edit-mode');
-  formBtn.innerHTML = '<i class="fa-solid fa-pen"></i>   Update Item';
-  formBtn.style.backgroundColor = '#228B22';
-  itemInput.value = item.textContent;
-}
-
-export function removeItem(item) {
-  if (
-    confirm(`Are you sure you want to remove the item "${item.textContent}"?`)
-  ) {
-    // Remove item from DOM
-    item.remove();
-
-    // Remove item from storage
-    removeItemFromStorage(item.textContent);
-
-    checkUI();
-  }
-}
-
-export function removeItemFromStorage(item) {
-  let itemsFromStorage = getItemsFromStorage();
-
-  // Filter out item to be removed
-  itemsFromStorage = itemsFromStorage.filter((i) => i !== item);
-
-  // Re-set to localstorage
-  localStorage.setItem('items', JSON.stringify(itemsFromStorage));
-}
-
-export function clearItems() {
-  while (itemList.firstChild) {
-    itemList.removeChild(itemList.firstChild);
-  }
-
-  // Clear from localStorage
-  localStorage.removeItem('items');
-
-  checkUI();
-}
-
-export function filterItems(e) {
-  const items = itemList.querySelectorAll('li');
-  const text = e.target.value.toLowerCase();
-
-  items.forEach((item) => {
-    const itemName = item.firstChild.textContent.toLowerCase();
-    if (itemName.indexOf(text) != -1) {
-      item.style.display = 'flex';
+    const newItem = this.anItemInput.uniqueValue;
+    if (this.aFormButton.isEditMode) {
+      new commands.RemoveEditingItemCommand(this.anItemList, this.aStorage).execute();
+      new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
+      this.#refreshUICommand.execute();
     } else {
-      item.style.display = 'none';
+      if (this.aStorage.hasItem(newItem)) {
+        this.#alertIfItemExists();
+        return;
+      }
+      new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
+      this.#refreshUICommand.execute();
     }
-  });
-}
-
-export function checkUI() {
-  itemInput.value = '';
-
-  const items = itemList.querySelectorAll('li');
-
-  if (items.length === 0) {
-    clearBtn.style.display = 'none';
-    itemFilter.style.display = 'none';
-  } else {
-    clearBtn.style.display = 'block';
-    itemFilter.style.display = 'block';
   }
 
-  formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
-  formBtn.style.backgroundColor = '#333';
+  #alertAddAnItem() {
+    alert('Please add an item');
+  }
 
-  isEditMode = false;
+  #alertIfItemExists(newItem) {
+    alert(`The item "${newItem}" already exists!`);
+  }
+
+  // MARK: - onClickItem
+
+  onClickItem(e) {
+    if (this.#isRemoveButtonClicked(e)) {
+      const listItemElement = e.target.parentElement.parentElement;
+      this.removeItem(listItemElement);
+    } else if (this.#isItemClicked(e)) {
+      const listItemElement = e.target;
+      this.setItemToEdit(listItemElement);
+    }
+  }
+
+  #isRemoveButtonClicked(e) {
+    const buttonElement = e.target.parentElement
+    return buttonElement.classList.contains('remove-item');
+  }
+
+  removeItem(item) {
+    new commands.RemoveItemCommand(this.anItemList, this.aStorage).execute(item);
+    this.#refreshUICommand.execute();
+  }
+
+  #isItemClicked(e) {
+    return e.target.closest(this.anItemList.LI_ELEMENT);
+  }
+
+  setItemToEdit(item) {
+    new commands.SetItemToEditCommand(this.anItemList, this.aFormButton, this.anItemInput).execute(item);
+  }
+
+  // MARK: - onClickClearAll
+
+  onClickClearAll() {
+    new commands.ClearAllCommand(this.anItemList, this.aStorage).execute();
+    this.#refreshUICommand.execute();
+  }
+
+  // MARK: - onEditingInput
+
+  onEditingInput(e) {
+    new commands.FilterItemsCommand(this.anItemList).execute(e.target.value);
+  }
+
+  // MARK: - onDOMContentLoad
+
+  onDOMContentLoad() {
+    new commands.DisplayAllItemsCommand(this.anItemList, this.aStorage).execute();
+    this.#refreshUICommand.execute();
+  }
 }
 
-// Initialize app
-export function init() {
-  // Event Listeners
-  itemForm.addEventListener('submit', onAddItemSubmit);
-  itemList.addEventListener('click', onClickItem);
-  clearBtn.addEventListener('click', clearItems);
-  itemFilter.addEventListener('input', filterItems);
-  document.addEventListener('DOMContentLoaded', displayItems);
+export const page = new ShoppingListPage();
 
-  checkUI();
-}
+// MARK: - 함수 실행문
 
-init();
+page.launchUI()

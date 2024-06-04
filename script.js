@@ -1,4 +1,3 @@
-import * as thisModule from './script.js';
 import * as storage from './storage.js';
 import * as elements from './elements.js';
 import * as commands from './commands.js';

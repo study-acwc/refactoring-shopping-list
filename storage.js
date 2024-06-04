@@ -16,8 +16,8 @@ export class Storage {
         this.#storage.removeItem(this.#key);
     }
     
-    saveAllItems(newItems) {
-        this.#storage.setItem(this.#key, JSON.stringify(newItems));
+    saveAllItems(items) {
+        this.#storage.setItem(this.#key, JSON.stringify(items));
     }
 
     addItem(item) {

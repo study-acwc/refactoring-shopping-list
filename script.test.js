@@ -18,7 +18,44 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
     test('아이템을 저장하지 않는다', () => {
         script.page.onAddItemSubmit(event);
 
-        expect(script.page.aStorage.allItems).toHaveLength(0);
+        expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: none;">
+      </div>
+
+      <ul id="item-list" class="items"></ul>
+
+      <button id="clear" class="btn-clear" style="display: none;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
     });
 });
 
@@ -35,20 +72,130 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
     test('아이템을 저장한다', () => {
         script.page.onAddItemSubmit(event);
 
-        expect(script.page.aStorage.allItems).toContain(inputValue);
+        expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>item1<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
     });
 
     test('화면에 새로운 아이템을 표시한다', () => {
       script.page.onAddItemSubmit(event);
 
-      let elements = filteredItemElementsBy(inputValue);
-      expect(elements).toHaveLength(1);
+      expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>item1<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 
     test("입력값을 지운다.", () => {
         script.page.onAddItemSubmit(event);
 
-        expect(itemInputValue()).toBe('');
+        expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>item1<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
     });
 });
 
@@ -65,14 +212,87 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
     test('아이템을 중복 저장하지 않는다', () => {
         script.page.onAddItemSubmit(event);
 
-        const filteredItems = filteredLocalStorageItemsBy(inputValue);
-        expect(filteredItems).toHaveLength(1);
+        expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: none;">
+      </div>
+
+      <ul id="item-list" class="items"></ul>
+
+      <button id="clear" class="btn-clear" style="display: none;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
     });
 
     test("입력값을 지우지 않는다", () => {
         script.page.onAddItemSubmit(event);
 
-        expect(itemInputValue()).toBe(inputValue);
+        expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: none;">
+      </div>
+
+      <ul id="item-list" class="items"></ul>
+
+      <button id="clear" class="btn-clear" style="display: none;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
     });
 });
 
@@ -96,39 +316,259 @@ describe('Update Item 버튼이 눌렸을 때', () => {
     test('저장된 아이템을 제거한다', () => {
         script.page.onAddItemSubmit(event);
 
-        expect(script.page.aStorage.allItems).not.toContain(itemTitle);
+        expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>updatedItem<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
     });
 
     test('화면에서 해당 아이템을 제거한다', () => {
       script.page.onAddItemSubmit(event);
 
-      let elements = filteredItemElementsBy(itemTitle);
-      expect(elements).toHaveLength(0);
+      expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>updatedItem<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
     });
 
     test("아이템 편집 상태를 해제한다", () => {
         script.page.onAddItemSubmit(event);
 
-        expect(script.page.aFormButton.isEditMode).toBeFalsy();
+        expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>updatedItem<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
     });
 
     test('새로운 아이템을 저장한다', () => {
         script.page.onAddItemSubmit(event);
 
-        expect(script.page.aStorage.allItems).toContain(updatedItemTitle);
+        expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>updatedItem<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
     });
 
     test('화면에 새로운 아이템을 표시한다', () => {
         script.page.onAddItemSubmit(event);
 
-        let elements = filteredItemElementsBy(updatedItemTitle);
-        expect(elements).toHaveLength(1);
+        expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>updatedItem<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
     });
 
     test("입력값을 지운다", () => {
         script.page.onAddItemSubmit(event);
 
-        expect(itemInputValue()).toBe('');
+        expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>updatedItem<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
     });
 });
 
@@ -152,8 +592,44 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
     };
     script.page.onClickItem(event);
 
-    // 메서드 호출 여부로 테스트 성공여부를 검증(= 행위 검증)
-    expect(confirm).toHaveBeenCalled();
+   expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: none;">
+      </div>
+
+      <ul id="item-list" class="items"></ul>
+
+      <button id="clear" class="btn-clear" style="display: none;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 });
 
@@ -176,44 +652,180 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   test('아이템 편집 상태를 활성화한다', () => {
     script.page.onClickItem(itemClickEvent);
 
-    expect(script.page.aFormButton.isEditMode).toBeTruthy();
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(34, 139, 34);"><i class="fa-solid fa-pen"></i>   Update Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li class="edit-mode">item1<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 
   test('해당 아이템을 편집 모드로 표시한다', () => {
     script.page.onClickItem(itemClickEvent);
 
-    const filteredItems = itemElements().filter(
-      (i) => i.textContent.includes(clickedElement.textContent) && editingItemElement(i)
-    );
-    expect(filteredItems).toHaveLength(1);
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(34, 139, 34);"><i class="fa-solid fa-pen"></i>   Update Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li class="edit-mode">item1<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 
   test('해당되지 않는 아이템은 편집 모드로 표시하지 않는다', () => {
     script.page.onClickItem(itemClickEvent);
   
-    const filteredItems = itemElements().filter(
-      (i) => false == i.textContent.includes(clickedElement.textContent) && editingItemElement(i)
-    );
-    expect(filteredItems).toHaveLength(0);
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(34, 139, 34);"><i class="fa-solid fa-pen"></i>   Update Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li class="edit-mode">item1<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 
   test('검색어 입력창을 편집할 아이템의 텍스트로 채운다', () => {
     script.page.onClickItem(itemClickEvent);
 
-    expect(itemInputValue()).toBe(clickedElement.textContent);
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(34, 139, 34);"><i class="fa-solid fa-pen"></i>   Update Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li class="edit-mode">item1<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 });
 
 describe('아이템 영역이 아닌 위치가 눌렸을 때', () => {
-  let removeItemSpy;
-  let setItemToEditSpy;
   let itemClickEvent;
 
   beforeEach(() => {
-    // script 모듈의 removeItem과 setItemToEdit 함수를 스파이가 모킹한다.
-    removeItemSpy = jest.spyOn(script.page, 'removeItem');
-    setItemToEditSpy = jest.spyOn(script.page, 'setItemToEdit');
-
     itemClickEvent = {
       target: {
         parentElement: {
@@ -234,8 +846,44 @@ describe('아이템 영역이 아닌 위치가 눌렸을 때', () => {
   test('아이템 삭제나 편집 동작을 수행하지 않는다', () => {
     script.page.onClickItem(itemClickEvent);
 
-    expect(removeItemSpy).not.toHaveBeenCalled();
-    expect(setItemToEditSpy).not.toHaveBeenCalled();
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: none;">
+      </div>
+
+      <ul id="item-list" class="items"></ul>
+
+      <button id="clear" class="btn-clear" style="display: none;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 });
 
@@ -261,14 +909,87 @@ describe('삭제 여부 확인 창에서 취소 버튼이 눌렸을 때', () => 
   test('아이템을 저장소에서 제거하지 않는다', () => {
     script.page.removeItem(item);
 
-    expect(script.page.aStorage.allItems).toContain(itemTitle);
+   expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>item1<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 
   test('아이템을 DOM에서 제거하지 않는다', () => {
     script.page.removeItem(item);
 
-    expect(itemElements().map( (i) => i.textContent))
-      .toContain(itemTitle);
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>item1<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 });
 
@@ -294,19 +1015,130 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   test('아이템을 저장소에서 제거한다', () => {
     script.page.removeItem(item);
 
-    expect(script.page.aStorage.allItems).not.toContain(itemTitle);
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: none;">
+      </div>
+
+      <ul id="item-list" class="items"></ul>
+
+      <button id="clear" class="btn-clear" style="display: none;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 
   test('필터링 영역을 표시하지 않는다', () => {
     script.page.removeItem(item);
 
-    expect(script.page.anItemFilter.isHidden).toBeTruthy();
+   expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: none;">
+      </div>
+
+      <ul id="item-list" class="items"></ul>
+
+      <button id="clear" class="btn-clear" style="display: none;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 
   test('전체 삭제 버튼을 표시하지 않는다', () => {
     script.page.removeItem(item);
 
-    expect(script.page.aClearButton.isHidden).toBeTruthy();
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: none;">
+      </div>
+
+      <ul id="item-list" class="items"></ul>
+
+      <button id="clear" class="btn-clear" style="display: none;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 });
 
@@ -333,19 +1165,130 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   test('아이템을 저장소에서 제거한다', () => {
     script.page.removeItem(item1);
 
-    expect(script.page.aStorage.allItems).not.toContain(itemTitle1);
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>item2<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 
   test('필터링 영역을 표시한다', () => {
     script.page.removeItem(item1);
 
-    expect(script.page.anItemFilter.isDisplayed).toBeTruthy();
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>item2<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 
   test('전체 삭제 버튼을 표시하지 않는다', () => {
     script.page.removeItem(item1);
 
-    expect(script.page.aClearButton.isDisplayed).toBeTruthy();
+   expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>item2<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 });
 
@@ -367,19 +1310,87 @@ describe('검색어를 입력했을 때', () => {
   test('검색 결과에 해당하는 아이템을 표시한다', () => {
     script.page.onEditingInput(searchKeywordEvent);
 
-    const filteredItems = itemElements().filter(
-      (i) => i.textContent.includes(searchKeyword) && hasFilteredItemStyle(i)
-    );
-    expect(filteredItems).toHaveLength(1);
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li style="display: flex;">notebook<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li><li style="display: none;">ipad<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 
   test('검색 결과에 해당하지 않는 아이템은 표시하지 않는다', () => {
     script.page.onEditingInput(searchKeywordEvent);
     
-    const filteredItems = itemElements().filter(
-      (i) => i.textContent != searchKeyword && hasUnfilteredItemStyle(i)
-    );
-    expect(filteredItems).toHaveLength(1);
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li style="display: flex;">notebook<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li><li style="display: none;">ipad<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 });
 
@@ -391,13 +1402,87 @@ describe('Clear All 버튼이 눌렸을 때', () => {
   test('모든 아이템을 저장소에서 제거한다', () => {
     script.page.onClickClearAll();
 
-    expect(script.page.aStorage.allItems).toHaveLength(0);
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: none;">
+      </div>
+
+      <ul id="item-list" class="items"></ul>
+
+      <button id="clear" class="btn-clear" style="display: none;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 
   test('모든 아이템을 화면에서 제거한다', () => {
     script.page.onClickClearAll();
 
-    expect(itemElements()).toHaveLength(0);
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: none;">
+      </div>
+
+      <ul id="item-list" class="items"></ul>
+
+      <button id="clear" class="btn-clear" style="display: none;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 });
 
@@ -414,22 +1499,130 @@ describe('Dom Content가 로드되었을 때', () => {
       (i) => i.textContent
     );
 
-    // items 배열과 contents 배열이 자료형과 내용이 완전히 동일한지를 검사한다. 
-    // 만약 두 배열의 요소의 순서, 자료형, 내용이 완전히 같으면 테스트가 통과한다.
-    // 하지만 만약 두 배열이 다른 요소 순서나 다른 요소를 포함하거나 자료형이 다르면 테스트는 실패하게 된다.
-    expect(items).toStrictEqual(contents);
+   expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>item1<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li><li>item2<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 
   test('입력필드가 비어있어야 한다', () => {
     script.page.onDOMContentLoad();
 
-    expect(itemInputValue()).toBe('');
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>item1<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li><li>item2<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 
   test('아이템 편집상태가 아니어야 한다', () => {
     script.page.onDOMContentLoad();
 
-    expect(script.page.aFormButton.isEditMode).toBeFalsy();
+    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(51, 51, 51);"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li>item1<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li><li>item2<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
   });
 });
 
@@ -442,16 +1635,8 @@ function dummyUIEvent() {
   };
 }
 
-function filteredLocalStorageItemsBy(itemTitle) {
-  return script.page.aStorage.allItems.filter(item => item === itemTitle);
-}
-
 function setItemInputValue(value) {
   script.page.anItemInput.updateValue(value);
-}
-
-function itemInputValue() {
-  return script.page.anItemInput.uniqueValue;
 }
 
 function itemElements() {
@@ -462,20 +1647,8 @@ function filteredItemElementsBy(itemTitle) {
   return itemElements().filter((i) => i.textContent == itemTitle);
 }
 
-function hasFilteredItemStyle(element) {
-  return element.style.display == elements.CSSDisplay.FLEX;
-}
-
-function hasUnfilteredItemStyle(element) {
-  return element.style.display == elements.CSSDisplay.NONE;
-}
-
 function deleteButtonInItemElement(element) {
   return element.lastElementChild.lastElementChild;
-}
-
-function editingItemElement(element) {
-  return element.classList.contains(script.page.anItemList.EDITMODE_ELEMENT_CLASS)
 }
 
 function updateUserInputAndSubmitAdd(itemTitle) {

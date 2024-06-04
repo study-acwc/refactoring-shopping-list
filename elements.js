@@ -101,16 +101,6 @@ export class ClearButton {
       this.#element = element;
   }
 
-  // only for unit tesing
-  get isHidden() {
-    return this.#element.style.display == CSSDisplay.NONE;
-  }
-
-  // only for unit tesing
-  get isDisplayed() {
-    return this.#element.style.display == CSSDisplay.BLOCK;
-  }
-
   hide() {
     this.#element.style.display = CSSDisplay.NONE;
   }
@@ -129,16 +119,6 @@ export class ItemFilter {
 
     constructor(element) {
         this.#element = element;
-    }
-
-    // only for unit tesing
-    get isHidden() {
-        return this.#element.style.display == CSSDisplay.NONE;
-    }
-
-    // only for unit tesing
-    get isDisplayed() {
-        return this.#element.style.display == CSSDisplay.BLOCK;
     }
 
     hide() {

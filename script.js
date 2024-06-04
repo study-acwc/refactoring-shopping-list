@@ -4,20 +4,24 @@ import * as commands from './commands.js';
 
 // MARK: - 변수 선언
 
-class ShoppingListPage {
+export class ShoppingListPage {
   #refreshUICommand;
   #anItemForm;
+  #aClearButton;
+  #anItemFilter;
+  #aFormButton;
+
 
   constructor() {
     this.aStorage = new storage.Storage('items');
     this.anItemList = new elements.ItemElementList(document.getElementById('item-list'));
     this.#anItemForm = new elements.ItemForm(document.getElementById('item-form'));
-    this.aClearButton = new elements.ClearButton(document.getElementById('clear'));
-    this.anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
+    this.#aClearButton = new elements.ClearButton(document.getElementById('clear'));
+    this.#anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
     this.anItemInput = new elements.ItemInput(document.getElementById('item-input'));
-    this.aFormButton = new elements.FormButton(this.#anItemForm.formButton);
+    this.#aFormButton = new elements.FormButton(this.#anItemForm.formButton);
     
-    this.#refreshUICommand = new commands.refreshUICommand(this.anItemInput, this.anItemList, this.aFormButton, this.aClearButton, this.anItemFilter);
+    this.#refreshUICommand = new commands.refreshUICommand(this.anItemInput, this.anItemList, this.#aFormButton, this.#aClearButton, this.#anItemFilter);
   }
 
   launchUI() {
@@ -28,8 +32,8 @@ class ShoppingListPage {
   #registerEventListeners() {
     this.#anItemForm.addListener(this.onAddItemSubmit);
     this.anItemList.addListener(this.onClickItem);
-    this.aClearButton.addListener(this.onClickClearAll);
-    this.anItemFilter.addListener(this.onEditingInput);
+    this.#aClearButton.addListener(this.onClickClearAll);
+    this.#anItemFilter.addListener(this.onEditingInput);
     document.addEventListener('DOMContentLoaded', this.onDOMContentLoad);
   }
 
@@ -42,7 +46,7 @@ class ShoppingListPage {
       return;
     }
     const newItem = this.anItemInput.uniqueValue;
-    if (this.aFormButton.isEditMode) {
+    if (this.#aFormButton.isEditMode) {
       new commands.RemoveEditingItemCommand(this.anItemList, this.aStorage).execute();
       new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
       this.#refreshUICommand.execute();
@@ -91,7 +95,7 @@ class ShoppingListPage {
   }
 
   setItemToEdit(item) {
-    new commands.SetItemToEditCommand(this.anItemList, this.aFormButton, this.anItemInput).execute(item);
+    new commands.SetItemToEditCommand(this.anItemList, this.#aFormButton, this.anItemInput).execute(item);
   }
 
   // MARK: - onClickClearAll

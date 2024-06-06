@@ -1,11 +1,11 @@
 import * as innerHTMLForTest from './scriptTestHTMLSetup.js';
-import * as script from './script.js';
+import { controller } from './script.js';
 import * as elements from './elements.js';
 
 window.alert = jest.fn();
 
 beforeEach(() => {
-  script.page.onClickClearAll();
+  controller.view.onClickClearAll();
 });
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
@@ -16,7 +16,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
     });
 
     test('아이템을 저장하지 않는다', () => {
-        script.page.onAddItemSubmit(event);
+        controller.view.onAddItemSubmit(event);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -66,11 +66,11 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
         event = dummyUIEvent();
         inputValue = 'item1';
         setItemInputValue(inputValue);
-        script.page.aStorage.saveAllItems(['item2', 'item3']);
+        controller.view.aStorage.saveAllItems(['item2', 'item3']);
     });
 
     test('아이템을 저장하고, 화면에 새로운 아이템을 표시하고, 입력값을 지운다.', () => {
-        script.page.onAddItemSubmit(event);
+        controller.view.onAddItemSubmit(event);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -120,11 +120,11 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
         event = dummyUIEvent();
         inputValue = 'item1';
         setItemInputValue(inputValue);
-        script.page.aStorage.saveAllItems([inputValue]);
+        controller.view.aStorage.saveAllItems([inputValue]);
     });
 
     test('아이템을 중복 저장하지 않고, 입력값을 지우지 않는다', () => {
-        script.page.onAddItemSubmit(event);
+        controller.view.onAddItemSubmit(event);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -179,13 +179,13 @@ describe('Update Item 버튼이 눌렸을 때', () => {
       updateUserInputAndSubmitAdd(itemTitle);
       // 2
       const filtered = filteredItemElementsBy(itemTitle);
-      script.page.setItemToEdit(filtered[0]);
+      controller.view.setItemToEdit(filtered[0]);
       // 3
       setItemInputValue(updatedItemTitle);
     });
 
     test('저장된 아이템을 제거하고, 화면에서 해당 아이템을 제거하고, 아이템 편집 상태를 해제하고, 새로운 아이템을 저장하고, 화면에 새로운 아이템을 표시하고, 입력값을 지운다', () => {
-        script.page.onAddItemSubmit(event);
+        controller.view.onAddItemSubmit(event);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -246,7 +246,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
     let event = {
       target: clickedElement
     };
-    script.page.onClickItem(event);
+    controller.view.onClickItem(event);
 
    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -306,7 +306,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   });
 
   test('아이템 편집 상태를 활성화하고, 해당 아이템을 편집 모드로 표시하고, 해당되지 않는 아이템은 편집 모드로 표시하지 않고, 검색어 입력창을 편집할 아이템의 텍스트로 채운다', () => {
-    script.page.onClickItem(itemClickEvent);
+    controller.view.onClickItem(itemClickEvent);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -371,7 +371,7 @@ describe('아이템 영역이 아닌 위치가 눌렸을 때', () => {
   });
 
   test('아이템 삭제나 편집 동작을 수행하지 않는다', () => {
-    script.page.onClickItem(itemClickEvent);
+    controller.view.onClickItem(itemClickEvent);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -434,7 +434,7 @@ describe('삭제 여부 확인 창에서 취소 버튼이 눌렸을 때', () => 
   });
 
   test('아이템을 저장소에서 제거하지 않고, 아이템을 DOM에서 제거하지 않는다', () => {
-    script.page.removeItem(item);
+    controller.view.removeItem(item);
 
    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -497,7 +497,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   });
 
   test('아이템을 저장소에서 제거하고, 필터링 영역을 표시하지 않고, 전체 삭제 버튼을 표시하지 않는다', () => {
-    script.page.removeItem(item);
+    controller.view.removeItem(item);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -561,7 +561,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   });
 
   test('아이템을 저장소에서 제거하고, 필터링 영역을 표시하고, 전체 삭제 버튼을 표시하지 않는다', () => {
-    script.page.removeItem(item1);
+    controller.view.removeItem(item1);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -620,7 +620,7 @@ describe('검색어를 입력했을 때', () => {
   });
 
   test('검색 결과에 해당하는 아이템을 표시하고, 검색 결과에 해당하지 않는 아이템은 표시하지 않는다', () => {
-    script.page.onEditingInput(searchKeywordEvent);
+    controller.view.onEditingInput(searchKeywordEvent);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -665,11 +665,11 @@ describe('검색어를 입력했을 때', () => {
 
 describe('Clear All 버튼이 눌렸을 때', () => {
   beforeEach(() => {
-    script.page.aStorage.saveAllItems(['item1', 'item2']);
+    controller.view.aStorage.saveAllItems(['item1', 'item2']);
   });
 
   test('모든 아이템을 저장소에서 제거한다', () => {
-    script.page.onClickClearAll();
+    controller.view.onClickClearAll();
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -712,7 +712,7 @@ describe('Clear All 버튼이 눌렸을 때', () => {
   });
 
   test('모든 아이템을 화면에서 제거한다', () => {
-    script.page.onClickClearAll();
+    controller.view.onClickClearAll();
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -758,11 +758,11 @@ describe('Clear All 버튼이 눌렸을 때', () => {
 describe('Dom Content가 로드되었을 때', () => {
   let contents = ['item1', 'item2'];
   beforeEach(() => {
-    script.page.aStorage.saveAllItems(contents);
+    controller.view.aStorage.saveAllItems(contents);
   });
 
   test('저장된 아이템을 화면에 표시하고, 입력필드가 비어있어야 허고, 아이템 편집상태가 아니어야 한다', () => {
-    script.page.onDOMContentLoad();
+    controller.view.onDOMContentLoad();
     
     const items = itemElements().map(
       (i) => i.textContent
@@ -819,11 +819,11 @@ function dummyUIEvent() {
 }
 
 function setItemInputValue(value) {
-  script.page.anItemInput.updateValue(value);
+  controller.view.anItemInput.updateValue(value);
 }
 
 function itemElements() {
-  return Array.from(script.page.anItemList.allItems);
+  return Array.from(controller.view.anItemList.allItems);
 }
 
 function filteredItemElementsBy(itemTitle) {
@@ -836,5 +836,5 @@ function deleteButtonInItemElement(element) {
 
 function updateUserInputAndSubmitAdd(itemTitle) {
   setItemInputValue(itemTitle);
-  script.page.onAddItemSubmit(dummyUIEvent());
+  controller.view.onAddItemSubmit(dummyUIEvent());
 }

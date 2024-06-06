@@ -2,7 +2,17 @@ import * as storage from './storage.js';
 import * as elements from './elements.js';
 import * as commands from './commands.js';
 
-// MARK: - 변수 선언
+class ShoppingListPageController {
+    view;
+
+    constructor(view) {
+        this.view = view;
+    }
+
+    launchUI() {
+        this.view.launchUI();
+    }
+}
 
 export class ShoppingListPage {
   #refreshUICommand;
@@ -125,8 +135,8 @@ export class ShoppingListPage {
   }
 }
 
-export const page = new ShoppingListPage();
+export const controller = new ShoppingListPageController(new ShoppingListPage());
 
 // MARK: - 함수 실행문
 
-page.launchUI()
+controller.launchUI();

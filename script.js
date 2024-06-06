@@ -2,13 +2,13 @@ import * as storage from './storage.js';
 import * as elements from './elements.js';
 import * as commands from './commands.js';
 
-class ShoppingListPageController {
+export class ShoppingListPageController {
     #view;
-    aStorage;
+    #aStorage;
 
     constructor(view, aStorage) {
         this.#view = view;
-        this.aStorage = aStorage;
+        this.#aStorage = aStorage;
     }
 
     launchUI() {
@@ -34,8 +34,8 @@ class ShoppingListPageController {
         this.#view.alertAddAnItem();
         return;
       }
-      this.aStorage.removeItem(editedItemTitle);
-      this.aStorage.addItem(newItemTitle);
+      this.#aStorage.removeItem(editedItemTitle);
+      this.#aStorage.addItem(newItemTitle);
       this.#view.replaceEditingItemWith(newItemTitle);
     }
 
@@ -44,11 +44,11 @@ class ShoppingListPageController {
         this.#view.alertAddAnItem();
         return;
       }
-      if (this.aStorage.hasItem(newItemTitle)) {
+      if (this.#aStorage.hasItem(newItemTitle)) {
         this.#view.alertIfItemExists(newItemTitle);
         return;
       }
-      this.aStorage.addItem(newItemTitle);
+      this.#aStorage.addItem(newItemTitle);
       this.#view.addItemWith(newItemTitle);
     }
 
@@ -67,14 +67,14 @@ class ShoppingListPageController {
     }
 
     onItemRemovalConfirmed(itemTitle) {
-      this.aStorage.removeItem(itemTitle);
+      this.#aStorage.removeItem(itemTitle);
       this.#view.removeItem(itemTitle);
     }
 
     // MARK: - onClickClearAll
 
     onClickClearAll() {
-      this.aStorage.clearItems();
+      this.#aStorage.clearItems();
       this.#view.onClickClearAll();
     }
 
@@ -87,7 +87,7 @@ class ShoppingListPageController {
     // MARK: - onDOMContentLoad
 
     onDOMContentLoad() {
-      const itemTitleList = this.aStorage.allItems;
+      const itemTitleList = this.#aStorage.allItems;
       this.#view.onDOMContentLoad(itemTitleList);
     }
 }

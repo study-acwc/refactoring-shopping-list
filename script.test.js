@@ -16,7 +16,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
     });
 
     test('아이템을 저장하지 않는다', () => {
-        controller.view.onAddItemSubmit(event);
+        controller.onAddItemSubmit(event);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -70,7 +70,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
     });
 
     test('아이템을 저장하고, 화면에 새로운 아이템을 표시하고, 입력값을 지운다.', () => {
-        controller.view.onAddItemSubmit(event);
+        controller.onAddItemSubmit(event);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -124,7 +124,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
     });
 
     test('아이템을 중복 저장하지 않고, 입력값을 지우지 않는다', () => {
-        controller.view.onAddItemSubmit(event);
+        controller.onAddItemSubmit(event);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -185,7 +185,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
     });
 
     test('저장된 아이템을 제거하고, 화면에서 해당 아이템을 제거하고, 아이템 편집 상태를 해제하고, 새로운 아이템을 저장하고, 화면에 새로운 아이템을 표시하고, 입력값을 지운다', () => {
-        controller.view.onAddItemSubmit(event);
+        controller.onAddItemSubmit(event);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -246,7 +246,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
     let event = {
       target: clickedElement
     };
-    controller.view.onClickItem(event);
+    controller.onClickItem(event);
 
    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -306,7 +306,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   });
 
   test('아이템 편집 상태를 활성화하고, 해당 아이템을 편집 모드로 표시하고, 해당되지 않는 아이템은 편집 모드로 표시하지 않고, 검색어 입력창을 편집할 아이템의 텍스트로 채운다', () => {
-    controller.view.onClickItem(itemClickEvent);
+    controller.onClickItem(itemClickEvent);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -371,7 +371,7 @@ describe('아이템 영역이 아닌 위치가 눌렸을 때', () => {
   });
 
   test('아이템 삭제나 편집 동작을 수행하지 않는다', () => {
-    controller.view.onClickItem(itemClickEvent);
+    controller.onClickItem(itemClickEvent);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -620,7 +620,7 @@ describe('검색어를 입력했을 때', () => {
   });
 
   test('검색 결과에 해당하는 아이템을 표시하고, 검색 결과에 해당하지 않는 아이템은 표시하지 않는다', () => {
-    controller.view.onEditingInput(searchKeywordEvent);
+    controller.onEditingInput(searchKeywordEvent);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -669,7 +669,7 @@ describe('Clear All 버튼이 눌렸을 때', () => {
   });
 
   test('모든 아이템을 저장소에서 제거한다', () => {
-    controller.view.onClickClearAll();
+    controller.onClickClearAll();
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -762,7 +762,7 @@ describe('Dom Content가 로드되었을 때', () => {
   });
 
   test('저장된 아이템을 화면에 표시하고, 입력필드가 비어있어야 허고, 아이템 편집상태가 아니어야 한다', () => {
-    controller.view.onDOMContentLoad();
+    controller.onDOMContentLoad();
     
     const items = itemElements().map(
       (i) => i.textContent

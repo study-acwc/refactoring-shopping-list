@@ -10,7 +10,46 @@ class ShoppingListPageController {
     }
 
     launchUI() {
+        this.#registerEventListeners();
         this.view.launchUI();
+    }
+
+    #registerEventListeners() {
+      this.view.bindAddItem(this.onAddItemSubmit.bind(this));
+      this.view.bindClearAll(this.onClickClearAll.bind(this));
+      this.view.bindClickItem(this.onClickItem.bind(this));
+      this.view.bindEditingInput(this.onEditingInput.bind(this));
+      this.view.bindDOMContentLoaded(this.onDOMContentLoad.bind(this));
+    }  
+
+    // MARK: - onAddItemSubmit
+
+    onAddItemSubmit(e) {
+      this.view.onAddItemSubmit(e);
+    }
+
+    // MARK: - onClickItem
+
+    onClickItem(e) {
+      this.view.onClickItem(e);
+    }
+
+    // MARK: - onClickClearAll
+
+    onClickClearAll() {
+      this.view.onClickClearAll();
+    }
+
+    // MARK: - onEditingInput
+
+    onEditingInput(e) {
+      this.view.onEditingInput(e);
+    }
+
+    // MARK: - onDOMContentLoad
+
+    onDOMContentLoad() {
+      this.view.onDOMContentLoad();
     }
 }
 
@@ -34,18 +73,29 @@ export class ShoppingListPage {
   }
 
   launchUI() {
-    this.#registerEventListeners();
     this.#refreshUICommand.execute();
   }
 
-  #registerEventListeners() {
-    this.#anItemForm.addListener(this.onAddItemSubmit);
-    this.anItemList.addListener(this.onClickItem);
-    this.#aClearButton.addListener(this.onClickClearAll);
-    this.#anItemFilter.addListener(this.onEditingInput);
-    document.addEventListener('DOMContentLoaded', this.onDOMContentLoad);
+  bindAddItem(handler) {
+    this.#anItemForm.addListener(handler);
   }
 
+  bindClearAll(handler) {
+    this.#aClearButton.addListener(handler);
+  }
+
+  bindClickItem(handler) {
+    this.anItemList.addListener(handler);
+  }
+
+  bindEditingInput(handler) {
+    this.#anItemFilter.addListener(handler);
+  }
+
+  bindDOMContentLoaded(handler) {
+    document.addEventListener('DOMContentLoaded', handler);
+  }
+  
   // MARK: - onAddItemSubmit
 
   onAddItemSubmit(e) {

@@ -2,7 +2,7 @@ import * as storage from './storage.js';
 import * as elements from './elements.js';
 import * as commands from './commands.js';
 
-export class ShoppingListPageController {
+export class ShoppingListPagePresenter {
     #view;
     #aStorage;
 
@@ -208,16 +208,16 @@ export class ShoppingListPage {
 }
 
 
-let controller;
+let presenter;
 
 function launchApp() {
   const view = new ShoppingListPage();
-  controller = new ShoppingListPageController(
+  presenter = new ShoppingListPagePresenter(
     view,
     new storage.Storage('items')
   );
-  view.setController(controller);
-  controller.launchUI();
+  view.setController(presenter);
+  presenter.launchUI();
 }
 
 

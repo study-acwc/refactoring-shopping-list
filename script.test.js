@@ -4,23 +4,23 @@ import * as elements from './elements.js';
 import * as storage from './storage.js';
 
 window.alert = jest.fn();
-let ctrl;
+let presenter;
 let model;
 let view;
 
 beforeEach(() => {
   view = new script.ShoppingListPage();
   model = new storage.Storage('items');
-  ctrl = new script.ShoppingListPageController(
+  presenter = new script.ShoppingListPagePresenter(
     view,
     model
   );
-  view.setController(ctrl);
-  ctrl.launchUI();
+  view.setController(presenter);
+  presenter.launchUI();
 });
 
 beforeEach(() => {
-  ctrl.onClickClearAll();
+  presenter.onClickClearAll();
 });
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
@@ -30,7 +30,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
     });
 
     test('아이템을 저장하지 않는다', () => {
-        ctrl.onAddItemSubmit(newItemTitle);
+        presenter.onAddItemSubmit(newItemTitle);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -78,12 +78,12 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
     let editingItemTitle;
     beforeEach(() => {
         inputValue = 'item1';
-        ctrl.onAddItemSubmit('item2');
-        ctrl.onAddItemSubmit('item3');
+        presenter.onAddItemSubmit('item2');
+        presenter.onAddItemSubmit('item3');
     });
 
     test('아이템을 저장하고, 화면에 새로운 아이템을 표시하고, 입력값을 지운다.', () => {
-        ctrl.onAddItemSubmit(inputValue);
+        presenter.onAddItemSubmit(inputValue);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -130,11 +130,11 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
     let inputValue;
     beforeEach(() => {
         inputValue = 'item1';
-        ctrl.onAddItemSubmit(inputValue);
+        presenter.onAddItemSubmit(inputValue);
     });
 
     test('아이템을 중복 저장하지 않고, 입력값을 지우지 않는다', () => {
-        ctrl.onAddItemSubmit(inputValue);
+        presenter.onAddItemSubmit(inputValue);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -184,13 +184,13 @@ describe('Update Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
     itemTitle = 'oldItem';
     updatedItemTitle = '';
     // 1
-    ctrl.onAddItemSubmit(itemTitle);
+    presenter.onAddItemSubmit(itemTitle);
     // 2
-    ctrl.onClickItemContents(itemTitle);
+    presenter.onClickItemContents(itemTitle);
   });
 
   test('업데이트 액션을 수행하지 않는다', () => {
-      ctrl.onUpdateItemSubmit(itemTitle, updatedItemTitle);
+      presenter.onUpdateItemSubmit(itemTitle, updatedItemTitle);
 
       expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -240,13 +240,13 @@ describe('Update Item 버튼이 눌렸을 때, 입력값이 있으면', () => {
       itemTitle = 'oldItem';
       updatedItemTitle = 'updatedItem';
       // 1
-      ctrl.onAddItemSubmit(itemTitle);
+      presenter.onAddItemSubmit(itemTitle);
       // 2
-      ctrl.onClickItemContents(itemTitle);
+      presenter.onClickItemContents(itemTitle);
     });
 
     test('저장된 아이템을 제거하고, 화면에서 해당 아이템을 제거하고, 아이템 편집 상태를 해제하고, 새로운 아이템을 저장하고, 화면에 새로운 아이템을 표시하고, 입력값을 지운다', () => {
-        ctrl.onUpdateItemSubmit(itemTitle, updatedItemTitle);
+        presenter.onUpdateItemSubmit(itemTitle, updatedItemTitle);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -295,13 +295,13 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
   beforeEach(() => {;
     itemTitle = 'item1';
     // 1
-    ctrl.onAddItemSubmit(itemTitle);
+    presenter.onAddItemSubmit(itemTitle);
     // 2
     global.confirm = jest.fn();
   });
 
   test('삭제 여부 확인 창을 띄운다', () => {
-    ctrl.onClickItemDeleteButton(itemTitle);
+    presenter.onClickItemDeleteButton(itemTitle);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -349,11 +349,11 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   beforeEach(() => {
     itemTitle = 'item1';
     // 1
-    ctrl.onAddItemSubmit(itemTitle);
+    presenter.onAddItemSubmit(itemTitle);
   });
 
   test('아이템 편집 상태를 활성화하고, 해당 아이템을 편집 모드로 표시하고, 해당되지 않는 아이템은 편집 모드로 표시하지 않고, 검색어 입력창을 편집할 아이템의 텍스트로 채운다', () => {
-    ctrl.onClickItemContents(itemTitle);
+    presenter.onClickItemContents(itemTitle);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -403,13 +403,13 @@ describe('삭제 여부 확인 창에서 취소 버튼이 눌렸을 때', () => 
   beforeEach(() => {
     itemTitle = 'item1';
     // 1
-    ctrl.onAddItemSubmit(itemTitle);
+    presenter.onAddItemSubmit(itemTitle);
     // 2
     global.confirm = jest.fn().mockReturnValue(false);
   });
 
   test('아이템을 저장소에서 제거하지 않고, 아이템을 DOM에서 제거하지 않는다', () => {
-    ctrl.onClickItemDeleteButton(itemTitle);
+    presenter.onClickItemDeleteButton(itemTitle);
 
    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -459,15 +459,15 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   beforeEach(() => {
     itemTitle = 'item1';
     // 1
-    ctrl.onAddItemSubmit(itemTitle);
+    presenter.onAddItemSubmit(itemTitle);
     // 2
-    ctrl.onClickItemContents(itemTitle);
+    presenter.onClickItemContents(itemTitle);
     // 3
     global.confirm = jest.fn().mockReturnValue(true);
   });
 
   test('아이템을 저장소에서 제거하고, 필터링 영역을 표시하지 않고, 전체 삭제 버튼을 표시하지 않는다', () => {
-    ctrl.onClickItemDeleteButton(itemTitle);
+    presenter.onClickItemDeleteButton(itemTitle);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -516,14 +516,14 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   beforeEach(() => {
     itemTitle1 = 'item1';
     // 1
-    ctrl.onAddItemSubmit(itemTitle1);
-    ctrl.onAddItemSubmit('item2');
+    presenter.onAddItemSubmit(itemTitle1);
+    presenter.onAddItemSubmit('item2');
     // 2
     global.confirm = jest.fn().mockReturnValue(true);
   });
 
   test('아이템을 저장소에서 제거하고, 필터링 영역을 표시하고, 전체 삭제 버튼을 표시한다', () => {
-    ctrl.onClickItemDeleteButton(itemTitle1);
+    presenter.onClickItemDeleteButton(itemTitle1);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -571,8 +571,8 @@ describe('검색어를 입력했을 때', () => {
   let searchKeywordEvent;
   beforeEach(() => {
     // 1
-    ctrl.onAddItemSubmit('notebook');
-    ctrl.onAddItemSubmit('ipad');
+    presenter.onAddItemSubmit('notebook');
+    presenter.onAddItemSubmit('ipad');
     // 2
     searchKeyword = 'note';
     searchKeywordEvent = {
@@ -582,7 +582,7 @@ describe('검색어를 입력했을 때', () => {
   });
 
   test('검색 결과에 해당하는 아이템을 표시하고, 검색 결과에 해당하지 않는 아이템은 표시하지 않는다', () => {
-    ctrl.onEditingInput(searchKeywordEvent);
+    presenter.onEditingInput(searchKeywordEvent);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -631,7 +631,7 @@ describe('Clear All 버튼이 눌렸을 때', () => {
   });
 
   test('모든 아이템을 저장소에서 제거한다', () => {
-    ctrl.onClickClearAll();
+    presenter.onClickClearAll();
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -674,7 +674,7 @@ describe('Clear All 버튼이 눌렸을 때', () => {
   });
 
   test('모든 아이템을 화면에서 제거한다', () => {
-    ctrl.onClickClearAll();
+    presenter.onClickClearAll();
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -724,7 +724,7 @@ describe('Dom Content가 로드되었을 때', () => {
   });
 
   test('저장된 아이템을 화면에 표시하고, 입력필드가 비어있어야 허고, 아이템 편집상태가 아니어야 한다', () => {
-    ctrl.onDOMContentLoad();
+    presenter.onDOMContentLoad();
     
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>

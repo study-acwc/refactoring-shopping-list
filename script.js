@@ -11,7 +11,6 @@ export class ShoppingListPage {
   #anItemFilter;
   #aFormButton;
 
-
   constructor() {
     this.aStorage = new storage.Storage('items');
     this.anItemList = new elements.ItemElementList(document.getElementById('item-list'));
@@ -47,8 +46,11 @@ export class ShoppingListPage {
     }
     const newItem = this.anItemInput.uniqueValue;
     if (this.#aFormButton.isEditMode) {
+      const editingItem = this.anItemList.editingItem;
+      this.aStorage.removeItem(editingItem.textContent);
       new commands.RemoveEditingItemCommand(this.anItemList, this.aStorage).execute();
       new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
+      this.aStorage.addItem(newItem);
       this.#refreshUICommand.execute();
     } else {
       if (this.aStorage.hasItem(newItem)) {
@@ -56,6 +58,7 @@ export class ShoppingListPage {
         return;
       }
       new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
+      this.aStorage.addItem(newItem);
       this.#refreshUICommand.execute();
     }
   }
@@ -87,6 +90,7 @@ export class ShoppingListPage {
 
   removeItem(item) {
     new commands.RemoveItemCommand(this.anItemList, this.aStorage).execute(item);
+    this.aStorage.removeItem(item.textContent);
     this.#refreshUICommand.execute();
   }
 
@@ -102,6 +106,7 @@ export class ShoppingListPage {
 
   onClickClearAll() {
     new commands.ClearAllCommand(this.anItemList, this.aStorage).execute();
+    this.aStorage.clearItems();
     this.#refreshUICommand.execute();
   }
 

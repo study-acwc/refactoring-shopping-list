@@ -9,7 +9,6 @@ export class ClearAllCommand {
 
     execute() {
         this.#anItemList.clearItems();
-        this.#aStorage.clearItems();
     }
 }
 
@@ -91,7 +90,6 @@ export class RemoveItemCommand {
             return;
         }
         this.#anItemList.removeItem(item);
-        this.#aStorage.removeItem(item.textContent);
     }
 
     #confirmItemRemoval(textContent) {
@@ -128,7 +126,6 @@ export class AddItemCommand {
 
     execute(newItem) {
         this.#anItemList.appendItemWith(newItem);
-        this.#aStorage.addItem(newItem);
     }
 }
 
@@ -143,7 +140,6 @@ export class RemoveEditingItemCommand {
 
     execute() {
         const item = this.#anItemList.editingItem;
-        this.#aStorage.removeItem(item.textContent);
         this.#anItemList.disableEditModeClassFor(item);
         this.#anItemList.removeItem(item);
     }

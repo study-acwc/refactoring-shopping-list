@@ -119,7 +119,8 @@ export class ShoppingListPage {
   // MARK: - onDOMContentLoad
 
   onDOMContentLoad() {
-    new commands.DisplayAllItemsCommand(this.anItemList, this.aStorage).execute();
+    const itemTitleList = this.aStorage.allItems;
+    new commands.DisplayAllItemsCommand(this.anItemList, this.aStorage).execute(itemTitleList);
     this.#refreshUICommand.execute();
   }
 }

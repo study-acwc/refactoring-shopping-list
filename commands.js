@@ -33,8 +33,8 @@ export class DisplayAllItemsCommand {
         this.#aStorage = aStorage;
     }
     
-    execute() {
-        this.#aStorage.allItems
+    execute(itemTitleList) {
+        itemTitleList
             .forEach((item) => this.#anItemList.appendItemWith(item));
     }
 }

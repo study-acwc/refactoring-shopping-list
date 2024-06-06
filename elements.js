@@ -4,14 +4,20 @@ export const CSSDisplay = {
     FLEX: 'flex'
 };
 
+export const ITEM_CLICK_SPOT = {
+    CONTENTS: "contents",
+    DELETE_BUTTON: "deleteButton"
+}
+
 const BUTTON_ELEMENT = 'button';
 
 export class ItemElementList {
     #list;
+    #onClickItemListener;
 
     constructor(list) {
         this.#list = list;
-        this.LI_ELEMENT = 'li';
+        this.LI_ELEMENT = 'li'; 
         this.EDITMODE_ELEMENT_CLASS = 'edit-mode';
         this.LI_ELEMENT = 'li';
         this.BUTTON_ELEMENT = 'button';
@@ -23,6 +29,13 @@ export class ItemElementList {
 
     get allItems() {
         return this.#list.querySelectorAll(this.LI_ELEMENT);
+    }
+
+    itemWith(itemTitle) {
+        return Array.from(this.allItems).find((item) => {
+            const itemName = item.firstChild.textContent.toLowerCase();
+            return itemName === itemTitle.toLowerCase();
+        });
     }
 
     clearItems() {
@@ -90,8 +103,28 @@ export class ItemElementList {
     }
 
     addListener(listener) {
-        this.#list.addEventListener('click', listener);
+        this.#onClickItemListener = listener;
+        this.#list.addEventListener('click', this.#onClickItemHandler.bind(this));
     }
+
+    #onClickItemHandler(e) {
+        if (this.#isRemoveButtonClicked(e)) {
+            const listItemElement = e.target.parentElement.parentElement;
+            this.#onClickItemListener(ITEM_CLICK_SPOT.DELETE_BUTTON, listItemElement);
+        } else if (this.#isItemClicked(e)) {
+            const listItemElement = e.target;
+            this.#onClickItemListener(ITEM_CLICK_SPOT.CONTENTS, listItemElement);
+        }
+    }
+
+    #isRemoveButtonClicked(e) {
+        const buttonElement = e.target.parentElement
+        return buttonElement.classList.contains('remove-item');
+    }
+
+    #isItemClicked(e) {
+        return e.target.closest(this.LI_ELEMENT);
+    }    
 }
 
 export class ClearButton {
@@ -143,10 +176,6 @@ export class ItemInput {
 
     get uniqueValue() {
         return this.#element.value.trim()
-    }
-
-    get hasValidValue() {
-        return this.#element.value != ''
     }
 
     updateValue(newValue) {

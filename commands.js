@@ -80,14 +80,7 @@ export class RemoveItemCommand {
     }
 
     execute(item) {
-        if (false == this.#confirmItemRemoval(item.textContent)) {
-            return;
-        }
         this.#anItemList.removeItem(item);
-    }
-
-    #confirmItemRemoval(textContent) {
-        return confirm(`Are you sure you want to remove the item "${textContent}"?`)
     }
 }
 

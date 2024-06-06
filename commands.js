@@ -1,10 +1,8 @@
 export class ClearAllCommand {
     #anItemList;
-    #aStorage;
 
-    constructor(anItemList, aStorage) {
+    constructor(anItemList) {
         this.#anItemList = anItemList;
-        this.#aStorage = aStorage;
     }
 
     execute() {
@@ -26,11 +24,9 @@ export class FilterItemsCommand {
 
 export class DisplayAllItemsCommand {
     #anItemList;
-    #aStorage;
 
-    constructor(anItemList, aStorage) {
+    constructor(anItemList) {
         this.#anItemList = anItemList;
-        this.#aStorage = aStorage;
     }
     
     execute(itemTitleList) {
@@ -78,11 +74,9 @@ export class refreshUICommand {
 
 export class RemoveItemCommand {
     #anItemList;
-    #aStorage;
     
-    constructor(anItemList, aStorage) {
+    constructor(anItemList) {
         this.#anItemList = anItemList;
-        this.#aStorage = aStorage;
     }
 
     execute(item) {
@@ -117,11 +111,9 @@ export class SetItemToEditCommand {
 
 export class AddItemCommand {
     #anItemList;
-    #aStorage;
 
-    constructor(anItemList, aStorage) {
+    constructor(anItemList) {
         this.#anItemList = anItemList;
-        this.#aStorage = aStorage;
     }
 
     execute(newItem) {
@@ -131,11 +123,9 @@ export class AddItemCommand {
 
 export class RemoveEditingItemCommand {
     #anItemList;
-    #aStorage;
 
-    constructor(anItemList, aStorage) {
+    constructor(anItemList) {
         this.#anItemList = anItemList;
-        this.#aStorage = aStorage;
     }
 
     execute() {

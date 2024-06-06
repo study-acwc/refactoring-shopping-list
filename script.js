@@ -48,8 +48,8 @@ export class ShoppingListPage {
     if (this.#aFormButton.isEditMode) {
       const editingItem = this.anItemList.editingItem;
       this.aStorage.removeItem(editingItem.textContent);
-      new commands.RemoveEditingItemCommand(this.anItemList, this.aStorage).execute();
-      new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
+      new commands.RemoveEditingItemCommand(this.anItemList).execute();
+      new commands.AddItemCommand(this.anItemList).execute(newItem);
       this.aStorage.addItem(newItem);
       this.#refreshUICommand.execute();
     } else {
@@ -57,7 +57,7 @@ export class ShoppingListPage {
         this.#alertIfItemExists();
         return;
       }
-      new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
+      new commands.AddItemCommand(this.anItemList).execute(newItem);
       this.aStorage.addItem(newItem);
       this.#refreshUICommand.execute();
     }
@@ -89,7 +89,7 @@ export class ShoppingListPage {
   }
 
   removeItem(item) {
-    new commands.RemoveItemCommand(this.anItemList, this.aStorage).execute(item);
+    new commands.RemoveItemCommand(this.anItemList).execute(item);
     this.aStorage.removeItem(item.textContent);
     this.#refreshUICommand.execute();
   }
@@ -105,7 +105,7 @@ export class ShoppingListPage {
   // MARK: - onClickClearAll
 
   onClickClearAll() {
-    new commands.ClearAllCommand(this.anItemList, this.aStorage).execute();
+    new commands.ClearAllCommand(this.anItemList).execute();
     this.aStorage.clearItems();
     this.#refreshUICommand.execute();
   }
@@ -120,7 +120,7 @@ export class ShoppingListPage {
 
   onDOMContentLoad() {
     const itemTitleList = this.aStorage.allItems;
-    new commands.DisplayAllItemsCommand(this.anItemList, this.aStorage).execute(itemTitleList);
+    new commands.DisplayAllItemsCommand(this.anItemList).execute(itemTitleList);
     this.#refreshUICommand.execute();
   }
 }

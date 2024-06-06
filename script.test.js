@@ -15,6 +15,7 @@ beforeEach(() => {
     view,
     model
   );
+  view.setController(ctrl);
   ctrl.launchUI();
 });
 

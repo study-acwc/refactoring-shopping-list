@@ -12,20 +12,8 @@ export class ShoppingListPageController {
     }
 
     launchUI() {
-        this.#registerEventListeners();
         this.#view.launchUI();
     }
-
-    #registerEventListeners() {
-      this.#view.bindAddItemSubmitHandler(this.onAddItemSubmit.bind(this));
-      this.#view.bindUpdateItemSubmitHandler(this.onUpdateItemSubmit.bind(this));
-      this.#view.bindClearAll(this.onClickClearAll.bind(this));
-      this.#view.bindClickItemContents(this.onClickItemContents.bind(this));
-      this.#view.bindClickItemDeleteButton(this.onClickItemDeleteButton.bind(this));
-      this.#view.bindEditingInput(this.onEditingInput.bind(this));
-      this.#view.bindDOMContentLoaded(this.onDOMContentLoad.bind(this));
-      this.#view.bindItemRemovalConfirmed(this.onItemRemovalConfirmed.bind(this));
-    }  
 
     // MARK: - onAddItemSubmit
 
@@ -93,79 +81,56 @@ export class ShoppingListPageController {
 }
 
 export class ShoppingListPage {
+  #controller;
+
   #anItemForm;
   #aClearButton;
   #anItemFilter;
+  #anItemInput;
   #aFormButton;
 
   #refreshUICommand;
 
-  #itemRemovalConfirmedHandler;
-  #clickItemContentsHandler;
-  #clickItemDeleteButtonHandler;
-  #addItemSubmitHandler;
-  #updateItemSubmitHandler;
+  constructor(controller) {
+    this.#controller = controller;
 
-  constructor() {
     this.anItemList = new elements.ItemElementList(document.getElementById('item-list'));
     this.#anItemForm = new elements.ItemForm(document.getElementById('item-form'));
     this.#aClearButton = new elements.ClearButton(document.getElementById('clear'));
     this.#anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
-    this.anItemInput = new elements.ItemInput(document.getElementById('item-input'));
+    this.#anItemInput = new elements.ItemInput(document.getElementById('item-input'));
     this.#aFormButton = new elements.FormButton(this.#anItemForm.formButton);
     
-    this.#refreshUICommand = new commands.refreshUICommand(this.anItemInput, this.anItemList, this.#aFormButton, this.#aClearButton, this.#anItemFilter);
+    this.#refreshUICommand = new commands.refreshUICommand(this.#anItemInput, this.anItemList, this.#aFormButton, this.#aClearButton, this.#anItemFilter);
+  }
+
+  setController(controller) {
+    this.#controller = controller;
   }
 
   launchUI() {
-    this.#anItemForm.addListener(this.#onAddOrUpdateItemSubmit.bind(this));
-    this.anItemList.addListener(this.#onClickItem.bind(this));
-
+    this.#registerEventListeners();
     this.#refreshUICommand.execute();
   }
 
-  bindAddItemSubmitHandler(handler) {
-    this.#addItemSubmitHandler = handler;
-  }
-
-  bindUpdateItemSubmitHandler(handler) {
-    this.#updateItemSubmitHandler = handler;
-  }
-
-  bindClearAll(handler) {
-    this.#aClearButton.addListener(handler);
-  }
-
-  bindClickItemContents(handler) {
-    this.#clickItemContentsHandler = handler;
-  }
-
-  bindClickItemDeleteButton(handler) {
-    this.#clickItemDeleteButtonHandler = handler;
-  }
-
-  bindEditingInput(handler) {
-    this.#anItemFilter.addListener(handler);
-  }
-
-  bindDOMContentLoaded(handler) {
-    document.addEventListener('DOMContentLoaded', handler);
-  }
-
-  bindItemRemovalConfirmed(handler) {
-    this.#itemRemovalConfirmedHandler = handler;
-  }
+  #registerEventListeners() {
+    this.#anItemForm.addListener(this.#onAddOrUpdateItemSubmit.bind(this));
+    this.anItemList.addListener(this.#onClickItem.bind(this));
+    this.#aClearButton.addListener(this.#controller.onClickClearAll.bind(this.#controller));
+    this.#anItemFilter.addListener(this.#controller.onEditingInput.bind(this.#controller));
+    document.addEventListener('DOMContentLoaded', this.#controller.onDOMContentLoad.bind(this.#controller));
+  }  
   
   // MARK: - onAddOrUpdateItemSubmit
 
   #onAddOrUpdateItemSubmit(e) {
     e.preventDefault();
-    const newItem = this.anItemInput.uniqueValue;
+    const newItem = this.#anItemInput.uniqueValue;
     if (this.#aFormButton.isEditMode) {
       const editingItem = this.anItemList.editingItem;
-      this.#updateItemSubmitHandler(editingItem.textContent, newItem);
+      this.#controller.onUpdateItemSubmit(editingItem.textContent, newItem);
     } else {
-      this.#addItemSubmitHandler(newItem);
+      this.#controller.onAddItemSubmit(newItem);
     }
   }
 
@@ -192,9 +157,9 @@ export class ShoppingListPage {
 
   #onClickItem(itemClickSpot, itemElement) {
     if (itemClickSpot == elements.ITEM_CLICK_SPOT.DELETE_BUTTON) {
-        this.#clickItemDeleteButtonHandler(itemElement.textContent);
+        this.#controller.onClickItemDeleteButton(itemElement.textContent);
     } else if (itemClickSpot == elements.ITEM_CLICK_SPOT.CONTENTS) {
-        this.#clickItemContentsHandler(itemElement.textContent);
+        this.#controller.onClickItemContents(itemElement.textContent);
     }
   }
 
@@ -208,7 +173,7 @@ export class ShoppingListPage {
 
   showRemoveItemConfirmation(itemTitle) {
     if(this.#confirmItemRemoval(itemTitle)) {
-      this.#itemRemovalConfirmedHandler(itemTitle);
+      this.#controller.onItemRemovalConfirmed(itemTitle);
     }
   }
 
@@ -218,7 +183,7 @@ export class ShoppingListPage {
 
   setItemToEdit(itemTitle) {
     const item = this.anItemList.itemWith(itemTitle);
-    new commands.SetItemToEditCommand(this.anItemList, this.#aFormButton, this.anItemInput).execute(item);
+    new commands.SetItemToEditCommand(this.anItemList, this.#aFormButton, this.#anItemInput).execute(item);
   }
 
   // MARK: - onClickClearAll
@@ -242,11 +207,20 @@ export class ShoppingListPage {
   }
 }
 
-export const controller = new ShoppingListPageController(
-  new ShoppingListPage(),
-  new storage.Storage('items')
-);
+
+let controller;
+
+function launchApp() {
+  const view = new ShoppingListPage();
+  controller = new ShoppingListPageController(
+    view,
+    new storage.Storage('items')
+  );
+  view.setController(controller);
+  controller.launchUI();
+}
+
 
 // MARK: - 함수 실행문
 
-controller.launchUI();
+launchApp();

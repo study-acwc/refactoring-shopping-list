@@ -13,7 +13,6 @@ export default class Form extends Template {
 	}
 
 	bindEvents() {
-		document.addEventListener('DOMContentLoaded', this.displayItems)
 		const itemForm = $('#item-form')
 		itemForm.addEventListener('submit', this.onAddItemSubmit)
 	}
@@ -53,20 +52,6 @@ export default class Form extends Template {
 		Storage.updateItem(TODO.STORAGE_KEY, newItem)
 		updateUI(clearBtn, itemFilter, formBtn, itemInput)
 	}
-
-	displayItems() {
-		const itemInput = $('#item-input')
-		const formBtn = $('#form-btn')
-		const itemList = $('#item-list')
-		const clearBtn = $('#clear')
-		const itemFilter = $('#filter')
-
-		Storage.getItem(TODO.STORAGE_KEY).forEach((item) =>
-			addItemToDOM(item, itemList)
-		)
-		updateUI(clearBtn, itemFilter, formBtn, itemInput)
-	}
-
 	template() {
 		return `
 				<div class="form-control">

@@ -1,3 +1,5 @@
+import { TODO } from '../constant/index.js'
+
 export const Storage = {
 	getItem: (key) => {
 		const items = localStorage.getItem(key)
@@ -13,4 +15,13 @@ export const Storage = {
 		const prevItems = Storage.getItem(key)
 		localStorage.setItem(key, JSON.stringify([...prevItems, items]))
 	},
+}
+
+export function removeFromStorage(item) {
+	const updated = Storage.getItem(TODO.STORAGE_KEY).filter((i) => i !== item)
+	Storage.setItem(TODO.STORAGE_KEY, updated)
+}
+
+export function isItemExists(item) {
+	return Storage.getItem(TODO.STORAGE_KEY).includes(item)
 }

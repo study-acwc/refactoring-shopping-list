@@ -1,6 +1,6 @@
 import { Storage } from './storage.js'
 import { TODO } from './const.js'
-import { $ } from './src/util.js'
+import { $ } from './src/helper/util.js'
 
 const itemForm = $('#item-form')
 const itemInput = $('#item-input')
@@ -10,6 +10,18 @@ const itemFilter = $('#filter')
 const formBtn = itemForm.querySelector('button')
 
 export let isEditMode = false
+
+export function init() {
+	initEvents()
+}
+
+function initEvents() {
+	itemForm.addEventListener('submit', onAddItemSubmit)
+	itemList.addEventListener('click', onClickItem)
+	clearBtn.addEventListener('click', clearItems)
+	itemFilter.addEventListener('input', filterItems)
+	document.addEventListener('DOMContentLoaded', displayItems)
+}
 
 export function displayItems() {
 	Storage.getItem(TODO.STORAGE_KEY).forEach((item) => addItemToDOM(item))
@@ -51,14 +63,10 @@ export function onAddItemSubmit(e) {
 }
 
 export function addItemToDOM(item) {
-	// Create list item
 	const li = document.createElement('li')
 	li.appendChild(document.createTextNode(item))
-
 	const button = createButton('remove-item btn-link text-red')
 	li.appendChild(button)
-
-	// Add li to the DOM
 	itemList.appendChild(li)
 }
 
@@ -162,17 +170,5 @@ export function checkUI() {
 	formBtn.style.backgroundColor = '#333'
 
 	isEditMode = false
-}
-
-// Initialize app
-export function init() {
-	// Event Listeners
-	itemForm.addEventListener('submit', onAddItemSubmit)
-	itemList.addEventListener('click', onClickItem)
-	clearBtn.addEventListener('click', clearItems)
-	itemFilter.addEventListener('input', filterItems)
-	document.addEventListener('DOMContentLoaded', displayItems)
-
-	checkUI()
 }
 init()

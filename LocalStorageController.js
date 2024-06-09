@@ -1,11 +1,16 @@
-const LOCAL_STORAGE_KEY = "items";
-
 export default class LocalStorageController {
-  static setItem(storageValue) {
-    localStorage.setItem(LOCAL_STORAGE_KEY, storageValue);
+  constructor(key) {
+    this.key = key;
+  }
+  setItem(storageValue) {
+    localStorage.setItem(this.key, storageValue);
   }
 
-  static getItem() {
-    return localStorage.getItem(LOCAL_STORAGE_KEY) ?? null;
+  getItem() {
+    return localStorage.getItem(this.key) ?? null;
+  }
+
+  removeItem() {
+    localStorage.removeItem(this.key);
   }
 }

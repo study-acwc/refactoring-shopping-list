@@ -103,6 +103,15 @@ export class ShoppingListPage {
   get isEditMode() {
     return this.#aFormButton.isEditMode
   }
+
+  isRemoveButtonClicked(e) {
+    const buttonElement = e.target.parentElement
+    return buttonElement.classList.contains('remove-item');
+  }
+
+  isItemClicked(e) {
+    return e.target.closest(this.anItemList.LI_ELEMENT);
+  }
 }
 
 export class ShoppingListPageController {
@@ -165,18 +174,13 @@ export class ShoppingListPageController {
   // MARK: - onClickItem
 
   onClickItem(e) {
-    if (this.#isRemoveButtonClicked(e)) {
+    if (this.#view.isRemoveButtonClicked(e)) {
       const listItemElement = e.target.parentElement.parentElement;
       this.onRemoveButtonClicked(listItemElement);
-    } else if (this.#isItemClicked(e)) {
+    } else if (this.#view.isItemClicked(e)) {
       const listItemElement = e.target;
       this.#view.setItemToEdit(listItemElement);
     }
-  }
-
-  #isRemoveButtonClicked(e) {
-    const buttonElement = e.target.parentElement
-    return buttonElement.classList.contains('remove-item');
   }
 
   onRemoveButtonClicked(item) {
@@ -189,10 +193,6 @@ export class ShoppingListPageController {
 
   #confirmItemRemoval(textContent) {
     return confirm(`Are you sure you want to remove the item "${textContent}"?`)
-  }
-
-  #isItemClicked(e) {
-    return e.target.closest(this.anItemList.LI_ELEMENT);
   }
 
   // MARK: - onClickClearAll

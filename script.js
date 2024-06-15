@@ -116,7 +116,7 @@ export class ShoppingListPageController {
       return;
     }
     const newItem = this.anItemInput.uniqueValue;
-    if (this.#aFormButton.isEditMode) {
+    if (this.isEditMode) {
       this.#removeEditingItem();
       this.#addItem(newItem);
       this.#refreshUICommand.execute();
@@ -128,6 +128,10 @@ export class ShoppingListPageController {
       this.#addItem(newItem);
       this.#refreshUICommand.execute();
     }
+  }
+
+  get isEditMode() {
+    return this.#aFormButton.isEditMode
   }
 
   #addItem(newItem) {

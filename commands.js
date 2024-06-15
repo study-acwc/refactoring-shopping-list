@@ -1,17 +1,3 @@
-export class ClearAllCommand {
-    #anItemList;
-    #aStorage;
-
-    constructor(anItemList, aStorage) {
-        this.#anItemList = anItemList;
-        this.#aStorage = aStorage;
-    }
-
-    execute() {
-        this.#anItemList.clearItems();
-        this.#aStorage.clearItems();
-    }
-}
 
 export class refreshUICommand {
     #anItemInput;

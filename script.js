@@ -142,8 +142,13 @@ export class ShoppingListPageController {
   // MARK: - onClickClearAll
 
   onClickClearAll() {
-    new commands.ClearAllCommand(this.anItemList, this.aStorage).execute();
+    this.#clearAll();
     this.#refreshUICommand.execute();
+  }
+
+  #clearAll() {
+    this.anItemList.clearItems();
+    this.aStorage.clearItems();
   }
 
   // MARK: - onEditingInput

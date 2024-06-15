@@ -93,6 +93,11 @@ export class ShoppingListPage {
     this.#refreshUICommand.execute();
   }
 
+  addItem(newItem) {
+    this.anItemList.appendItemWith(newItem);
+    this.#refreshUICommand.execute();
+  }
+
   // MARK: - 임시
 
   get isEditMode() {
@@ -138,20 +143,15 @@ export class ShoppingListPageController {
       this.aStorage.removeItem(newItem.textContent);
       this.#view.removeEditingItem();
       this.aStorage.addItem(newItem);
-      this.#addItem(newItem);
+      this.#view.addItem(newItem);
     } else {
       if (this.aStorage.hasItem(newItem)) {
         this.#alertIfItemExists();
         return;
       }
       this.aStorage.addItem(newItem);
-      this.#addItem(newItem);
+      this.#view.addItem(newItem);
     }
-  }
-
-  #addItem(newItem) {
-    this.anItemList.appendItemWith(newItem);
-    this.#refreshUICommand.execute();
   }
 
   #alertAddAnItem() {

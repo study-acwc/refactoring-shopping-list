@@ -187,13 +187,13 @@ export class ShoppingListPageController {
   // MARK: - onDOMContentLoad
 
   onDOMContentLoad() {
-    this.#displayAllItems();
+    let itemTitles = this.aStorage.allItems;
+    this.#displayAllItems(itemTitles);
     this.#refreshUICommand.execute();
   }
 
-  #displayAllItems() {
-    this.aStorage.allItems
-            .forEach((item) => this.anItemList.appendItemWith(item));
+  #displayAllItems(itemTitles) {
+    itemTitles.forEach((item) => this.anItemList.appendItemWith(item));
   }
 }
 

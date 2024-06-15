@@ -35,18 +35,3 @@ export class refreshUICommand {
         this._anItemFilter.show();
     }
 }
-
-export class AddItemCommand {
-    #anItemList;
-    #aStorage;
-
-    constructor(anItemList, aStorage) {
-        this.#anItemList = anItemList;
-        this.#aStorage = aStorage;
-    }
-
-    execute(newItem) {
-        this.#anItemList.appendItemWith(newItem);
-        this.#aStorage.addItem(newItem);
-    }
-}

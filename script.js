@@ -89,18 +89,23 @@ export class ShoppingListPageController {
     const newItem = this.anItemInput.uniqueValue;
     if (this.#aFormButton.isEditMode) {
       this.#removeEditingItem();
-      new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
+      this.#addItem(newItem);
       this.#refreshUICommand.execute();
     } else {
       if (this.aStorage.hasItem(newItem)) {
         this.#alertIfItemExists();
         return;
       }
-      new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
+      this.#addItem(newItem);
       this.#refreshUICommand.execute();
     }
   }
 
+  #addItem(newItem) {
+    this.anItemList.appendItemWith(newItem);
+    this.aStorage.addItem(newItem);
+  }
+ 
   #removeEditingItem() {
     const item = this.anItemList.editingItem;
     this.aStorage.removeItem(item.textContent);

@@ -10,13 +10,20 @@ export class ShoppingListPage {
   #anItemForm;
   #aClearButton;
   #anItemFilter;
+  #aFormButton;
+
+  #refreshUICommand;
 
   constructor() {
     this.anItemList = new elements.ItemElementList(document.getElementById('item-list'));
     this.#anItemForm = new elements.ItemForm(document.getElementById('item-form'));
     this.#aClearButton = new elements.ClearButton(document.getElementById('clear'));
     this.#anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
-    
+    this.#aFormButton = new elements.FormButton(this.#anItemForm.formButton);
+    this.anItemInput = new elements.ItemInput(document.getElementById('item-input'));
+
+    this.#refreshUICommand = new commands.refreshUICommand(this.anItemInput, this.anItemList, this.#aFormButton, this.#aClearButton, this.#anItemFilter);
+
     this.#registerEventListeners();
   }
 
@@ -50,6 +57,13 @@ export class ShoppingListPage {
 
   onDOMContentLoad() {
     this.#presenter.onDOMContentLoad();
+  }
+
+  // MARK: - calling by preseneter
+
+  displayAllItems(itemTitles) {
+    itemTitles.forEach((item) => this.anItemList.appendItemWith(item));
+    this.#refreshUICommand.execute();
   }
 }
 
@@ -188,12 +202,7 @@ export class ShoppingListPageController {
 
   onDOMContentLoad() {
     let itemTitles = this.aStorage.allItems;
-    this.#displayAllItems(itemTitles);
-  }
-
-  #displayAllItems(itemTitles) {
-    itemTitles.forEach((item) => this.anItemList.appendItemWith(item));
-    this.#refreshUICommand.execute();
+    this.#view.displayAllItems(itemTitles);
   }
 }
 

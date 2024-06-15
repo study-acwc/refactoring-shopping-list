@@ -178,6 +178,10 @@ export class ShoppingListPageController {
       return;
     }
     this.aStorage.removeItem(item.textContent);
+    this.removeItem(item);
+  }
+
+  removeItem(item) {
     this.anItemList.removeItem(item);
     this.#refreshUICommand.execute();
   }

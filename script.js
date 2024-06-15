@@ -4,15 +4,65 @@ import * as commands from './commands.js';
 
 // MARK: - 변수 선언
 
+export class ShoppingListPage {
+  #presenter;
+
+  #anItemForm;
+  #aClearButton;
+  #anItemFilter;
+
+  constructor() {
+    this.anItemList = new elements.ItemElementList(document.getElementById('item-list'));
+    this.#anItemForm = new elements.ItemForm(document.getElementById('item-form'));
+    this.#aClearButton = new elements.ClearButton(document.getElementById('clear'));
+    this.#anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
+    
+    this.#registerEventListeners();
+  }
+
+  setPresenter(presenter) {
+    this.#presenter = presenter;
+  }
+
+  #registerEventListeners() {
+    this.#anItemForm.addListener(this.onAddItemSubmit.bind(this));
+    this.anItemList.addListener(this.onClickItem.bind(this));
+    this.#aClearButton.addListener(this.onClickClearAll.bind(this));
+    this.#anItemFilter.addListener(this.onEditingInput.bind(this));
+    document.addEventListener('DOMContentLoaded', this.onDOMContentLoad.bind(this));
+  }
+
+  onAddItemSubmit(e) {
+    this.#presenter.onAddItemSubmit(e);
+  }
+
+  onClickItem(e) {
+    this.#presenter.onClickItem(e);
+  }
+
+  onClickClearAll() {
+    this.#presenter.onClickClearAll();
+  }
+
+  onEditingInput(e) {
+    this.#presenter.onEditingInput(e);
+  }
+
+  onDOMContentLoad() {
+    this.#presenter.onDOMContentLoad();
+  }
+}
+
 export class ShoppingListPageController {
   #refreshUICommand;
   #anItemForm;
   #aClearButton;
   #anItemFilter;
   #aFormButton;
+  #view;
 
-
-  constructor() {
+  constructor(view) {
+    this.#view = view;
     this.aStorage = new storage.Storage('items');
     this.anItemList = new elements.ItemElementList(document.getElementById('item-list'));
     this.#anItemForm = new elements.ItemForm(document.getElementById('item-form'));
@@ -25,16 +75,7 @@ export class ShoppingListPageController {
   }
 
   launchUI() {
-    this.#registerEventListeners();
     this.#refreshUICommand.execute();
-  }
-
-  #registerEventListeners() {
-    this.#anItemForm.addListener(this.onAddItemSubmit);
-    this.anItemList.addListener(this.onClickItem);
-    this.#aClearButton.addListener(this.onClickClearAll);
-    this.#anItemFilter.addListener(this.onEditingInput);
-    document.addEventListener('DOMContentLoaded', this.onDOMContentLoad);
   }
 
   // MARK: - onAddItemSubmit
@@ -119,8 +160,9 @@ export class ShoppingListPageController {
   }
 }
 
-export const page = new ShoppingListPageController();
+const view = new ShoppingListPage();
+export const page = new ShoppingListPageController(view);
 
 // MARK: - 함수 실행문
-
+view.setPresenter(page);
 page.launchUI()

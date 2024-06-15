@@ -74,6 +74,12 @@ export class ShoppingListPage {
     this.anItemList.clearItems();
     this.#refreshUICommand.execute();
   }
+
+  setItemToEdit(item) {
+    this.anItemList.toggleEditModeForSingleItem(item);
+    this.#aFormButton.applyEditModeStyle();
+    this.anItemInput.updateValue(item.textContent);
+  }
 }
 
 export class ShoppingListPageController {
@@ -152,7 +158,7 @@ export class ShoppingListPageController {
       this.removeItem(listItemElement);
     } else if (this.#isItemClicked(e)) {
       const listItemElement = e.target;
-      this.setItemToEdit(listItemElement);
+      this.#view.setItemToEdit(listItemElement);
     }
   }
 
@@ -176,12 +182,6 @@ export class ShoppingListPageController {
 
   #isItemClicked(e) {
     return e.target.closest(this.anItemList.LI_ELEMENT);
-  }
-
-  setItemToEdit(item) {
-    this.anItemList.toggleEditModeForSingleItem(item);
-    this.#aFormButton.applyEditModeStyle();
-    this.anItemInput.updateValue(item.textContent);
   }
 
   // MARK: - onClickClearAll

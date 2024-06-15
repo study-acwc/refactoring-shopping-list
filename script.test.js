@@ -184,7 +184,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
       updateUserInputAndSubmitAdd(itemTitle);
       // 2
       const filtered = filteredItemElementsBy(itemTitle);
-      sut.setItemToEdit(filtered[0]);
+      view.setItemToEdit(filtered[0]);
       // 3
       setItemInputValue(updatedItemTitle);
     });

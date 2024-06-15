@@ -65,6 +65,10 @@ export class ShoppingListPage {
     itemTitles.forEach((item) => this.anItemList.appendItemWith(item));
     this.#refreshUICommand.execute();
   }
+
+  filterItems(itemTitle) {
+    this.anItemList.filterItemsWith(itemTitle.toLowerCase());
+  }
 }
 
 export class ShoppingListPageController {
@@ -191,11 +195,7 @@ export class ShoppingListPageController {
 
   onEditingInput(e) {
     let itemTitle = e.target.value;
-    this.#filterItems(itemTitle);
-  }
-
-  #filterItems(itemTitle) {
-    this.anItemList.filterItemsWith(itemTitle.toLowerCase());
+    this.#view.filterItems(itemTitle);
   }
 
   // MARK: - onDOMContentLoad

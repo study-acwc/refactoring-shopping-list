@@ -80,6 +80,12 @@ export class ShoppingListPage {
     this.#aFormButton.applyEditModeStyle();
     this.anItemInput.updateValue(item.textContent);
   }
+
+  // MARK: - 임시
+
+  get isEditMode() {
+    return this.#aFormButton.isEditMode
+  }
 }
 
 export class ShoppingListPageController {
@@ -116,7 +122,7 @@ export class ShoppingListPageController {
       return;
     }
     const newItem = this.anItemInput.uniqueValue;
-    if (this.isEditMode) {
+    if (this.#view.isEditMode) {
       this.#removeEditingItem();
       this.#addItem(newItem);
       this.#refreshUICommand.execute();
@@ -128,10 +134,6 @@ export class ShoppingListPageController {
       this.#addItem(newItem);
       this.#refreshUICommand.execute();
     }
-  }
-
-  get isEditMode() {
-    return this.#aFormButton.isEditMode
   }
 
   #addItem(newItem) {

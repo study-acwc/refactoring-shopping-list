@@ -137,6 +137,7 @@ export class ShoppingListPageController {
     if (this.#view.isEditMode) {
       this.aStorage.removeItem(newItem.textContent);
       this.#view.removeEditingItem();
+      this.aStorage.addItem(newItem);
       this.#addItem(newItem);
       this.#refreshUICommand.execute();
     } else {
@@ -144,6 +145,7 @@ export class ShoppingListPageController {
         this.#alertIfItemExists();
         return;
       }
+      this.aStorage.addItem(newItem);
       this.#addItem(newItem);
       this.#refreshUICommand.execute();
     }
@@ -151,7 +153,6 @@ export class ShoppingListPageController {
 
   #addItem(newItem) {
     this.anItemList.appendItemWith(newItem);
-    this.aStorage.addItem(newItem);
   }
 
   #alertAddAnItem() {

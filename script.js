@@ -90,6 +90,7 @@ export class ShoppingListPage {
     const item = this.anItemList.editingItem;
     this.anItemList.disableEditModeClassFor(item);
     this.anItemList.removeItem(item);
+    this.#refreshUICommand.execute();
   }
 
   // MARK: - 임시

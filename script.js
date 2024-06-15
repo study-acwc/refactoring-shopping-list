@@ -44,7 +44,22 @@ export class ShoppingListPage {
   }
 
   onClickItem(e) {
-    this.#presenter.onClickItemTemp(e);
+    if (this.#isRemoveButtonClicked(e)) {
+      const listItemElement = e.target.parentElement.parentElement;
+      this.#presenter.onRemoveButtonClicked(listItemElement);
+    } else if (this.#isItemClicked(e)) {
+      const listItemElement = e.target;
+      this.#presenter.onClickItem(listItemElement);
+    }
+  }
+
+  #isRemoveButtonClicked(e) {
+    const buttonElement = e.target.parentElement
+    return buttonElement.classList.contains('remove-item');
+  }
+
+  #isItemClicked(e) {
+    return e.target.closest(this.anItemList.LI_ELEMENT);
   }
 
   onClickClearAll() {
@@ -102,15 +117,6 @@ export class ShoppingListPage {
 
   get isEditMode() {
     return this.#aFormButton.isEditMode
-  }
-
-  isRemoveButtonClicked(e) {
-    const buttonElement = e.target.parentElement
-    return buttonElement.classList.contains('remove-item');
-  }
-
-  isItemClicked(e) {
-    return e.target.closest(this.anItemList.LI_ELEMENT);
   }
 }
 
@@ -172,16 +178,6 @@ export class ShoppingListPageController {
   }
 
   // MARK: - onClickItem
-
-  onClickItemTemp(e) {
-    if (this.#view.isRemoveButtonClicked(e)) {
-      const listItemElement = e.target.parentElement.parentElement;
-      this.onRemoveButtonClicked(listItemElement);
-    } else if (this.#view.isItemClicked(e)) {
-      const listItemElement = e.target;
-      this.onClickItem(listItemElement);
-    }
-  }
 
   onClickItem(listItemElement) {
     this.#view.setItemToEdit(listItemElement);

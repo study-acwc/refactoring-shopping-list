@@ -177,8 +177,8 @@ export class ShoppingListPageController {
     if (false == this.#confirmItemRemoval(item.textContent)) {
       return;
     }
-    this.anItemList.removeItem(item);
     this.aStorage.removeItem(item.textContent);
+    this.anItemList.removeItem(item);
     this.#refreshUICommand.execute();
   }
 

@@ -44,7 +44,7 @@ export class ShoppingListPage {
   }
 
   onClickItem(e) {
-    this.#presenter.onClickItem(e);
+    this.#presenter.onClickItemTemp(e);
   }
 
   onClickClearAll() {
@@ -173,7 +173,7 @@ export class ShoppingListPageController {
 
   // MARK: - onClickItem
 
-  onClickItem(e) {
+  onClickItemTemp(e) {
     if (this.#view.isRemoveButtonClicked(e)) {
       const listItemElement = e.target.parentElement.parentElement;
       this.onRemoveButtonClicked(listItemElement);

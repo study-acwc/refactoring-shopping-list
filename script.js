@@ -161,7 +161,7 @@ export class ShoppingListPageController {
   onClickItem(e) {
     if (this.#isRemoveButtonClicked(e)) {
       const listItemElement = e.target.parentElement.parentElement;
-      this.removeItem(listItemElement);
+      this.onRemoveButtonClicked(listItemElement);
     } else if (this.#isItemClicked(e)) {
       const listItemElement = e.target;
       this.#view.setItemToEdit(listItemElement);
@@ -173,7 +173,7 @@ export class ShoppingListPageController {
     return buttonElement.classList.contains('remove-item');
   }
 
-  removeItem(item) {
+  onRemoveButtonClicked(item) {
     if (false == this.#confirmItemRemoval(item.textContent)) {
       return;
     }

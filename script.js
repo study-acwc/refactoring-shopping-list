@@ -4,7 +4,7 @@ import * as commands from './commands.js';
 
 // MARK: - 변수 선언
 
-export class ShoppingListPage {
+export class ShoppingListPageController {
   #refreshUICommand;
   #anItemForm;
   #aClearButton;
@@ -119,7 +119,7 @@ export class ShoppingListPage {
   }
 }
 
-export const page = new ShoppingListPage();
+export const page = new ShoppingListPageController();
 
 // MARK: - 함수 실행문
 

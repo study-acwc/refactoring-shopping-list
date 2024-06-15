@@ -155,8 +155,13 @@ export class ShoppingListPageController {
   // MARK: - onDOMContentLoad
 
   onDOMContentLoad() {
-    new commands.DisplayAllItemsCommand(this.anItemList, this.aStorage).execute();
+    this.#displayAllItems();
     this.#refreshUICommand.execute();
+  }
+
+  #displayAllItems() {
+    this.aStorage.allItems
+            .forEach((item) => this.anItemList.appendItemWith(item));
   }
 }
 

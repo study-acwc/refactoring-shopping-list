@@ -25,21 +25,6 @@ export class FilterItemsCommand {
     }
 }
 
-export class DisplayAllItemsCommand {
-    #anItemList;
-    #aStorage;
-
-    constructor(anItemList, aStorage) {
-        this.#anItemList = anItemList;
-        this.#aStorage = aStorage;
-    }
-    
-    execute() {
-        this.#aStorage.allItems
-            .forEach((item) => this.#anItemList.appendItemWith(item));
-    }
-}
-
 export class refreshUICommand {
     #anItemInput;
     #anItemList;

@@ -149,7 +149,12 @@ export class ShoppingListPageController {
   // MARK: - onEditingInput
 
   onEditingInput(e) {
-    new commands.FilterItemsCommand(this.anItemList).execute(e.target.value);
+    let itemTitle = e.target.value;
+    this.#filterItems(itemTitle);
+  }
+
+  #filterItems(itemTitle) {
+    this.anItemList.filterItemsWith(itemTitle.toLowerCase());
   }
 
   // MARK: - onDOMContentLoad

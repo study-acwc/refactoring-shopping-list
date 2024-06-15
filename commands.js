@@ -13,18 +13,6 @@ export class ClearAllCommand {
     }
 }
 
-export class FilterItemsCommand {
-    #anItemList;
-
-    constructor(anItemList) {
-        this.#anItemList = anItemList;
-    }
-
-    execute(itemTitle) {
-        this.#anItemList.filterItemsWith(itemTitle.toLowerCase());
-    }
-}
-
 export class refreshUICommand {
     #anItemInput;
     #anItemList;

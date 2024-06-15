@@ -189,11 +189,11 @@ export class ShoppingListPageController {
   onDOMContentLoad() {
     let itemTitles = this.aStorage.allItems;
     this.#displayAllItems(itemTitles);
-    this.#refreshUICommand.execute();
   }
 
   #displayAllItems(itemTitles) {
     itemTitles.forEach((item) => this.anItemList.appendItemWith(item));
+    this.#refreshUICommand.execute();
   }
 }
 

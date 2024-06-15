@@ -88,7 +88,7 @@ export class ShoppingListPageController {
     }
     const newItem = this.anItemInput.uniqueValue;
     if (this.#aFormButton.isEditMode) {
-      new commands.RemoveEditingItemCommand(this.anItemList, this.aStorage).execute();
+      this.#removeEditingItem();
       new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
       this.#refreshUICommand.execute();
     } else {
@@ -99,6 +99,13 @@ export class ShoppingListPageController {
       new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
       this.#refreshUICommand.execute();
     }
+  }
+
+  #removeEditingItem() {
+    const item = this.anItemList.editingItem;
+    this.aStorage.removeItem(item.textContent);
+    this.anItemList.disableEditModeClassFor(item);
+    this.anItemList.removeItem(item);
   }
 
   #alertAddAnItem() {
@@ -127,8 +134,16 @@ export class ShoppingListPageController {
   }
 
   removeItem(item) {
-    new commands.RemoveItemCommand(this.anItemList, this.aStorage).execute(item);
+    if (false == this.#confirmItemRemoval(item.textContent)) {
+      return;
+    }
+    this.anItemList.removeItem(item);
+    this.aStorage.removeItem(item.textContent);
     this.#refreshUICommand.execute();
+  }
+
+  #confirmItemRemoval(textContent) {
+    return confirm(`Are you sure you want to remove the item "${textContent}"?`)
   }
 
   #isItemClicked(e) {

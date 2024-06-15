@@ -36,28 +36,6 @@ export class refreshUICommand {
     }
 }
 
-export class RemoveItemCommand {
-    #anItemList;
-    #aStorage;
-    
-    constructor(anItemList, aStorage) {
-        this.#anItemList = anItemList;
-        this.#aStorage = aStorage;
-    }
-
-    execute(item) {
-        if (false == this.#confirmItemRemoval(item.textContent)) {
-            return;
-        }
-        this.#anItemList.removeItem(item);
-        this.#aStorage.removeItem(item.textContent);
-    }
-
-    #confirmItemRemoval(textContent) {
-        return confirm(`Are you sure you want to remove the item "${textContent}"?`)
-    }
-}
-
 export class AddItemCommand {
     #anItemList;
     #aStorage;
@@ -70,22 +48,5 @@ export class AddItemCommand {
     execute(newItem) {
         this.#anItemList.appendItemWith(newItem);
         this.#aStorage.addItem(newItem);
-    }
-}
-
-export class RemoveEditingItemCommand {
-    #anItemList;
-    #aStorage;
-
-    constructor(anItemList, aStorage) {
-        this.#anItemList = anItemList;
-        this.#aStorage = aStorage;
-    }
-
-    execute() {
-        const item = this.#anItemList.editingItem;
-        this.#aStorage.removeItem(item.textContent);
-        this.#anItemList.disableEditModeClassFor(item);
-        this.#anItemList.removeItem(item);
     }
 }

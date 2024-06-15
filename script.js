@@ -118,6 +118,10 @@ export class ShoppingListPage {
   get isEditMode() {
     return this.#aFormButton.isEditMode
   }
+
+  confirmItemRemoval(textContent) {
+    return confirm(`Are you sure you want to remove the item "${textContent}"?`)
+  }
 }
 
 export class ShoppingListPageController {
@@ -184,7 +188,7 @@ export class ShoppingListPageController {
   }
 
   onRemoveButtonClicked(item) {
-    if (false == this.#confirmItemRemoval(item.textContent)) {
+    if (false == this.#view.confirmItemRemoval(item.textContent)) {
       return;
     }
     this.onItemRemovalConfirmed(item);
@@ -193,10 +197,6 @@ export class ShoppingListPageController {
   onItemRemovalConfirmed(item) {
     this.aStorage.removeItem(item.textContent);
     this.#view.removeItem(item);
-  }
-
-  #confirmItemRemoval(textContent) {
-    return confirm(`Are you sure you want to remove the item "${textContent}"?`)
   }
 
   // MARK: - onClickClearAll

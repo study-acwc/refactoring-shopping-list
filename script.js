@@ -136,7 +136,9 @@ export class ShoppingListPageController {
   }
 
   setItemToEdit(item) {
-    new commands.SetItemToEditCommand(this.anItemList, this.#aFormButton, this.anItemInput).execute(item);
+    this.anItemList.toggleEditModeForSingleItem(item);
+    this.#aFormButton.applyEditModeStyle();
+    this.anItemInput.updateValue(item.textContent);
   }
 
   // MARK: - onClickClearAll

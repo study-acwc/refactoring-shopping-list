@@ -58,24 +58,6 @@ export class RemoveItemCommand {
     }
 }
 
-export class SetItemToEditCommand {
-    #anItemList;
-    #aFormButton;
-    #anItemInput;
-
-    constructor(anItemList, aFormButton, anItemInput) {
-        this.#anItemList = anItemList;
-        this._anItemInput = anItemInput;
-        this._aFormButton = aFormButton;
-    }
-
-    execute(item) {
-        this.#anItemList.toggleEditModeForSingleItem(item);
-        this._aFormButton.applyEditModeStyle();
-        this._anItemInput.updateValue(item.textContent);
-    }
-}
-
 export class AddItemCommand {
     #anItemList;
     #aStorage;

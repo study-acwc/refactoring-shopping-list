@@ -187,6 +187,10 @@ export class ShoppingListPageController {
     if (false == this.#confirmItemRemoval(item.textContent)) {
       return;
     }
+    this.onItemRemovalConfirmed(item);
+  }
+
+  onItemRemovalConfirmed(item) {
     this.aStorage.removeItem(item.textContent);
     this.#view.removeItem(item);
   }

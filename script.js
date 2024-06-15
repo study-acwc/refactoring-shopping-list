@@ -69,6 +69,11 @@ export class ShoppingListPage {
   filterItems(itemTitle) {
     this.anItemList.filterItemsWith(itemTitle.toLowerCase());
   }
+
+  clearAll() {
+    this.anItemList.clearItems();
+    this.#refreshUICommand.execute();
+  }
 }
 
 export class ShoppingListPageController {
@@ -182,13 +187,8 @@ export class ShoppingListPageController {
   // MARK: - onClickClearAll
 
   onClickClearAll() {
-    this.#clearAll();
+    this.#view.clearAll();
     this.aStorage.clearItems();
-  }
-
-  #clearAll() {
-    this.anItemList.clearItems();
-    this.#refreshUICommand.execute();
   }
 
   // MARK: - onEditingInput

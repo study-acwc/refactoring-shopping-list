@@ -179,8 +179,12 @@ export class ShoppingListPageController {
       this.onRemoveButtonClicked(listItemElement);
     } else if (this.#view.isItemClicked(e)) {
       const listItemElement = e.target;
-      this.#view.setItemToEdit(listItemElement);
+      this.onClickItem(listItemElement);
     }
+  }
+
+  onClickItem(listItemElement) {
+    this.#view.setItemToEdit(listItemElement);
   }
 
   onRemoveButtonClicked(item) {

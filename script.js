@@ -42,17 +42,12 @@ export class ShoppingListPage {
   onAddItemSubmit(e) {
     e.preventDefault();
     const newItem = this.anItemInput.uniqueValue;
-    if (this.#isEditMode()) {
+    if (this.#aFormButton.isEditMode) {
       this.#presenter.onClickUpdateItemSubmit(newItem);
     } else {
       this.#presenter.onClickAddItemSubmit(newItem);
     }
   }
-
-  #isEditMode() {
-    return this.#aFormButton.isEditMode
-  }
-
 
   onClickItem(e) {
     if (this.#isRemoveButtonClicked(e)) {

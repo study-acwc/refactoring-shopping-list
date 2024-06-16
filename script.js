@@ -141,14 +141,14 @@ export class ShoppingListPagePresenter {
 
   // MARK: - onClickUpdateItemSubmit
 
-  onClickUpdateItemSubmit(newItem) {
-    if (false == this.#checkIfItemInputIsValid(newItem)) {
+  onClickUpdateItemSubmit(newItemTitle) {
+    if (false == this.#checkIfItemInputIsValid(newItemTitle)) {
       return;
     }
-    this.#model.removeItem(newItem.textContent);
+    this.#model.removeItem(newItemTitle.textContent);
     this.#view.removeEditingItem();
-    this.#model.addItem(newItem);
-    this.#view.addItem(newItem);
+    this.#model.addItem(newItemTitle);
+    this.#view.addItem(newItemTitle);
   }
 
   #checkIfItemInputIsValid(value) {

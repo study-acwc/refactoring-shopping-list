@@ -833,12 +833,8 @@ describe('Dom Content가 로드되었을 때', () => {
   });
 
   test('저장된 아이템을 화면에 표시하고, 입력필드가 비어있어야 허고, 아이템 편집상태가 아니어야 한다', () => {
-    view.onDOMContentLoad();
+   view.onDOMContentLoad();
     
-    const items = itemElements().map(
-      (i) => i.textContent
-    );
-
    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
     <meta charset="UTF-8">

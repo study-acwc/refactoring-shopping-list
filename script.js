@@ -157,7 +157,7 @@ export class ShoppingListPageController {
   onAddItemSubmit(e) {
     e.preventDefault();
     const newItem = this.anItemInput.uniqueValue;
-    if (false == this.checkIfItemInputIsValid()) {
+    if (false == this.checkIfItemInputIsValid(newItem)) {
       return;
     }
     if (this.#view.isEditMode) {
@@ -171,8 +171,8 @@ export class ShoppingListPageController {
     }
   }
 
-  checkIfItemInputIsValid() {
-    if (false == this.#isValidInput(this.anItemInput.uniqueValue)) {
+  checkIfItemInputIsValid(value) {
+    if (false == this.#isValidInput(value)) {
       this.#alertAddAnItem();
       return false;
     }

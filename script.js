@@ -142,7 +142,7 @@ export class ShoppingListPageController {
 
   constructor(view, model) {
     this.#view = view;
-    this.aStorage = new storage.Storage('items');
+    this.model = new storage.Storage('items');
   }
 
   launchUI() {
@@ -155,9 +155,9 @@ export class ShoppingListPageController {
     if (false == this.#checkIfItemInputIsValid(newItem)) {
       return;
     }
-    this.aStorage.removeItem(newItem.textContent);
+    this.model.removeItem(newItem.textContent);
     this.#view.removeEditingItem();
-    this.aStorage.addItem(newItem);
+    this.model.addItem(newItem);
     this.#view.addItem(newItem);
   }
 
@@ -184,12 +184,12 @@ export class ShoppingListPageController {
     if (false == this.#checkIfItemInputIsValid(newItem)) {
       return;
     }
-    if (this.aStorage.hasItem(newItem)) {
+    if (this.model.hasItem(newItem)) {
       this.#alertIfItemExists();
       return;
     }
 
-    this.aStorage.addItem(newItem);
+    this.model.addItem(newItem);
     this.#view.addItem(newItem);
   }
 
@@ -206,7 +206,7 @@ export class ShoppingListPageController {
   // MARK: - onItemRemovalConfirmed
 
   onItemRemovalConfirmed(item) {
-    this.aStorage.removeItem(item.textContent);
+    this.model.removeItem(item.textContent);
     this.#view.removeItem(item);
   }
 
@@ -214,7 +214,7 @@ export class ShoppingListPageController {
 
   onClickClearAll() {
     this.#view.clearAll();
-    this.aStorage.clearItems();
+    this.model.clearItems();
   }
 
   // MARK: - onEditingInput
@@ -227,7 +227,7 @@ export class ShoppingListPageController {
   // MARK: - onDOMContentLoad
 
   onDOMContentLoad() {
-    let itemTitles = this.aStorage.allItems;
+    let itemTitles = this.model.allItems;
     this.#view.displayAllItems(itemTitles);
   }
 }

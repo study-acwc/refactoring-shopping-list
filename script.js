@@ -149,6 +149,18 @@ export class ShoppingListPageController {
     this.#view.refreshUI();
   }
 
+  // MARK: - onClickUpdateItemSubmit
+
+  onClickUpdateItemSubmit(newItem) {
+    if (false == this.#checkIfItemInputIsValid(newItem)) {
+      return;
+    }
+    this.aStorage.removeItem(newItem.textContent);
+    this.#view.removeEditingItem();
+    this.aStorage.addItem(newItem);
+    this.#view.addItem(newItem);
+  }
+
   #checkIfItemInputIsValid(value) {
     if (false == this.#isValidInput(value)) {
       this.#alertAddAnItem();
@@ -162,15 +174,11 @@ export class ShoppingListPageController {
     return value != ''
   }
 
-  onClickUpdateItemSubmit(newItem) {
-    if (false == this.#checkIfItemInputIsValid(newItem)) {
-      return;
-    }
-    this.aStorage.removeItem(newItem.textContent);
-    this.#view.removeEditingItem();
-    this.aStorage.addItem(newItem);
-    this.#view.addItem(newItem);
+  #alertAddAnItem() {
+    alert('Please add an item');
   }
+
+  // MARK: - onClickAddItemSubmit
 
   onClickAddItemSubmit(newItem) {
     if (false == this.#checkIfItemInputIsValid(newItem)) {
@@ -185,10 +193,6 @@ export class ShoppingListPageController {
     this.#view.addItem(newItem);
   }
 
-  #alertAddAnItem() {
-    alert('Please add an item');
-  }
-
   #alertIfItemExists(newItem) {
     alert(`The item "${newItem}" already exists!`);
   }
@@ -198,6 +202,8 @@ export class ShoppingListPageController {
   onClickItem(listItemElement) {
     this.#view.setItemToEdit(listItemElement);
   }
+
+  // MARK: - onItemRemovalConfirmed
 
   onItemRemovalConfirmed(item) {
     this.aStorage.removeItem(item.textContent);

@@ -126,6 +126,10 @@ export class ShoppingListPage {
     this.#refreshUICommand.execute();
   }
 
+  refreshUI() {
+    this.#refreshUICommand.execute();
+  }
+
   // MARK: - 임시
 
   get isEditMode() {
@@ -155,11 +159,7 @@ export class ShoppingListPageController {
   }
 
   launchUI() {
-    this.refreshUI();
-  }
-
-  refreshUI() {
-    this.#refreshUICommand.execute();
+    this.#view.refreshUI();
   }
 
   #checkIfItemInputIsValid(value) {

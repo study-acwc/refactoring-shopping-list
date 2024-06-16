@@ -160,9 +160,7 @@ export class ShoppingListPageController {
     if (this.#view.isEditMode) {
       this.onClickUpdateItemSubmit(newItem);
     } else {
-      if (true == this.onClickAddItemSubmit(newItem)) {
-
-      }
+      this.onClickAddItemSubmit(newItem);
     }
   }
 
@@ -191,16 +189,15 @@ export class ShoppingListPageController {
 
   onClickAddItemSubmit(newItem) {
     if (false == this.checkIfItemInputIsValid(newItem)) {
-      return false;
+      return;
     }
-
     if (this.aStorage.hasItem(newItem)) {
       this.#alertIfItemExists();
-      return false;
+      return;
     }
+
     this.aStorage.addItem(newItem);
     this.#view.addItem(newItem);
-    return true
   }
 
   #alertAddAnItem() {

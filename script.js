@@ -114,8 +114,8 @@ export class ShoppingListPage {
     this.#refreshUICommand.execute();
   }
 
-  addItem(newItem) {
-    this.anItemList.appendItemWith(newItem);
+  addItem(newItemTitle) {
+    this.anItemList.appendItemWith(newItemTitle);
     this.#refreshUICommand.execute();
   }
 

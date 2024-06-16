@@ -2,7 +2,7 @@ import * as storage from './storage.js';
 import * as elements from './elements.js';
 import * as commands from './commands.js';
 
-// MARK: - 변수 선언
+// MARK: - ShoppingListPage
 
 export class ShoppingListPage {
   #presenter;
@@ -136,6 +136,8 @@ export class ShoppingListPage {
     return this.#aFormButton.isEditMode
   }
 }
+
+// MARK: - ShoppingListPagePresenter
 
 export class ShoppingListPagePresenter {
   #view;

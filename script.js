@@ -170,17 +170,17 @@ export class ShoppingListPagePresenter {
 
   // MARK: - onClickAddItemSubmit
 
-  onClickAddItemSubmit(newItem) {
-    if (false == this.#checkIfItemInputIsValid(newItem)) {
+  onClickAddItemSubmit(newItemTitle) {
+    if (false == this.#checkIfItemInputIsValid(newItemTitle)) {
       return;
     }
-    if (this.#model.hasItem(newItem)) {
+    if (this.#model.hasItem(newItemTitle)) {
       this.#alertIfItemExists();
       return;
     }
 
-    this.#model.addItem(newItem);
-    this.#view.addItem(newItem);
+    this.#model.addItem(newItemTitle);
+    this.#view.addItem(newItemTitle);
   }
 
   #alertIfItemExists(newItem) {

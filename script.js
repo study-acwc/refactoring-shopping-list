@@ -46,11 +46,18 @@ export class ShoppingListPage {
   onClickItem(e) {
     if (this.#isRemoveButtonClicked(e)) {
       const listItemElement = e.target.parentElement.parentElement;
-      this.#presenter.onRemoveButtonClicked(listItemElement);
+      if (false == this.#confirmItemRemoval(listItemElement.textContent)) {
+        return;
+      }
+      this.#presenter.onItemRemovalConfirmed(listItemElement);
     } else if (this.#isItemClicked(e)) {
       const listItemElement = e.target;
       this.#presenter.onClickItem(listItemElement);
     }
+  }
+
+  #confirmItemRemoval(textContent) {
+    return confirm(`Are you sure you want to remove the item "${textContent}"?`)
   }
 
   #isRemoveButtonClicked(e) {
@@ -118,10 +125,6 @@ export class ShoppingListPage {
   get isEditMode() {
     return this.#aFormButton.isEditMode
   }
-
-  confirmItemRemoval(textContent) {
-    return confirm(`Are you sure you want to remove the item "${textContent}"?`)
-  }
 }
 
 export class ShoppingListPageController {
@@ -185,13 +188,6 @@ export class ShoppingListPageController {
 
   onClickItem(listItemElement) {
     this.#view.setItemToEdit(listItemElement);
-  }
-
-  onRemoveButtonClicked(item) {
-    if (false == this.#view.confirmItemRemoval(item.textContent)) {
-      return;
-    }
-    this.onItemRemovalConfirmed(item);
   }
 
   onItemRemovalConfirmed(item) {

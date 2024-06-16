@@ -11,7 +11,7 @@ let model;
 beforeEach(() => {
   view = new script.ShoppingListPage();
   model = new storage.Storage('items');
-  sut = new script.ShoppingListPageController(view, model);
+  sut = new script.ShoppingListPagePresenter(view, model);
   view.setPresenter(sut);
   view.onClickClearAll();
 });

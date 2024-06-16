@@ -137,7 +137,7 @@ export class ShoppingListPage {
   }
 }
 
-export class ShoppingListPageController {
+export class ShoppingListPagePresenter {
   #view;
   #model;
 
@@ -234,7 +234,7 @@ export class ShoppingListPageController {
 }
 
 const view = new ShoppingListPage();
-export const page = new ShoppingListPageController(
+export const page = new ShoppingListPagePresenter(
   view,
   new storage.Storage('items')
 );

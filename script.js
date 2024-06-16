@@ -40,7 +40,13 @@ export class ShoppingListPage {
   }
 
   onAddItemSubmit(e) {
-    this.#presenter.onAddItemSubmit(e);
+    e.preventDefault();
+    const newItem = this.anItemInput.uniqueValue;
+    if (this.isEditMode) {
+      this.#presenter.onClickUpdateItemSubmit(newItem);
+    } else {
+      this.#presenter.onClickAddItemSubmit(newItem);
+    }
   }
 
   onClickItem(e) {
@@ -150,18 +156,6 @@ export class ShoppingListPageController {
 
   launchUI() {
     this.#refreshUICommand.execute();
-  }
-
-  // MARK: - onAddItemSubmit
-
-  onAddItemSubmit(e) {
-    e.preventDefault();
-    const newItem = this.anItemInput.uniqueValue;
-    if (this.#view.isEditMode) {
-      this.onClickUpdateItemSubmit(newItem);
-    } else {
-      this.onClickAddItemSubmit(newItem);
-    }
   }
 
   #checkIfItemInputIsValid(value) {

@@ -162,8 +162,7 @@ export class ShoppingListPageController {
     }
     const newItem = this.anItemInput.uniqueValue;
     if (this.#view.isEditMode) {
-      this.aStorage.removeItem(newItem.textContent);
-      this.aStorage.addItem(newItem);
+      this.onClickUpdateItemSubmit(newItem);
       this.#view.removeEditingItem();
       this.#view.addItem(newItem);
     } else {
@@ -171,6 +170,11 @@ export class ShoppingListPageController {
         this.#view.addItem(newItem);
       }
     }
+  }
+
+  onClickUpdateItemSubmit(newItem) {
+    this.aStorage.removeItem(newItem.textContent);
+    this.aStorage.addItem(newItem);
   }
 
   onClickAddItemSubmit(newItem) {

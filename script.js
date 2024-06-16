@@ -234,11 +234,11 @@ export class ShoppingListPagePresenter {
 }
 
 const view = new ShoppingListPage();
-export const page = new ShoppingListPagePresenter(
+export const presenter = new ShoppingListPagePresenter(
   view,
   new storage.Storage('items')
 );
 
 // MARK: - 함수 실행문
-view.setPresenter(page);
-page.launchUI()
+view.setPresenter(presenter);
+presenter.launchUI()

@@ -156,8 +156,7 @@ export class ShoppingListPageController {
 
   onAddItemSubmit(e) {
     e.preventDefault();
-    if (false == this.anItemInput.hasValidValue) {
-      this.#alertAddAnItem();
+    if (false == this.checkIfItemInputIsValid()) {
       return;
     }
     const newItem = this.anItemInput.uniqueValue;
@@ -170,6 +169,15 @@ export class ShoppingListPageController {
         this.#view.addItem(newItem);
       }
     }
+  }
+
+  checkIfItemInputIsValid() {
+    if (false == this.anItemInput.hasValidValue) {
+      this.#alertAddAnItem();
+      return false;
+    }
+
+    return true
   }
 
   onClickUpdateItemSubmit(newItem) {

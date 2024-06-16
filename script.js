@@ -164,7 +164,7 @@ export class ShoppingListPageController {
     }
   }
 
-  checkIfItemInputIsValid(value) {
+  #checkIfItemInputIsValid(value) {
     if (false == this.#isValidInput(value)) {
       this.#alertAddAnItem();
       return false;
@@ -178,7 +178,7 @@ export class ShoppingListPageController {
   }
 
   onClickUpdateItemSubmit(newItem) {
-    if (false == this.checkIfItemInputIsValid(newItem)) {
+    if (false == this.#checkIfItemInputIsValid(newItem)) {
       return;
     }
     this.aStorage.removeItem(newItem.textContent);
@@ -188,7 +188,7 @@ export class ShoppingListPageController {
   }
 
   onClickAddItemSubmit(newItem) {
-    if (false == this.checkIfItemInputIsValid(newItem)) {
+    if (false == this.#checkIfItemInputIsValid(newItem)) {
       return;
     }
     if (this.aStorage.hasItem(newItem)) {

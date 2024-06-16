@@ -138,24 +138,11 @@ export class ShoppingListPage {
 }
 
 export class ShoppingListPageController {
-  #refreshUICommand;
-  #anItemForm;
-  #aClearButton;
-  #anItemFilter;
-  #aFormButton;
   #view;
 
   constructor(view) {
     this.#view = view;
     this.aStorage = new storage.Storage('items');
-    this.anItemList = new elements.ItemElementList(document.getElementById('item-list'));
-    this.#anItemForm = new elements.ItemForm(document.getElementById('item-form'));
-    this.#aClearButton = new elements.ClearButton(document.getElementById('clear'));
-    this.#anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
-    this.anItemInput = new elements.ItemInput(document.getElementById('item-input'));
-    this.#aFormButton = new elements.FormButton(this.#anItemForm.formButton);
-    
-    this.#refreshUICommand = new commands.refreshUICommand(this.anItemInput, this.anItemList, this.#aFormButton, this.#aClearButton, this.#anItemFilter);
   }
 
   launchUI() {

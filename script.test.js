@@ -887,11 +887,11 @@ function dummyUIEvent() {
 }
 
 function setItemInputValue(value) {
-  sut.anItemInput.updateValue(value);
+  view.anItemInput.updateValue(value);
 }
 
 function itemElements() {
-  return Array.from(sut.anItemList.allItems);
+  return Array.from(view.anItemList.allItems);
 }
 
 function filteredItemElementsBy(itemTitle) {

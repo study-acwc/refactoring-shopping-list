@@ -144,11 +144,7 @@ export class ItemInput {
     get uniqueValue() {
         return this.#element.value.trim()
     }
-
-    isValidInput(value) {
-        return value != ''
-    }
-
+    
     updateValue(newValue) {
         this.#element.value = newValue;
     }

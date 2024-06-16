@@ -172,12 +172,16 @@ export class ShoppingListPageController {
   }
 
   checkIfItemInputIsValid() {
-    if (false == this.anItemInput.isValidInput(this.anItemInput.uniqueValue)) {
+    if (false == this.#isValidInput(this.anItemInput.uniqueValue)) {
       this.#alertAddAnItem();
       return false;
     }
 
     return true
+  }
+
+  #isValidInput(value) {
+    return value != ''
   }
 
   onClickUpdateItemSubmit(newItem) {

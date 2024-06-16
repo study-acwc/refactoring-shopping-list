@@ -157,14 +157,17 @@ export class ShoppingListPageController {
   onAddItemSubmit(e) {
     e.preventDefault();
     const newItem = this.anItemInput.uniqueValue;
-    if (false == this.checkIfItemInputIsValid(newItem)) {
-      return;
-    }
     if (this.#view.isEditMode) {
+      if (false == this.checkIfItemInputIsValid(newItem)) {
+        return;
+      }
       this.onClickUpdateItemSubmit(newItem);
       this.#view.removeEditingItem();
       this.#view.addItem(newItem);
     } else {
+      if (false == this.checkIfItemInputIsValid(newItem)) {
+        return;
+      }
       if (true == this.onClickAddItemSubmit(newItem)) {
         this.#view.addItem(newItem);
       }

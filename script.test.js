@@ -172,6 +172,66 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
     });
 });
 
+
+describe('Update Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
+  let event;
+  let itemTitle;
+  beforeEach(() => {
+      event = dummyUIEvent();
+      itemTitle = 'item';
+      // 1
+      updateUserInputAndSubmitAdd(itemTitle);
+      // 2
+      const filtered = filteredItemElementsBy(itemTitle);
+      view.setItemToEdit(filtered[0]);
+      // 3
+      setItemInputValue('');
+  });
+
+  test('아이템을 변경하지 않는다', () => {
+      view.onAddItemSubmit(event);
+
+      expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
+"<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="images/note.png" alt="">
+        <h1>Shopping List</h1>
+      </header>
+      <form id="item-form">
+        <div class="form-control">
+          <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item">
+        </div>
+        <div class="form-control">
+          <button type="submit" class="btn" style="background-color: rgb(34, 139, 34);"><i class="fa-solid fa-pen"></i>   Update Item</button>
+        </div>
+      </form>
+
+      <div class="filter">
+        <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" style="display: block;">
+      </div>
+
+      <ul id="item-list" class="items"><li class="edit-mode">item<button class="remove-item btn-link text-red"><i class="fa-solid fa-xmark"></i></button></li></ul>
+
+      <button id="clear" class="btn-clear" style="display: block;">Clear All</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  
+
+</body>"
+`);
+  });
+});
+
 describe('Update Item 버튼이 눌렸을 때', () => {
     let event;
     let itemTitle;

@@ -145,8 +145,8 @@ export class ItemInput {
         return this.#element.value.trim()
     }
 
-    get hasValidValue() {
-        return this.#element.value != ''
+    isValidInput(value) {
+        return value != ''
     }
 
     updateValue(newValue) {

@@ -156,10 +156,10 @@ export class ShoppingListPageController {
 
   onAddItemSubmit(e) {
     e.preventDefault();
+    const newItem = this.anItemInput.uniqueValue;
     if (false == this.checkIfItemInputIsValid()) {
       return;
     }
-    const newItem = this.anItemInput.uniqueValue;
     if (this.#view.isEditMode) {
       this.onClickUpdateItemSubmit(newItem);
       this.#view.removeEditingItem();

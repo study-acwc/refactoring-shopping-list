@@ -155,6 +155,10 @@ export class ShoppingListPageController {
   }
 
   launchUI() {
+    this.refreshUI();
+  }
+
+  refreshUI() {
     this.#refreshUICommand.execute();
   }
 

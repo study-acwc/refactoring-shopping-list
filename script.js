@@ -167,15 +167,20 @@ export class ShoppingListPageController {
       this.#view.removeEditingItem();
       this.#view.addItem(newItem);
     } else {
-      if (this.aStorage.hasItem(newItem)) {
-        this.#alertIfItemExists();
-        return;
+      if (true == this.onClickAddItemSubmit(newItem)) {
+        this.#view.addItem(newItem);
       }
-      this.aStorage.addItem(newItem);
-      this.#view.addItem(newItem);
     }
   }
 
+  onClickAddItemSubmit(newItem) {
+    if (this.aStorage.hasItem(newItem)) {
+      this.#alertIfItemExists();
+      return false;
+    }
+    this.aStorage.addItem(newItem);
+    return true
+  }
 
   #alertAddAnItem() {
     alert('Please add an item');

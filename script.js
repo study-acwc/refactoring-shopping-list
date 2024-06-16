@@ -42,12 +42,17 @@ export class ShoppingListPage {
   onAddItemSubmit(e) {
     e.preventDefault();
     const newItem = this.anItemInput.uniqueValue;
-    if (this.isEditMode) {
+    if (this.#isEditMode()) {
       this.#presenter.onClickUpdateItemSubmit(newItem);
     } else {
       this.#presenter.onClickAddItemSubmit(newItem);
     }
   }
+
+  #isEditMode() {
+    return this.#aFormButton.isEditMode
+  }
+
 
   onClickItem(e) {
     if (this.#isRemoveButtonClicked(e)) {
@@ -128,12 +133,6 @@ export class ShoppingListPage {
 
   refreshUI() {
     this.#refreshUICommand.execute();
-  }
-
-  // MARK: - 임시
-
-  get isEditMode() {
-    return this.#aFormButton.isEditMode
   }
 }
 

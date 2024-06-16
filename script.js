@@ -175,7 +175,7 @@ export class ShoppingListPagePresenter {
       return;
     }
     if (this.#model.hasItem(newItemTitle)) {
-      this.#alertIfItemExists();
+      this.#alertIfItemExists(newItemTitle);
       return;
     }
 

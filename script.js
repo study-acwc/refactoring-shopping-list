@@ -163,8 +163,8 @@ export class ShoppingListPageController {
     const newItem = this.anItemInput.uniqueValue;
     if (this.#view.isEditMode) {
       this.aStorage.removeItem(newItem.textContent);
-      this.#view.removeEditingItem();
       this.aStorage.addItem(newItem);
+      this.#view.removeEditingItem();
       this.#view.addItem(newItem);
     } else {
       if (this.aStorage.hasItem(newItem)) {
@@ -175,6 +175,7 @@ export class ShoppingListPageController {
       this.#view.addItem(newItem);
     }
   }
+
 
   #alertAddAnItem() {
     alert('Please add an item');

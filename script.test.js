@@ -1,14 +1,17 @@
 import * as innerHTMLForTest from './scriptTestHTMLSetup.js';
 import * as script from './script.js';
 import * as elements from './elements.js';
+import * as storage from './storage.js';
 
 window.alert = jest.fn();
 let sut;
 let view;
+let model;
 
 beforeEach(() => {
   view = new script.ShoppingListPage();
-  sut = new script.ShoppingListPageController(view);
+  model = new storage.Storage('items');
+  sut = new script.ShoppingListPageController(view, model);
   view.setPresenter(sut);
   view.onClickClearAll();
 });
@@ -71,7 +74,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
         event = dummyUIEvent();
         inputValue = 'item1';
         setItemInputValue(inputValue);
-        sut.aStorage.saveAllItems(['item2', 'item3']);
+        model.saveAllItems(['item2', 'item3']);
     });
 
     test('아이템을 저장하고, 화면에 새로운 아이템을 표시하고, 입력값을 지운다.', () => {
@@ -125,7 +128,7 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
         event = dummyUIEvent();
         inputValue = 'item1';
         setItemInputValue(inputValue);
-        sut.aStorage.saveAllItems([inputValue]);
+        model.saveAllItems([inputValue]);
     });
 
     test('아이템을 중복 저장하지 않고, 입력값을 지우지 않는다', () => {
@@ -733,7 +736,7 @@ describe('검색어를 입력했을 때', () => {
 
 describe('Clear All 버튼이 눌렸을 때', () => {
   beforeEach(() => {
-    sut.aStorage.saveAllItems(['item1', 'item2']);
+    model.saveAllItems(['item1', 'item2']);
   });
 
   test('모든 아이템을 저장소에서 제거한다', () => {
@@ -826,7 +829,7 @@ describe('Clear All 버튼이 눌렸을 때', () => {
 describe('Dom Content가 로드되었을 때', () => {
   let contents = ['item1', 'item2'];
   beforeEach(() => {
-    sut.aStorage.saveAllItems(contents);
+    model.saveAllItems(contents);
   });
 
   test('저장된 아이템을 화면에 표시하고, 입력필드가 비어있어야 허고, 아이템 편집상태가 아니어야 한다', () => {

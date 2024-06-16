@@ -140,7 +140,7 @@ export class ShoppingListPage {
 export class ShoppingListPageController {
   #view;
 
-  constructor(view) {
+  constructor(view, model) {
     this.#view = view;
     this.aStorage = new storage.Storage('items');
   }
@@ -233,7 +233,10 @@ export class ShoppingListPageController {
 }
 
 const view = new ShoppingListPage();
-export const page = new ShoppingListPageController(view);
+export const page = new ShoppingListPageController(
+  view,
+  new storage.Storage('items')
+);
 
 // MARK: - 함수 실행문
 view.setPresenter(page);

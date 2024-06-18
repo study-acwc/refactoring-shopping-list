@@ -182,7 +182,7 @@ describe('Update Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
   });
 
   test('아이템을 변경하지 않는다', () => {
-      sut.onClickUpdateItemSubmit(inputValue);
+      sut.onClickUpdateItemSubmit(itemTitle, inputValue);
 
       expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -239,7 +239,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
     });
 
     test('저장된 아이템을 제거하고, 화면에서 해당 아이템을 제거하고, 아이템 편집 상태를 해제하고, 새로운 아이템을 저장하고, 화면에 새로운 아이템을 표시하고, 입력값을 지운다', () => {
-        sut.onClickUpdateItemSubmit(updatedItemTitle);
+        sut.onClickUpdateItemSubmit(itemTitle, updatedItemTitle);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>

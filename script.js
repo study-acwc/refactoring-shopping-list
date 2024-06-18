@@ -44,7 +44,10 @@ export class ShoppingListPage {
     e.preventDefault();
     const newItem = this.#anItemInput.uniqueValue;
     if (this.#aFormButton.isEditMode) {
-      this.#presenter.onClickUpdateItemSubmit(newItem);
+      this.#presenter.onClickUpdateItemSubmit(
+        this.anItemList.editingItem.textContent,
+        newItem
+      );
     } else {
       this.#presenter.onClickAddItemSubmit(newItem);
     }
@@ -158,13 +161,13 @@ export class ShoppingListPagePresenter {
 
   // MARK: - onClickUpdateItemSubmit
 
-  onClickUpdateItemSubmit(newItemTitle) {
+  onClickUpdateItemSubmit(editingItemTitle, newItemTitle) {
     if (false == this.#isValidInput(newItemTitle)) {
       this.#view.alertAddAnItem();
       return;
     }
 
-    this.#model.removeItem(newItemTitle.textContent);
+    this.#model.removeItem(editingItemTitle);
     this.#view.removeEditingItem();
     this.#model.addItem(newItemTitle);
     this.#view.addItem(newItemTitle);

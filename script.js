@@ -127,6 +127,10 @@ export class ShoppingListPage {
   alertIfItemExists(newItem) {
     alert(`The item "${newItem}" already exists!`);
   }
+
+  alertAddAnItem() {
+    alert('Please add an item');
+  }
 }
 
 // MARK: - ShoppingListPagePresenter
@@ -148,7 +152,7 @@ export class ShoppingListPagePresenter {
 
   onClickUpdateItemSubmit(newItemTitle) {
     if (false == this.#isValidInput(newItemTitle)) {
-      this.#alertAddAnItem();
+      this.#view.alertAddAnItem();
       return;
     }
 
@@ -162,15 +166,11 @@ export class ShoppingListPagePresenter {
     return value != ''
   }
 
-  #alertAddAnItem() {
-    alert('Please add an item');
-  }
-
   // MARK: - onClickAddItemSubmit
 
   onClickAddItemSubmit(newItemTitle) {
     if (false == this.#isValidInput(newItemTitle)) {
-      this.#alertAddAnItem();
+      this.#view.alertAddAnItem();
       return;
     }
     if (this.#model.hasItem(newItemTitle)) {

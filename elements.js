@@ -88,8 +88,8 @@ export class ItemElementList {
         this.#appendItem(li);
     }
 
-    #appendItem(element) {
-        this.#list.appendChild(element)
+    #appendItem(item) {
+        this.#list.appendChild(item)
     }
       
     #listItem(item) {

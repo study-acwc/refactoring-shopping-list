@@ -51,10 +51,10 @@ export class ItemElementList {
         }
     }
 
-    itemWith(textContent) {
+    itemWith(itemTitle) {
         for (const item of this.allItems) {
             const itemName = item.firstChild.textContent.trim().toLowerCase();
-            if (itemName.indexOf(textContent.toLowerCase()) != -1) {
+            if (itemName.indexOf(itemTitle.toLowerCase()) != -1) {
                 return item;
             }
         }

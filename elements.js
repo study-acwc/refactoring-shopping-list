@@ -72,7 +72,14 @@ export class ItemElementList {
         item.classList.remove(this.EDITMODE_ELEMENT_CLASS);
     }
 
-    removeItem(item) {
+    removeItemWith(itemTitle) {
+        const item = this.itemWith(itemTitle.trim());
+        if (item != null) {
+            this.#removeItem(item);
+        }
+    }
+
+    #removeItem(item) {
         item.remove();
     }
 

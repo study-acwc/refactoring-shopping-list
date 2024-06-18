@@ -108,14 +108,14 @@ export class ShoppingListPage {
   }
 
   removeItem(item) {
-    this.anItemList.removeItem(item);
+    this.anItemList.removeItemWith(item.textContent);
     this.#refreshUICommand.execute();
   }
 
   removeEditingItem() {
     const item = this.anItemList.editingItem;
     this.anItemList.disableEditModeClassFor(item.textContent);
-    this.anItemList.removeItem(item);
+    this.anItemList.removeItemWith(item.textContent);
     this.#refreshUICommand.execute();
   }
 

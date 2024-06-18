@@ -551,21 +551,16 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
 
 describe('검색어를 입력했을 때', () => {
   let searchKeyword;
-  let searchKeywordEvent;
   beforeEach(() => {
     // 1
     sut.onClickAddItemSubmit('notebook');
     sut.onClickAddItemSubmit('ipad');
     // 2
     searchKeyword = 'note';
-    searchKeywordEvent = {
-      preventDefault: jest.fn(),
-      target: { value: searchKeyword }
-    };
   });
 
   test('검색 결과에 해당하는 아이템을 표시하고, 검색 결과에 해당하지 않는 아이템은 표시하지 않는다', () => {
-    sut.onEditingInput(searchKeywordEvent);
+    sut.onEditingInput(searchKeyword);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>

@@ -77,7 +77,8 @@ export class ShoppingListPage {
   }
 
   #onEditingInput(e) {
-    this.#presenter.onEditingInput(e);
+    let itemTitle = e.target.value;
+    this.#presenter.onEditingInput(itemTitle);
   }
 
   #onDOMContentLoad() {
@@ -219,8 +220,7 @@ export class ShoppingListPagePresenter {
 
   // MARK: - onEditingInput
 
-  onEditingInput(e) {
-    let itemTitle = e.target.value;
+  onEditingInput(itemTitle) {
     this.#view.filterItems(itemTitle);
   }
 

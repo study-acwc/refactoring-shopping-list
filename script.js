@@ -2,77 +2,65 @@ import * as storage from './storage.js';
 import * as elements from './elements.js';
 import * as commands from './commands.js';
 
-// MARK: - 변수 선언
+// MARK: - ShoppingListPage
 
-class ShoppingListPage {
-  #refreshUICommand;
+export class ShoppingListPage {
+  #presenter;
+
+  #anItemList;
   #anItemForm;
+  #aClearButton;
+  #anItemFilter;
+  #aFormButton;
+  #anItemInput;
+
+  #refreshUICommand;
 
   constructor() {
-    this.aStorage = new storage.Storage('items');
-    this.anItemList = new elements.ItemElementList(document.getElementById('item-list'));
+    this.#anItemList = new elements.ItemElementList(document.getElementById('item-list'));
     this.#anItemForm = new elements.ItemForm(document.getElementById('item-form'));
-    this.aClearButton = new elements.ClearButton(document.getElementById('clear'));
-    this.anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
-    this.anItemInput = new elements.ItemInput(document.getElementById('item-input'));
-    this.aFormButton = new elements.FormButton(this.#anItemForm.formButton);
-    
-    this.#refreshUICommand = new commands.refreshUICommand(this.anItemInput, this.anItemList, this.aFormButton, this.aClearButton, this.anItemFilter);
+    this.#aClearButton = new elements.ClearButton(document.getElementById('clear'));
+    this.#anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
+    this.#aFormButton = new elements.FormButton(this.#anItemForm.formButton);
+    this.#anItemInput = new elements.ItemInput(document.getElementById('item-input'));
+
+    this.#refreshUICommand = new commands.refreshUICommand(this.#anItemInput, this.#anItemList, this.#aFormButton, this.#aClearButton, this.#anItemFilter);
+
+    this.#registerEventListeners();
   }
 
-  launchUI() {
-    this.#registerEventListeners();
-    this.#refreshUICommand.execute();
+  setPresenter(presenter) {
+    this.#presenter = presenter;
   }
 
   #registerEventListeners() {
-    this.#anItemForm.addListener(this.onAddItemSubmit);
-    this.anItemList.addListener(this.onClickItem);
-    this.aClearButton.addListener(this.onClickClearAll);
-    this.anItemFilter.addListener(this.onEditingInput);
-    document.addEventListener('DOMContentLoaded', this.onDOMContentLoad);
+    this.#anItemForm.addListener(this.#onAddItemSubmit.bind(this));
+    this.#anItemList.addListener(this.#onClickItem.bind(this));
+    this.#aClearButton.addListener(this.#onClickClearAll.bind(this));
+    this.#anItemFilter.addListener(this.#onEditingInput.bind(this));
+    document.addEventListener('DOMContentLoaded', this.#onDOMContentLoad.bind(this));
   }
 
-  // MARK: - onAddItemSubmit
-
-  onAddItemSubmit(e) {
+  #onAddItemSubmit(e) {
     e.preventDefault();
-    if (false == this.anItemInput.hasValidValue) {
-      this.#alertAddAnItem();
-      return;
-    }
-    const newItem = this.anItemInput.uniqueValue;
-    if (this.aFormButton.isEditMode) {
-      new commands.RemoveEditingItemCommand(this.anItemList, this.aStorage).execute();
-      new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
-      this.#refreshUICommand.execute();
+    const newItemTitle = this.#anItemInput.uniqueValue;
+    if (this.#aFormButton.isEditMode) {
+      this.#presenter.onClickUpdateItemSubmit(
+        this.#anItemList.editingItem.textContent,
+        newItemTitle
+      );
     } else {
-      if (this.aStorage.hasItem(newItem)) {
-        this.#alertIfItemExists();
-        return;
-      }
-      new commands.AddItemCommand(this.anItemList, this.aStorage).execute(newItem);
-      this.#refreshUICommand.execute();
+      this.#presenter.onClickAddItemSubmit(newItemTitle);
     }
   }
 
-  #alertAddAnItem() {
-    alert('Please add an item');
-  }
-
-  #alertIfItemExists(newItem) {
-    alert(`The item "${newItem}" already exists!`);
-  }
-
-  // MARK: - onClickItem
-
-  onClickItem(e) {
+  #onClickItem(e) {
     if (this.#isRemoveButtonClicked(e)) {
       const listItemElement = e.target.parentElement.parentElement;
-      this.removeItem(listItemElement);
+      this.#presenter.onItemRemovalButtonClicked(listItemElement.textContent);
     } else if (this.#isItemClicked(e)) {
       const listItemElement = e.target;
-      this.setItemToEdit(listItemElement);
+      this.#presenter.onClickItem(listItemElement.textContent);
     }
   }
 
@@ -81,42 +69,178 @@ class ShoppingListPage {
     return buttonElement.classList.contains('remove-item');
   }
 
-  removeItem(item) {
-    new commands.RemoveItemCommand(this.anItemList, this.aStorage).execute(item);
+  #isItemClicked(e) {
+    return e.target.closest(this.#anItemList.LI_ELEMENT);
+  }
+
+  #onClickClearAll() {
+    this.#presenter.onClickClearAll();
+  }
+
+  #onEditingInput(e) {
+    let itemTitle = e.target.value;
+    this.#presenter.onEditingInput(itemTitle);
+  }
+
+  #onDOMContentLoad() {
+    this.#presenter.onDOMContentLoad();
+  }
+
+  // MARK: - calling by preseneter
+
+  displayAllItems(itemTitles) {
+    itemTitles.forEach((item) => this.#anItemList.appendItemWith(item));
     this.#refreshUICommand.execute();
   }
 
-  #isItemClicked(e) {
-    return e.target.closest(this.anItemList.LI_ELEMENT);
+  filterItems(itemTitle) {
+    this.#anItemList.filterItemsWith(itemTitle.toLowerCase());
   }
 
-  setItemToEdit(item) {
-    new commands.SetItemToEditCommand(this.anItemList, this.aFormButton, this.anItemInput).execute(item);
+  clearAll() {
+    this.#anItemList.clearItems();
+    this.#refreshUICommand.execute();
+  }
+
+  setItemToEdit(itemTitle) {
+    this.#anItemList.toggleEditModeForSingleItemWith(itemTitle);
+    this.#aFormButton.applyEditModeStyle();
+    this.#anItemInput.updateValue(itemTitle);
+  }
+
+  removeItemWith(itemTitle) {
+    this.#anItemList.removeItemWith(itemTitle);
+    this.#refreshUICommand.execute();
+  }
+
+  removeEditingItem() {
+    const item = this.#anItemList.editingItem;
+    this.#anItemList.disableEditModeClassFor(item.textContent);
+    this.#anItemList.removeItemWith(item.textContent);
+    this.#refreshUICommand.execute();
+  }
+
+  addItem(newItemTitle) {
+    this.#anItemList.appendItemWith(newItemTitle);
+    this.#refreshUICommand.execute();
+  }
+
+  refreshUI() {
+    this.#refreshUICommand.execute();
+  }
+
+  alertIfItemExists(newItemTitle) {
+    alert(`The item "${newItemTitle}" already exists!`);
+  }
+
+  alertAddAnItem() {
+    alert('Please add an item');
+  }
+
+  confirmItemRemoval(itemTitle) {
+    if (false == confirm(`Are you sure you want to remove the item "${itemTitle}"?`)) {
+      return;
+    }
+
+    this.#presenter.onItemRemovalConfirmed(itemTitle);
+  }
+}
+
+// MARK: - ShoppingListPagePresenter
+
+export class ShoppingListPagePresenter {
+  #view;
+  #model;
+
+  constructor(view, model) {
+    this.#view = view;
+    this.#model = new storage.Storage('items');
+  }
+
+  launchUI() {
+    this.#view.refreshUI();
+  }
+
+  // MARK: - onClickUpdateItemSubmit
+
+  onClickUpdateItemSubmit(editingItemTitle, newItemTitle) {
+    if (false == this.#isValidInput(newItemTitle)) {
+      this.#view.alertAddAnItem();
+      return;
+    }
+
+    this.#model.removeItem(editingItemTitle);
+    this.#view.removeEditingItem();
+    this.#model.addItem(newItemTitle);
+    this.#view.addItem(newItemTitle);
+  }
+
+  #isValidInput(value) {
+    return value != ''
+  }
+
+  // MARK: - onClickAddItemSubmit
+
+  onClickAddItemSubmit(newItemTitle) {
+    if (false == this.#isValidInput(newItemTitle)) {
+      this.#view.alertAddAnItem();
+      return;
+    }
+    if (this.#model.hasItem(newItemTitle)) {
+      this.#view.alertIfItemExists(newItemTitle);
+      return;
+    }
+
+    this.#model.addItem(newItemTitle);
+    this.#view.addItem(newItemTitle);
+  }
+
+  // MARK: - onClickItem
+
+  onClickItem(itemTitle) {
+    this.#view.setItemToEdit(itemTitle);
+  }
+
+  // MARK: - onItemRemovalButtonClicked
+
+  onItemRemovalButtonClicked(itemTitle) {
+    this.#view.confirmItemRemoval(itemTitle);
+  }
+
+  // MARK: - onItemRemovalConfirmed
+
+  onItemRemovalConfirmed(itemTitle) {
+    this.#model.removeItem(itemTitle);
+    this.#view.removeItemWith(itemTitle);
   }
 
   // MARK: - onClickClearAll
 
   onClickClearAll() {
-    new commands.ClearAllCommand(this.anItemList, this.aStorage).execute();
-    this.#refreshUICommand.execute();
+    this.#view.clearAll();
+    this.#model.clearItems();
   }
 
   // MARK: - onEditingInput
 
-  onEditingInput(e) {
-    new commands.FilterItemsCommand(this.anItemList).execute(e.target.value);
+  onEditingInput(itemTitle) {
+    this.#view.filterItems(itemTitle);
   }
 
   // MARK: - onDOMContentLoad
 
   onDOMContentLoad() {
-    new commands.DisplayAllItemsCommand(this.anItemList, this.aStorage).execute();
-    this.#refreshUICommand.execute();
+    let itemTitles = this.#model.allItems;
+    this.#view.displayAllItems(itemTitles);
   }
 }
 
-export const page = new ShoppingListPage();
+const view = new ShoppingListPage();
+export const presenter = new ShoppingListPagePresenter(
+  view,
+  new storage.Storage('items')
+);
 
 // MARK: - 함수 실행문
-
-page.launchUI()
+view.setPresenter(presenter);
+presenter.launchUI()

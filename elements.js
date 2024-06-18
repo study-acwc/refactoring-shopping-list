@@ -42,17 +42,44 @@ export class ItemElementList {
         });
     }
 
-    toggleEditModeForSingleItem(item) {
+    toggleEditModeForSingleItemWith(itemTitle) {
+        const theItem = this.itemWith(itemTitle.trim());
         this.allItems
-            .forEach((i) => this.disableEditModeClassFor(i));
-        item.classList.add(this.EDITMODE_ELEMENT_CLASS);
+            .forEach((i) => this.#disableEditModeClassForItem(i));
+        if (theItem != null) {
+            theItem.classList.add(this.EDITMODE_ELEMENT_CLASS);
+        }
     }
 
-    disableEditModeClassFor(item) {
+    itemWith(itemTitle) {
+        for (const item of this.allItems) {
+            const itemName = item.firstChild.textContent.trim().toLowerCase();
+            if (itemName.indexOf(itemTitle.toLowerCase()) != -1) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    disableEditModeClassFor(itemTitle) {
+        const item = this.itemWith(itemTitle.trim());
+        if (item != null) {
+            this.#disableEditModeClassForItem(item);
+        }
+    }
+
+    #disableEditModeClassForItem(item) {
         item.classList.remove(this.EDITMODE_ELEMENT_CLASS);
     }
 
-    removeItem(item) {
+    removeItemWith(itemTitle) {
+        const item = this.itemWith(itemTitle.trim());
+        if (item != null) {
+            this.#removeItem(item);
+        }
+    }
+
+    #removeItem(item) {
         item.remove();
     }
 
@@ -61,8 +88,8 @@ export class ItemElementList {
         this.#appendItem(li);
     }
 
-    #appendItem(element) {
-        this.#list.appendChild(element)
+    #appendItem(item) {
+        this.#list.appendChild(item)
     }
       
     #listItem(item) {
@@ -101,16 +128,6 @@ export class ClearButton {
       this.#element = element;
   }
 
-  // only for unit tesing
-  get isHidden() {
-    return this.#element.style.display == CSSDisplay.NONE;
-  }
-
-  // only for unit tesing
-  get isDisplayed() {
-    return this.#element.style.display == CSSDisplay.BLOCK;
-  }
-
   hide() {
     this.#element.style.display = CSSDisplay.NONE;
   }
@@ -129,16 +146,6 @@ export class ItemFilter {
 
     constructor(element) {
         this.#element = element;
-    }
-
-    // only for unit tesing
-    get isHidden() {
-        return this.#element.style.display == CSSDisplay.NONE;
-    }
-
-    // only for unit tesing
-    get isDisplayed() {
-        return this.#element.style.display == CSSDisplay.BLOCK;
     }
 
     hide() {
@@ -164,11 +171,7 @@ export class ItemInput {
     get uniqueValue() {
         return this.#element.value.trim()
     }
-
-    get hasValidValue() {
-        return this.#element.value != ''
-    }
-
+    
     updateValue(newValue) {
         this.#element.value = newValue;
     }

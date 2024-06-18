@@ -33,14 +33,14 @@ export class ShoppingListPage {
   }
 
   #registerEventListeners() {
-    this.#anItemForm.addListener(this.onAddItemSubmit.bind(this));
-    this.anItemList.addListener(this.onClickItem.bind(this));
-    this.#aClearButton.addListener(this.onClickClearAll.bind(this));
-    this.#anItemFilter.addListener(this.onEditingInput.bind(this));
-    document.addEventListener('DOMContentLoaded', this.onDOMContentLoad.bind(this));
+    this.#anItemForm.addListener(this.#onAddItemSubmit.bind(this));
+    this.anItemList.addListener(this.#onClickItem.bind(this));
+    this.#aClearButton.addListener(this.#onClickClearAll.bind(this));
+    this.#anItemFilter.addListener(this.#onEditingInput.bind(this));
+    document.addEventListener('DOMContentLoaded', this.#onDOMContentLoad.bind(this));
   }
 
-  onAddItemSubmit(e) {
+  #onAddItemSubmit(e) {
     e.preventDefault();
     const newItem = this.#anItemInput.uniqueValue;
     if (this.#aFormButton.isEditMode) {
@@ -50,7 +50,7 @@ export class ShoppingListPage {
     }
   }
 
-  onClickItem(e) {
+  #onClickItem(e) {
     if (this.#isRemoveButtonClicked(e)) {
       const listItemElement = e.target.parentElement.parentElement;
       this.#presenter.onItemRemovalConfirmed(listItemElement);
@@ -69,15 +69,15 @@ export class ShoppingListPage {
     return e.target.closest(this.anItemList.LI_ELEMENT);
   }
 
-  onClickClearAll() {
+  #onClickClearAll() {
     this.#presenter.onClickClearAll();
   }
 
-  onEditingInput(e) {
+  #onEditingInput(e) {
     this.#presenter.onEditingInput(e);
   }
 
-  onDOMContentLoad() {
+  #onDOMContentLoad() {
     this.#presenter.onDOMContentLoad();
   }
 

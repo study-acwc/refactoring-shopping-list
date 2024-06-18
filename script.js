@@ -194,6 +194,10 @@ export class ShoppingListPagePresenter {
     if (false == this.#confirmItemRemoval(item.textContent)) {
       return;
     }
+    this.onItemRemovalConfirmed(item);
+  }
+
+  onItemRemovalConfirmed(item) {
     this.#model.removeItem(item.textContent);
     this.#view.removeItem(item);
   }

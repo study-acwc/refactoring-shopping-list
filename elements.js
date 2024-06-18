@@ -45,7 +45,7 @@ export class ItemElementList {
     toggleEditModeForSingleItemWith(itemTitle) {
         const theItem = this.itemWith(itemTitle.trim());
         this.allItems
-            .forEach((i) => this.disableEditModeClassFor(i));
+            .forEach((i) => this.#disableEditModeClassForItem(i));
         if (theItem != null) {
             theItem.classList.add(this.EDITMODE_ELEMENT_CLASS);
         }
@@ -61,7 +61,14 @@ export class ItemElementList {
         return null;
     }
 
-    disableEditModeClassFor(item) {
+    disableEditModeClassFor(itemTitle) {
+        const item = this.itemWith(itemTitle.trim());
+        if (item != null) {
+            this.#disableEditModeClassForItem(item);
+        }
+    }
+
+    #disableEditModeClassForItem(item) {
         item.classList.remove(this.EDITMODE_ELEMENT_CLASS);
     }
 

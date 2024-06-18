@@ -114,7 +114,7 @@ export class ShoppingListPage {
 
   removeEditingItem() {
     const item = this.anItemList.editingItem;
-    this.anItemList.disableEditModeClassFor(item);
+    this.anItemList.disableEditModeClassFor(item.textContent);
     this.anItemList.removeItem(item);
     this.#refreshUICommand.execute();
   }

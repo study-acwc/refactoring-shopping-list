@@ -136,12 +136,12 @@ export class ShoppingListPage {
     alert('Please add an item');
   }
 
-  confirmItemRemoval(item) {
-    if (false == confirm(`Are you sure you want to remove the item "${item.textContent}"?`)) {
+  confirmItemRemoval(itemTitle) {
+    if (false == confirm(`Are you sure you want to remove the item "${itemTitle}"?`)) {
       return;
     }
 
-    this.#presenter.onItemRemovalConfirmed(item.textContent);
+    this.#presenter.onItemRemovalConfirmed(itemTitle);
   }
 }
 
@@ -203,7 +203,7 @@ export class ShoppingListPagePresenter {
   // MARK: - onItemRemovalButtonClicked
 
   onItemRemovalButtonClicked(item) {
-    this.#view.confirmItemRemoval(item);
+    this.#view.confirmItemRemoval(item.textContent);
   }
 
   // MARK: - onItemRemovalConfirmed

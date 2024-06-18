@@ -53,7 +53,7 @@ export class ShoppingListPage {
   #onClickItem(e) {
     if (this.#isRemoveButtonClicked(e)) {
       const listItemElement = e.target.parentElement.parentElement;
-      this.#presenter.onItemRemovalConfirmed(listItemElement);
+      this.#presenter.onItemRemovalButtonClicked(listItemElement);
     } else if (this.#isItemClicked(e)) {
       const listItemElement = e.target;
       this.#presenter.onClickItem(listItemElement);
@@ -190,7 +190,7 @@ export class ShoppingListPagePresenter {
 
   // MARK: - onItemRemovalConfirmed
 
-  onItemRemovalConfirmed(item) {
+  onItemRemovalButtonClicked(item) {
     if (false == this.#confirmItemRemoval(item.textContent)) {
       return;
     }

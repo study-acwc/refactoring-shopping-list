@@ -297,7 +297,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
   });
 
   test('삭제 여부 확인 창을 띄운다', () => {
-   sut.onItemRemovalConfirmed(clickedElement);
+   sut.onItemRemovalButtonClicked(clickedElement);
 
    expect(confirm).toHaveBeenCalled();
   });
@@ -379,7 +379,7 @@ describe('삭제 여부 확인 창에서 취소 버튼이 눌렸을 때', () => 
   });
 
   test('아이템을 저장소에서 제거하지 않고, 아이템을 DOM에서 제거하지 않는다', () => {
-    sut.onItemRemovalConfirmed(clickedElement);
+    sut.onItemRemovalButtonClicked(clickedElement);
 
    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -442,7 +442,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   });
 
   test('아이템을 저장소에서 제거하고, 필터링 영역을 표시하지 않고, 전체 삭제 버튼을 표시하지 않는다', () => {
-    sut.onItemRemovalConfirmed(item);
+    sut.onItemRemovalButtonClicked(item);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -506,7 +506,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   });
 
   test('아이템을 저장소에서 제거하고, 필터링 영역을 표시하고, 전체 삭제 버튼을 표시하지 않는다', () => {
-    sut.onItemRemovalConfirmed(item1);
+    sut.onItemRemovalButtonClicked(item1);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>

@@ -42,8 +42,8 @@ export class ItemElementList {
         });
     }
 
-    toggleEditModeForSingleItem(item) {
-        const theItem = this.itemWith(item.textContent.trim());
+    toggleEditModeForSingleItemWith(itemTitle) {
+        const theItem = this.itemWith(itemTitle.trim());
         this.allItems
             .forEach((i) => this.disableEditModeClassFor(i));
         if (theItem != null) {

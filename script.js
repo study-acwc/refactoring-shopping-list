@@ -102,7 +102,7 @@ export class ShoppingListPage {
   }
 
   setItemToEdit(item) {
-    this.anItemList.toggleEditModeForSingleItem(item);
+    this.anItemList.toggleEditModeForSingleItemWith(item.textContent);
     this.#aFormButton.applyEditModeStyle();
     this.#anItemInput.updateValue(item.textContent);
   }

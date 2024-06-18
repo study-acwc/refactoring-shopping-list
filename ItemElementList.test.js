@@ -53,7 +53,7 @@ describe('toggleEditModeForSingleItem 함수가 호출됐을 때', () => {
     });
 
     test('그 아이템의 편집 모드를 활성화한다', () => {
-        sut.toggleEditModeForSingleItem(item);
+        sut.toggleEditModeForSingleItemWith(textContentsList[0]);
 
         let resultItem = sut.itemWith(textContentsList[0]);
         let result = Array.from(resultItem.classList).includes(sut.EDITMODE_ELEMENT_CLASS);

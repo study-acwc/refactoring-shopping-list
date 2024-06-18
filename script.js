@@ -191,10 +191,7 @@ export class ShoppingListPagePresenter {
   // MARK: - onItemRemovalConfirmed
 
   onItemRemovalButtonClicked(item) {
-    if (false == this.#confirmItemRemoval(item.textContent)) {
-      return;
-    }
-    this.onItemRemovalConfirmed(item);
+    this.#confirmItemRemoval(item);
   }
 
   onItemRemovalConfirmed(item) {
@@ -202,8 +199,12 @@ export class ShoppingListPagePresenter {
     this.#view.removeItem(item);
   }
 
-  #confirmItemRemoval(textContent) {
-    return confirm(`Are you sure you want to remove the item "${textContent}"?`)
+  #confirmItemRemoval(item) {
+    if (false == confirm(`Are you sure you want to remove the item "${item.textContent}"?`)) {
+      return;
+    }
+
+    this.onItemRemovalConfirmed(item);
   }
 
   // MARK: - onClickClearAll

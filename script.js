@@ -123,6 +123,10 @@ export class ShoppingListPage {
   refreshUI() {
     this.#refreshUICommand.execute();
   }
+
+  alertIfItemExists(newItem) {
+    alert(`The item "${newItem}" already exists!`);
+  }
 }
 
 // MARK: - ShoppingListPagePresenter
@@ -170,16 +174,12 @@ export class ShoppingListPagePresenter {
       return;
     }
     if (this.#model.hasItem(newItemTitle)) {
-      this.#alertIfItemExists(newItemTitle);
+      this.#view.alertIfItemExists(newItemTitle);
       return;
     }
 
     this.#model.addItem(newItemTitle);
     this.#view.addItem(newItemTitle);
-  }
-
-  #alertIfItemExists(newItem) {
-    alert(`The item "${newItem}" already exists!`);
   }
 
   // MARK: - onClickItem

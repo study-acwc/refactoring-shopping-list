@@ -107,8 +107,8 @@ export class ShoppingListPage {
     this.#anItemInput.updateValue(item.textContent);
   }
 
-  removeItem(item) {
-    this.anItemList.removeItemWith(item.textContent);
+  removeItemWith(itemTitle) {
+    this.anItemList.removeItemWith(itemTitle);
     this.#refreshUICommand.execute();
   }
 
@@ -208,7 +208,7 @@ export class ShoppingListPagePresenter {
 
   onItemRemovalConfirmed(item) {
     this.#model.removeItem(item.textContent);
-    this.#view.removeItem(item);
+    this.#view.removeItemWith(item.textContent);
   }
 
   // MARK: - onClickClearAll

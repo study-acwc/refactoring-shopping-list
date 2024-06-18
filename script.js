@@ -131,6 +131,14 @@ export class ShoppingListPage {
   alertAddAnItem() {
     alert('Please add an item');
   }
+
+  confirmItemRemoval(item) {
+    if (false == confirm(`Are you sure you want to remove the item "${item.textContent}"?`)) {
+      return;
+    }
+
+    this.#presenter.onItemRemovalConfirmed(item);
+  }
 }
 
 // MARK: - ShoppingListPagePresenter
@@ -191,20 +199,12 @@ export class ShoppingListPagePresenter {
   // MARK: - onItemRemovalConfirmed
 
   onItemRemovalButtonClicked(item) {
-    this.#confirmItemRemoval(item);
+    this.#view.confirmItemRemoval(item);
   }
 
   onItemRemovalConfirmed(item) {
     this.#model.removeItem(item.textContent);
     this.#view.removeItem(item);
-  }
-
-  #confirmItemRemoval(item) {
-    if (false == confirm(`Are you sure you want to remove the item "${item.textContent}"?`)) {
-      return;
-    }
-
-    this.onItemRemovalConfirmed(item);
   }
 
   // MARK: - onClickClearAll

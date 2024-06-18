@@ -283,21 +283,18 @@ describe('Update Item 버튼이 눌렸을 때', () => {
 });
 
 describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다면', () => {
-  let clickedElement;
+  let itemTitle;
 
   beforeEach(() => {;
-    let itemTitle = 'item1';
+    itemTitle = 'item1';
     // 1
     sut.onClickAddItemSubmit(itemTitle);
     // 2
-    const filtered = filteredItemElementsBy(itemTitle);
-    clickedElement = deleteButtonInItemElement(filtered[0]);
-    // 3
     global.confirm = jest.fn();
   });
 
   test('삭제 여부 확인 창을 띄운다', () => {
-   sut.onItemRemovalButtonClicked(clickedElement);
+   sut.onItemRemovalButtonClicked(itemTitle);
 
    expect(confirm).toHaveBeenCalled();
   });
@@ -360,7 +357,6 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
 });
 
 describe('삭제 여부 확인 창에서 취소 버튼이 눌렸을 때', () => {
-  let clickedElement;
   let itemTitle;
 
   afterEach(() => {
@@ -372,14 +368,11 @@ describe('삭제 여부 확인 창에서 취소 버튼이 눌렸을 때', () => 
     // 1
     sut.onClickAddItemSubmit(itemTitle);
     // 2
-    const filtered = filteredItemElementsBy(itemTitle);
-    clickedElement = deleteButtonInItemElement(filtered[0]);
-    // 3
     global.confirm = jest.fn().mockReturnValue(false);
   });
 
   test('아이템을 저장소에서 제거하지 않고, 아이템을 DOM에서 제거하지 않는다', () => {
-    sut.onItemRemovalButtonClicked(clickedElement);
+    sut.onItemRemovalButtonClicked(itemTitle);
 
    expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -423,7 +416,6 @@ describe('삭제 여부 확인 창에서 취소 버튼이 눌렸을 때', () => 
 });
 
 describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이템이 하나이면', () => {
-  let item;
   let itemTitle;
 
   afterEach(() => {
@@ -435,14 +427,11 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
     // 1
     sut.onClickAddItemSubmit(itemTitle);
     // 2
-    const filtered = filteredItemElementsBy(itemTitle);
-    item = filtered[0];
-    // 3
     global.confirm = jest.fn().mockReturnValue(true);
   });
 
   test('아이템을 저장소에서 제거하고, 필터링 영역을 표시하지 않고, 전체 삭제 버튼을 표시하지 않는다', () => {
-    sut.onItemRemovalButtonClicked(item);
+    sut.onItemRemovalButtonClicked(itemTitle);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -486,7 +475,6 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
 });
 
 describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이템이 두 개이면', () => {
-  let item1;
   let itemTitle1;
 
   afterEach(() => {
@@ -499,14 +487,11 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
     sut.onClickAddItemSubmit(itemTitle1);
     sut.onClickAddItemSubmit('item2');
     // 2
-    const filtered = filteredItemElementsBy(itemTitle1);
-    item1 = filtered[0];
-    // 3
     global.confirm = jest.fn().mockReturnValue(true);
   });
 
   test('아이템을 저장소에서 제거하고, 필터링 영역을 표시하고, 전체 삭제 버튼을 표시하지 않는다', () => {
-    sut.onItemRemovalButtonClicked(item1);
+    sut.onItemRemovalButtonClicked(itemTitle1);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>

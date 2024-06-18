@@ -43,9 +43,22 @@ export class ItemElementList {
     }
 
     toggleEditModeForSingleItem(item) {
+        const theItem = this.itemWith(item.textContent.trim());
         this.allItems
             .forEach((i) => this.disableEditModeClassFor(i));
-        item.classList.add(this.EDITMODE_ELEMENT_CLASS);
+        if (theItem != null) {
+            theItem.classList.add(this.EDITMODE_ELEMENT_CLASS);
+        }
+    }
+
+    itemWith(textContent) {
+        for (const item of this.allItems) {
+            const itemName = item.firstChild.textContent.trim().toLowerCase();
+            if (itemName.indexOf(textContent.toLowerCase()) != -1) {
+                return item;
+            }
+        }
+        return null;
     }
 
     disableEditModeClassFor(item) {

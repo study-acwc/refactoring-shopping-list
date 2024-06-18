@@ -7,6 +7,7 @@ import * as commands from './commands.js';
 export class ShoppingListPage {
   #presenter;
 
+  #anItemList;
   #anItemForm;
   #aClearButton;
   #anItemFilter;
@@ -16,14 +17,14 @@ export class ShoppingListPage {
   #refreshUICommand;
 
   constructor() {
-    this.anItemList = new elements.ItemElementList(document.getElementById('item-list'));
+    this.#anItemList = new elements.ItemElementList(document.getElementById('item-list'));
     this.#anItemForm = new elements.ItemForm(document.getElementById('item-form'));
     this.#aClearButton = new elements.ClearButton(document.getElementById('clear'));
     this.#anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
     this.#aFormButton = new elements.FormButton(this.#anItemForm.formButton);
     this.#anItemInput = new elements.ItemInput(document.getElementById('item-input'));
 
-    this.#refreshUICommand = new commands.refreshUICommand(this.#anItemInput, this.anItemList, this.#aFormButton, this.#aClearButton, this.#anItemFilter);
+    this.#refreshUICommand = new commands.refreshUICommand(this.#anItemInput, this.#anItemList, this.#aFormButton, this.#aClearButton, this.#anItemFilter);
 
     this.#registerEventListeners();
   }
@@ -34,7 +35,7 @@ export class ShoppingListPage {
 
   #registerEventListeners() {
     this.#anItemForm.addListener(this.#onAddItemSubmit.bind(this));
-    this.anItemList.addListener(this.#onClickItem.bind(this));
+    this.#anItemList.addListener(this.#onClickItem.bind(this));
     this.#aClearButton.addListener(this.#onClickClearAll.bind(this));
     this.#anItemFilter.addListener(this.#onEditingInput.bind(this));
     document.addEventListener('DOMContentLoaded', this.#onDOMContentLoad.bind(this));
@@ -45,7 +46,7 @@ export class ShoppingListPage {
     const newItemTitle = this.#anItemInput.uniqueValue;
     if (this.#aFormButton.isEditMode) {
       this.#presenter.onClickUpdateItemSubmit(
-        this.anItemList.editingItem.textContent,
+        this.#anItemList.editingItem.textContent,
         newItemTitle
       );
     } else {
@@ -69,7 +70,7 @@ export class ShoppingListPage {
   }
 
   #isItemClicked(e) {
-    return e.target.closest(this.anItemList.LI_ELEMENT);
+    return e.target.closest(this.#anItemList.LI_ELEMENT);
   }
 
   #onClickClearAll() {
@@ -88,39 +89,39 @@ export class ShoppingListPage {
   // MARK: - calling by preseneter
 
   displayAllItems(itemTitles) {
-    itemTitles.forEach((item) => this.anItemList.appendItemWith(item));
+    itemTitles.forEach((item) => this.#anItemList.appendItemWith(item));
     this.#refreshUICommand.execute();
   }
 
   filterItems(itemTitle) {
-    this.anItemList.filterItemsWith(itemTitle.toLowerCase());
+    this.#anItemList.filterItemsWith(itemTitle.toLowerCase());
   }
 
   clearAll() {
-    this.anItemList.clearItems();
+    this.#anItemList.clearItems();
     this.#refreshUICommand.execute();
   }
 
   setItemToEdit(itemTitle) {
-    this.anItemList.toggleEditModeForSingleItemWith(itemTitle);
+    this.#anItemList.toggleEditModeForSingleItemWith(itemTitle);
     this.#aFormButton.applyEditModeStyle();
     this.#anItemInput.updateValue(itemTitle);
   }
 
   removeItemWith(itemTitle) {
-    this.anItemList.removeItemWith(itemTitle);
+    this.#anItemList.removeItemWith(itemTitle);
     this.#refreshUICommand.execute();
   }
 
   removeEditingItem() {
-    const item = this.anItemList.editingItem;
-    this.anItemList.disableEditModeClassFor(item.textContent);
-    this.anItemList.removeItemWith(item.textContent);
+    const item = this.#anItemList.editingItem;
+    this.#anItemList.disableEditModeClassFor(item.textContent);
+    this.#anItemList.removeItemWith(item.textContent);
     this.#refreshUICommand.execute();
   }
 
   addItem(newItemTitle) {
-    this.anItemList.appendItemWith(newItemTitle);
+    this.#anItemList.appendItemWith(newItemTitle);
     this.#refreshUICommand.execute();
   }
 

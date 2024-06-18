@@ -723,24 +723,3 @@ describe('Dom Content가 로드되었을 때', () => {
 `);
   });
 });
-
-const localStorageKey = 'items';
-
-function dummyUIEvent() {
-  return {
-    preventDefault: jest.fn(),
-    target: { value: 'Sample Value' }
-  };
-}
-
-function itemElements() {
-  return Array.from(view.anItemList.allItems);
-}
-
-function filteredItemElementsBy(itemTitle) {
-  return itemElements().filter((i) => i.textContent == itemTitle);
-}
-
-function deleteButtonInItemElement(element) {
-  return element.lastElementChild.lastElementChild;
-}

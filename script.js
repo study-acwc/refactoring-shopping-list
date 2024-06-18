@@ -141,7 +141,7 @@ export class ShoppingListPage {
       return;
     }
 
-    this.#presenter.onItemRemovalConfirmed(item);
+    this.#presenter.onItemRemovalConfirmed(item.textContent);
   }
 }
 
@@ -200,15 +200,17 @@ export class ShoppingListPagePresenter {
     this.#view.setItemToEdit(listItemElement);
   }
 
-  // MARK: - onItemRemovalConfirmed
+  // MARK: - onItemRemovalButtonClicked
 
   onItemRemovalButtonClicked(item) {
     this.#view.confirmItemRemoval(item);
   }
 
-  onItemRemovalConfirmed(item) {
-    this.#model.removeItem(item.textContent);
-    this.#view.removeItemWith(item.textContent);
+  // MARK: - onItemRemovalConfirmed
+
+  onItemRemovalConfirmed(itemTitle) {
+    this.#model.removeItem(itemTitle);
+    this.#view.removeItemWith(itemTitle);
   }
 
   // MARK: - onClickClearAll

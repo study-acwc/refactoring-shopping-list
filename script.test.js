@@ -177,8 +177,7 @@ describe('Update Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
       // 1
       sut.onClickAddItemSubmit(itemTitle);
       // 2
-      const filtered = filteredItemElementsBy(itemTitle);
-      view.setItemToEdit(filtered[0]);
+      view.setItemToEdit(itemTitle);
   });
 
   test('아이템을 변경하지 않는다', () => {
@@ -234,8 +233,7 @@ describe('Update Item 버튼이 눌렸을 때', () => {
       // 1
       sut.onClickAddItemSubmit(itemTitle);
       // 2
-      const filtered = filteredItemElementsBy(itemTitle);
-      view.setItemToEdit(filtered[0]);
+      view.setItemToEdit(itemTitle);
     });
 
     test('저장된 아이템을 제거하고, 화면에서 해당 아이템을 제거하고, 아이템 편집 상태를 해제하고, 새로운 아이템을 저장하고, 화면에 새로운 아이템을 표시하고, 입력값을 지운다', () => {

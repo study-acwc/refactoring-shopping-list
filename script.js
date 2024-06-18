@@ -101,10 +101,10 @@ export class ShoppingListPage {
     this.#refreshUICommand.execute();
   }
 
-  setItemToEdit(item) {
-    this.anItemList.toggleEditModeForSingleItemWith(item.textContent);
+  setItemToEdit(itemTitle) {
+    this.anItemList.toggleEditModeForSingleItemWith(itemTitle);
     this.#aFormButton.applyEditModeStyle();
-    this.#anItemInput.updateValue(item.textContent);
+    this.#anItemInput.updateValue(itemTitle);
   }
 
   removeItemWith(itemTitle) {
@@ -197,7 +197,7 @@ export class ShoppingListPagePresenter {
   // MARK: - onClickItem
 
   onClickItem(listItemElement) {
-    this.#view.setItemToEdit(listItemElement);
+    this.#view.setItemToEdit(listItemElement.textContent);
   }
 
   // MARK: - onItemRemovalButtonClicked

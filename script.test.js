@@ -17,14 +17,13 @@ beforeEach(() => {
 });
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
-    let event;
+    let inputValue;
     beforeEach(() => {
-        event = dummyUIEvent();
-        setItemInputValue('');
+        inputValue = '';
     });
 
     test('아이템을 저장하지 않는다', () => {
-        view.onAddItemSubmit(event);
+        sut.onClickAddItemSubmit(inputValue);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -68,17 +67,14 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
 });
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는 값이면', () => {
-    let event;
     let inputValue;
     beforeEach(() => {
-        event = dummyUIEvent();
         inputValue = 'item1';
-        setItemInputValue(inputValue);
         model.saveAllItems(['item2', 'item3']);
     });
 
     test('아이템을 저장하고, 화면에 새로운 아이템을 표시하고, 입력값을 지운다.', () => {
-        view.onAddItemSubmit(event);
+        sut.onClickAddItemSubmit(inputValue);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -122,17 +118,14 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 기존에 없는
 });
 
 describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이템이 이미 존재하면', () => {
-    let event;
     let inputValue;
     beforeEach(() => {
-        event = dummyUIEvent();
         inputValue = 'item1';
-        setItemInputValue(inputValue);
         model.saveAllItems([inputValue]);
     });
 
     test('아이템을 중복 저장하지 않고, 입력값을 지우지 않는다', () => {
-        view.onAddItemSubmit(event);
+        sut.onClickAddItemSubmit(inputValue);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -177,22 +170,20 @@ describe('Add Item 버튼이 눌렸을 때, 입력값이 있고 동일한 아이
 
 
 describe('Update Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
-  let event;
   let itemTitle;
+  let inputValue;
   beforeEach(() => {
-      event = dummyUIEvent();
       itemTitle = 'item';
+      inputValue = '';
       // 1
-      updateUserInputAndSubmitAdd(itemTitle);
+      sut.onClickAddItemSubmit(itemTitle);
       // 2
       const filtered = filteredItemElementsBy(itemTitle);
       view.setItemToEdit(filtered[0]);
-      // 3
-      setItemInputValue('');
   });
 
   test('아이템을 변경하지 않는다', () => {
-      view.onAddItemSubmit(event);
+      sut.onClickUpdateItemSubmit(inputValue);
 
       expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -236,24 +227,20 @@ describe('Update Item 버튼이 눌렸을 때, 입력값이 없으면', () => {
 });
 
 describe('Update Item 버튼이 눌렸을 때', () => {
-    let event;
     let itemTitle;
     let updatedItemTitle;
     beforeEach(() => {
-      event = dummyUIEvent();
       itemTitle = 'oldItem';
       updatedItemTitle = 'updatedItem';
       // 1
-      updateUserInputAndSubmitAdd(itemTitle);
+      sut.onClickAddItemSubmit(itemTitle);
       // 2
       const filtered = filteredItemElementsBy(itemTitle);
       view.setItemToEdit(filtered[0]);
-      // 3
-      setItemInputValue(updatedItemTitle);
     });
 
     test('저장된 아이템을 제거하고, 화면에서 해당 아이템을 제거하고, 아이템 편집 상태를 해제하고, 새로운 아이템을 저장하고, 화면에 새로운 아이템을 표시하고, 입력값을 지운다', () => {
-        view.onAddItemSubmit(event);
+        sut.onClickUpdateItemSubmit(updatedItemTitle);
 
         expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>
@@ -302,7 +289,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
   beforeEach(() => {;
     let itemTitle = 'item1';
     // 1
-    updateUserInputAndSubmitAdd(itemTitle);
+    sut.onClickAddItemSubmit(itemTitle);
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
     clickedElement = deleteButtonInItemElement(filtered[0]);
@@ -363,7 +350,7 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이�
   beforeEach(() => {
     let itemTitle = 'item1';
     // 1
-    updateUserInputAndSubmitAdd(itemTitle);
+    sut.onClickAddItemSubmit(itemTitle);
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
     clickedElement = filtered[0];
@@ -493,7 +480,7 @@ describe('삭제 여부 확인 창에서 취소 버튼이 눌렸을 때', () => 
   beforeEach(() => {
     itemTitle = 'item1';
     // 1
-    updateUserInputAndSubmitAdd(itemTitle);
+    sut.onClickAddItemSubmit(itemTitle);
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
     clickedElement = deleteButtonInItemElement(filtered[0]);
@@ -559,7 +546,7 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   beforeEach(() => {
     itemTitle = 'item1';
     // 1
-    updateUserInputAndSubmitAdd(itemTitle);
+    sut.onClickAddItemSubmit(itemTitle);
     // 2
     const filtered = filteredItemElementsBy(itemTitle);
     item = filtered[0];
@@ -622,8 +609,8 @@ describe('삭제 여부 확인 창에서 확인 버튼이 눌렸을 때, 아이�
   beforeEach(() => {
     itemTitle1 = 'item1';
     // 1
-    updateUserInputAndSubmitAdd(itemTitle1);
-    updateUserInputAndSubmitAdd('item2');
+    sut.onClickAddItemSubmit(itemTitle1);
+    sut.onClickAddItemSubmit('item2');
     // 2
     const filtered = filteredItemElementsBy(itemTitle1);
     item1 = filtered[0];
@@ -680,8 +667,8 @@ describe('검색어를 입력했을 때', () => {
   let searchKeywordEvent;
   beforeEach(() => {
     // 1
-    updateUserInputAndSubmitAdd('notebook');
-    updateUserInputAndSubmitAdd('ipad');
+    sut.onClickAddItemSubmit('notebook');
+    sut.onClickAddItemSubmit('ipad');
     // 2
     searchKeyword = 'note';
     searchKeywordEvent = {
@@ -885,10 +872,6 @@ function dummyUIEvent() {
   };
 }
 
-function setItemInputValue(value) {
-  view.anItemInput.updateValue(value);
-}
-
 function itemElements() {
   return Array.from(view.anItemList.allItems);
 }
@@ -899,9 +882,4 @@ function filteredItemElementsBy(itemTitle) {
 
 function deleteButtonInItemElement(element) {
   return element.lastElementChild.lastElementChild;
-}
-
-function updateUserInputAndSubmitAdd(itemTitle) {
-  setItemInputValue(itemTitle);
-  view.onAddItemSubmit(dummyUIEvent());
 }

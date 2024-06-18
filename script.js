@@ -11,6 +11,7 @@ export class ShoppingListPage {
   #aClearButton;
   #anItemFilter;
   #aFormButton;
+  #anItemInput;
 
   #refreshUICommand;
 
@@ -20,9 +21,9 @@ export class ShoppingListPage {
     this.#aClearButton = new elements.ClearButton(document.getElementById('clear'));
     this.#anItemFilter = new elements.ItemFilter(document.getElementById('filter'));
     this.#aFormButton = new elements.FormButton(this.#anItemForm.formButton);
-    this.anItemInput = new elements.ItemInput(document.getElementById('item-input'));
+    this.#anItemInput = new elements.ItemInput(document.getElementById('item-input'));
 
-    this.#refreshUICommand = new commands.refreshUICommand(this.anItemInput, this.anItemList, this.#aFormButton, this.#aClearButton, this.#anItemFilter);
+    this.#refreshUICommand = new commands.refreshUICommand(this.#anItemInput, this.anItemList, this.#aFormButton, this.#aClearButton, this.#anItemFilter);
 
     this.#registerEventListeners();
   }
@@ -41,7 +42,7 @@ export class ShoppingListPage {
 
   onAddItemSubmit(e) {
     e.preventDefault();
-    const newItem = this.anItemInput.uniqueValue;
+    const newItem = this.#anItemInput.uniqueValue;
     if (this.#aFormButton.isEditMode) {
       this.#presenter.onClickUpdateItemSubmit(newItem);
     } else {
@@ -99,7 +100,7 @@ export class ShoppingListPage {
   setItemToEdit(item) {
     this.anItemList.toggleEditModeForSingleItem(item);
     this.#aFormButton.applyEditModeStyle();
-    this.anItemInput.updateValue(item.textContent);
+    this.#anItemInput.updateValue(item.textContent);
   }
 
   removeItem(item) {

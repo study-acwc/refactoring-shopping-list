@@ -142,22 +142,15 @@ export class ShoppingListPagePresenter {
   // MARK: - onClickUpdateItemSubmit
 
   onClickUpdateItemSubmit(newItemTitle) {
-    if (false == this.#checkIfItemInputIsValid(newItemTitle)) {
+    if (false == this.#isValidInput(newItemTitle)) {
+      this.#alertAddAnItem();
       return;
     }
+
     this.#model.removeItem(newItemTitle.textContent);
     this.#view.removeEditingItem();
     this.#model.addItem(newItemTitle);
     this.#view.addItem(newItemTitle);
-  }
-
-  #checkIfItemInputIsValid(value) {
-    if (false == this.#isValidInput(value)) {
-      this.#alertAddAnItem();
-      return false;
-    }
-
-    return true
   }
 
   #isValidInput(value) {
@@ -171,7 +164,8 @@ export class ShoppingListPagePresenter {
   // MARK: - onClickAddItemSubmit
 
   onClickAddItemSubmit(newItemTitle) {
-    if (false == this.#checkIfItemInputIsValid(newItemTitle)) {
+    if (false == this.#isValidInput(newItemTitle)) {
+      this.#alertAddAnItem();
       return;
     }
     if (this.#model.hasItem(newItemTitle)) {

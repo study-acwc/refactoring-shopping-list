@@ -128,8 +128,8 @@ export class ShoppingListPage {
     this.#refreshUICommand.execute();
   }
 
-  alertIfItemExists(newItem) {
-    alert(`The item "${newItem}" already exists!`);
+  alertIfItemExists(newItemTitle) {
+    alert(`The item "${newItemTitle}" already exists!`);
   }
 
   alertAddAnItem() {

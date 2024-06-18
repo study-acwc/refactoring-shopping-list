@@ -299,19 +299,15 @@ describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 안이였다�
 });
 
 describe('아이템 영역이 눌렸을 때, 삭제 버튼 영역 바깥쪽이었다면', () => {
-  let clickedElement;
-  let itemClickEvent;
+  let itemTitle;
   beforeEach(() => {
-    let itemTitle = 'item1';
+    itemTitle = 'item1';
     // 1
     sut.onClickAddItemSubmit(itemTitle);
-    // 2
-    const filtered = filteredItemElementsBy(itemTitle);
-    clickedElement = filtered[0];
   });
 
   test('아이템 편집 상태를 활성화하고, 해당 아이템을 편집 모드로 표시하고, 해당되지 않는 아이템은 편집 모드로 표시하지 않고, 검색어 입력창을 편집할 아이템의 텍스트로 채운다', () => {
-    sut.onClickItem(clickedElement);
+    sut.onClickItem(itemTitle);
 
     expect(global.document.documentElement.innerHTML).toMatchInlineSnapshot(`
 "<head>

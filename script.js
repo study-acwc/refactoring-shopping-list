@@ -59,7 +59,7 @@ export class ShoppingListPage {
       this.#presenter.onItemRemovalButtonClicked(listItemElement.textContent);
     } else if (this.#isItemClicked(e)) {
       const listItemElement = e.target;
-      this.#presenter.onClickItem(listItemElement);
+      this.#presenter.onClickItem(listItemElement.textContent);
     }
   }
 
@@ -196,8 +196,8 @@ export class ShoppingListPagePresenter {
 
   // MARK: - onClickItem
 
-  onClickItem(listItemElement) {
-    this.#view.setItemToEdit(listItemElement.textContent);
+  onClickItem(itemTitle) {
+    this.#view.setItemToEdit(itemTitle);
   }
 
   // MARK: - onItemRemovalButtonClicked

@@ -1,6 +1,5 @@
 import * as innerHTMLForTest from './scriptTestHTMLSetup.js';
 import * as script from './script.js';
-import * as elements from './elements.js';
 import * as storage from './storage.js';
 
 window.alert = jest.fn();
